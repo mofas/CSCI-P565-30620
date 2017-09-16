@@ -9,7 +9,7 @@ Please install node.js server from https://nodejs.org/en/.
 
 After you installed, make sure it can be invoked from your command line tools.
 
-Please input `node -v` to see if it can report version of your node.js.
+Please input `node -v` on to see if it can report version of your node.js.
 
 ```
 $ node -v
@@ -22,7 +22,7 @@ Please install Yarn from https://yarnpkg.com/en/.
 
 After you installed, make sure it can be invoked from your command line tools.
 
-Please input `yarn -v` to see if it can run.
+Please input `yarn -v` to see if it can report version of your yarn.
 
 ```
 $ yarn -v
@@ -65,11 +65,11 @@ Navigate to `http://localhost:5000/echo/hello_world`, it should display hello_wo
 
 You can change `hello_world` to other text, and to see what happen.
 
-Another example is `http://localhost:5000/add/5/6`, it will return the sum of two number you give.
+Another example is `http://localhost:5000/add/5/6`, it will return the sum of two numbers you give.
 
-Take look on src/index.js to see what is logic there.
+Take look on src/index.js to see what logic there.
 
-Please add your toy api and commit to github for practicing.
+Please add your own api and commit to github for practicing.
 
 
 
