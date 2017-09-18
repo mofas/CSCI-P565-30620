@@ -1,4 +1,5 @@
 */node_modules
-/dump
+db_data/*
+be/build
 *.log
 .DS_Store
