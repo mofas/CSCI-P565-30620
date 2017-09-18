@@ -41,12 +41,12 @@ $ yarn
 
 Run following command on your CLI
 ```
-$ yarn start
+$ yarn dev
 ```
 You should see something like following...
 
 ```
-yarn start v1.0.1
+yarn dev v1.0.1
 warning package.json: No license field
 $ nodemon --exec npm run babel-node -- ./src/index.js
 [nodemon] 1.12.1
@@ -72,6 +72,13 @@ Take look on src/index.js to see what logic there.
 Please add your own api and commit to github for practicing.
 
 
+## Deploy to ZEIT
+
+Ask CY, CY will do it for you.
+
+```
+now
+```
 
 
 
