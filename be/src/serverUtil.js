@@ -4,16 +4,27 @@ import session from 'express-session';
 import config from './config';
 import bodyParser from 'body-parser';
 
-export const setup = (app, {config}) => {
-
-  app.use(session({
-    secret: config.server.session.secret,
-    saveUninitialized: config.server.session.saveUninitialized,
-    resave: config.server.session.resave,
-  }));
+export const setup = (app, { config, db }) => {
+  app.use(
+    session({
+      secret: config.session.secret,
+      saveUninitialized: config.session.saveUninitialized,
+      resave: config.session.resave,
+    })
+  );
 
   app.use('/*', setCrossDomainHeader);
 
+  app.options('/*', (req, rsp, next) => {
+    rsp.sendStatus(HTTPStatus.OK).end();
+  });
+
+  app.use('/*', bodyParser.json());
+  app.use('/*', bodyParser.urlencoded({ extended: true }));
+
+  //app.use('/graphql', checkAuth);
+
+  app.locals.db = db;
   app.locals.config = config;
   return app;
 };

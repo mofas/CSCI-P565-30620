@@ -15,7 +15,8 @@
     "express-session": "^1.13.0",
     "graphql": "^0.8.2",
     "http-status": "^0.2.2",
-    "immutable": "^3.8.1"
+    "immutable": "^3.8.1",
+    "mongodb": "^2.2.31"
   },
   "devDependencies": {
     "babel": "^6.23.0",
