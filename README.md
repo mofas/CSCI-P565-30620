@@ -34,4 +34,21 @@ I will suggest to use Robo 3T (https://robomongo.org/) as client for mongodb.
 
 
 
+# IDE / Tools
+
+I will suggest use VS code (https://code.visualstudio.com/), sublime text (https://www.sublimetext.com/) or Atom (https://atom.io/) for developing.
+
+Those IDE can improve your productivity significantly.
+
+- Babel
+- Emmet
+- Rect snippet
+
+
+# Email service
+
+we will use sendgrid as our email service, and api key will be shared later.
+
+
+
 
