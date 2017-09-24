@@ -3,31 +3,42 @@
 
 ## Prerequisite
 
-#### Node.js
+### Database
 
-Please install node.js server from https://nodejs.org/en/.
+We use mongodb as our primary database.
+WE can choose install mongodb locally, or running in docker.
 
-After you installed, make sure it can be invoked from your command line tools.
+#### 1. Install mongodb locally
 
-Please input `node -v` on to see if it can report version of your node.js.
+Download mongodb from website (https://www.mongodb.com/), and follow instructions to finish installing. After success install, please run mongodb at port 27017, which is default setting.
 
-```
-$ node -v
-v8.4.0
-```
+#### 2. Run mongodb inside docker
 
-#### Yarn
-
-Please install Yarn from https://yarnpkg.com/en/.
-
-After you installed, make sure it can be invoked from your command line tools.
-
-Please input `yarn -v` to see if it can report version of your yarn.
+Run the following command to start docker container, change `<YOUR_LOCAL_DIR>` to path you want to store data.
 
 ```
-$ yarn -v
-1.0.1
+docker run -p 27017:27017 -v /<YOUR_LOCAL_DIR>/db_data:/data/db --name my-mongo-db -d mongo --storageEngine wiredTiger
 ```
+
+If it start successfully, you can use `docker ps` to check.
+It should look like
+
+```
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                      NAMES
+7164be7891c7        mongo               "docker-entrypoint..."   2 days ago          Up 3 seconds        0.0.0.0:27017->27017/tcp   my-mongo-db
+```
+
+### Mongodb Client Tool
+
+I will suggest to use Robo 3T (https://robomongo.org/) as client for mongodb.
+
+
+### Email service
+
+we will use sendgrid as our email service, please ensure `sendgrid.env` in this folder. Please do not store `sendgrid.env` to any public access space.
+
+
+
 
 ## Setup
 

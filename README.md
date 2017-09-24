@@ -1,40 +1,35 @@
 # Software Engineering
 
 
-Before you start develop Backend, please install mongodb at first.
+## Prerequisite
 
-# Database
+#### Node.js
 
-We use mongodb as our primary database.
-WE can choose install mongodb locally, or running in docker.
+Please install node.js server from https://nodejs.org/en/.
 
-#### 1. Install mongodb locally
+After you installed, make sure it can be invoked from your command line tools.
 
-Download mongodb from website (https://www.mongodb.com/), and follow instructions to finish installing. After success install, please run mongodb at port 27017, which is default setting.
-
-#### 2. Run mongodb inside docker
-
-Run the following command to start docker container, change `<YOUR_LOCAL_DIR>` to path you want to store data.
+Please input `node -v` on to see if it can report version of your node.js.
 
 ```
-docker run -p 27017:27017 -v /<YOUR_LOCAL_DIR>/db_data:/data/db --name my-mongo-db -d mongo --storageEngine wiredTiger
+$ node -v
+v8.4.0
 ```
 
-If it start successfully, you can use `docker ps` to check.
-It should look like
+#### Yarn
+
+Please install Yarn from https://yarnpkg.com/en/.
+
+After you installed, make sure it can be invoked from your command line tools.
+
+Please input `yarn -v` to see if it can report version of your yarn.
 
 ```
-CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                      NAMES
-7164be7891c7        mongo               "docker-entrypoint..."   2 days ago          Up 3 seconds        0.0.0.0:27017->27017/tcp   my-mongo-db
+$ yarn -v
+1.0.1
 ```
 
-### Mongodb Client Tool
-
-I will suggest to use Robo 3T (https://robomongo.org/) as client for mongodb.
-
-
-
-# IDE / Tools
+## IDE / Tools
 
 I will suggest use VS code (https://code.visualstudio.com/), sublime text (https://www.sublimetext.com/) or Atom (https://atom.io/) for developing.
 
@@ -43,12 +38,6 @@ Those IDE can improve your productivity significantly.
 - Babel
 - Emmet
 - Rect snippet
-
-
-# Email service
-
-we will use sendgrid as our email service, and api key will be shared later.
-
 
 
 
