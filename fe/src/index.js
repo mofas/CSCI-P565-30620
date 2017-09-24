@@ -8,7 +8,6 @@ import createStore from 'store/';
 // import history from 'store/history';
 
 import registerServiceWorker from './registerServiceWorker';
-import './index.css';
 
 const rootElement = document.getElementById('root');
 const store = createStore();
