@@ -18,4 +18,32 @@ const defaultConfig = {
   },
 };
 
-module.exports = defaultConfig;
+const testingConfig = {
+  server: {
+    hostname: '127.0.0.1',
+    port: 5000,
+  },
+  mongo: {
+    url: `mongodb://localhost:27017/local`, //TODO: should target to testing db
+  },
+  session: {
+    cookie: {
+      secure: true,
+    },
+    saveUninitialized: false,
+    resave: false,
+    secret: 'you_should_not_use_default_secret',
+  },
+};
+
+const getConfig = () => {
+  if (process.env.CONFIG === 'testing') {
+    return testingConfig;
+  }
+
+  return defaultConfig;
+};
+
+const targetConfig = getConfig();
+
+module.exports = targetConfig;
