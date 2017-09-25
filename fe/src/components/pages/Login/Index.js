@@ -21,6 +21,7 @@ class Login extends React.PureComponent {
           <div className={cx('cover')} />
         </div>
         <div className={cx('content', 'abs-center')}>
+          <div className={cx('main-title')}>Your Game, Your Team</div>
           <div className={cx('title')}>Sing in to your NFL account</div>
           <div className={cx('box')}>
             <div className={cx('form')}>

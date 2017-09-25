@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
 
+import PortalNavbar from '../components/common/Navbar/PortalNavbar';
+
 import Login from '../components/pages/Login/Index';
 import ForgetPassword from '../components/pages/ForgetPassword/Index';
 import CreateAccount from '../components/pages/CreateAccount/Index';
@@ -14,6 +16,7 @@ export default class MainLayout extends Component {
   render() {
     return (
       <div>
+        <PortalNavbar />
         <Route exact path="/" component={Login} />
         <Route exact path="/forget_password" component={ForgetPassword} />
         <Route exact path="/create_account" component={CreateAccount} />

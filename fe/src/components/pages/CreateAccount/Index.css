@@ -1,0 +1,39 @@
+.root {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #fff;
+}
+
+.abs-center {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+
+.content {
+  margin: auto;
+  width: 480px;
+  height: 360px;
+  max-height: 100vh;
+}
+
+.title {
+  width: 100%;
+  margin-bottom: 20px;
+  color: #222;
+  font-size: 24px;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.box {
+  padding: 20px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  label {
+    display: block;
+    margin-bottom: 16px;
+  }
+}

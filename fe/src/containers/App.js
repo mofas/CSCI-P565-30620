@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 
 import PortalLayout from './PortalLayout';
 import AppLayout from './AppLayout';
@@ -11,8 +11,10 @@ export default class App extends Component {
   render() {
     return (
       <div>
-        <Route path="/" component={PortalLayout} />
-        <Route path="/app" component={AppLayout} />
+        <Switch>
+          <Route path="/app" component={AppLayout} />
+          <Route path="/" component={PortalLayout} />
+        </Switch>
       </div>
     );
   }
