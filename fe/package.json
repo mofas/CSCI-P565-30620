@@ -2,8 +2,10 @@
   "name": "fe",
   "version": "0.1.0",
   "private": true,
+  "homepage": "http://mofas.github.io/CSCI-P565-30620",
   "dependencies": {
     "classnames": "^2.2.5",
+    "gh-pages": "^1.0.0",
     "immutable": "^3.8.1",
     "normalize.css": "^7.0.0",
     "react": "^15.6.1",
@@ -18,6 +20,8 @@
     "redux-thunk": "^2.2.0"
   },
   "scripts": {
+    "predeploy": "yarn run build",
+    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",

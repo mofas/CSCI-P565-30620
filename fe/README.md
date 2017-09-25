@@ -19,8 +19,10 @@ $ yarn
 yarn start
 ```
 
-
-
 ## Deploy
 
-We will host our page in github temporarily. Please ask CY to do so.
+We will host our page in github temporarily.
+
+```
+yarn deploy
+```
