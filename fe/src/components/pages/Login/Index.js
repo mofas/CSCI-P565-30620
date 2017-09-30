@@ -14,8 +14,8 @@ class Login extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      username: 'admin',
-      password: '1234',
+      username: 'cli3@iu.edu',
+      password: '123456',
     };
   }
 

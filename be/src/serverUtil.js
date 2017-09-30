@@ -17,7 +17,7 @@ const setupPassport = (app, { config, db }) => {
     new passportLocal.Strategy(async (email, password, done) => {
       const hashpwd = crypto
         .createHash('sha256')
-        .update(password + config.server.sal)
+        .update(password + config.server.salt)
         .digest('base64');
 
       const ret = await db
@@ -37,13 +37,16 @@ const setupPassport = (app, { config, db }) => {
   );
 
   passport.serializeUser(function(user, cb) {
-    // console.log('serializeUser', user.username)
-    cb(null, user.username);
+    cb(null, user.email);
   });
 
-  passport.deserializeUser(function(username, cb) {
-    // console.log('deserializeUser', username)
-    cb(null, { username });
+  passport.deserializeUser(function(email, cb) {
+    db
+      .collection('accounts')
+      .findOne({ email })
+      .then(({ email, role, status }) => {
+        cb(null, { email, role, status });
+      });
   });
 };
 
