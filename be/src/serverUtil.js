@@ -1,4 +1,5 @@
 import HTTPStatus from 'http-status';
+import crypto from 'crypto';
 
 import passport from 'passport';
 import passportLocal from 'passport-local';
@@ -13,11 +14,24 @@ const setupPassport = (app, { config, db }) => {
   app.use(passport.session());
 
   passport.use(
-    new passportLocal.Strategy((username, password, done) => {
-      // console.log('hooooo', username, password);
-      if (username === 'admin' && password === '1234') {
-        return done(null, { username });
+    new passportLocal.Strategy(async (email, password, done) => {
+      const hashpwd = crypto
+        .createHash('sha256')
+        .update(password + config.server.sal)
+        .digest('base64');
+
+      const ret = await db
+        .collection('accounts')
+        .findOne({ email, password: hashpwd });
+
+      if (ret) {
+        return done(null, {
+          email: ret.email,
+          role: ret.role,
+          status: ret.status,
+        });
       }
+
       return done(null, false);
     })
   );

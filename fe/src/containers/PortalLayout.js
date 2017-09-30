@@ -6,6 +6,7 @@ import PortalNavbar from '../components/common/Navbar/PortalNavbar';
 import Login from '../components/pages/Login/Index';
 import ForgetPassword from '../components/pages/ForgetPassword/Index';
 import CreateAccount from '../components/pages/CreateAccount/Index';
+import GoVerifyEmail from '../components/pages/GoVerifyEmail/Index';
 import VerifyEmail from '../components/pages/VerifyEmail/Index';
 
 import classnames from 'classnames/bind';
@@ -20,7 +21,8 @@ export default class MainLayout extends Component {
         <Route exact path="/" component={Login} />
         <Route exact path="/forget_password" component={ForgetPassword} />
         <Route exact path="/create_account" component={CreateAccount} />
-        <Route exact path="/verify_email" component={VerifyEmail} />
+        <Route exact path="/go_verify_email/:email" component={GoVerifyEmail} />
+        <Route exact path="/verify_email/:id/:code" component={VerifyEmail} />
       </div>
     );
   }

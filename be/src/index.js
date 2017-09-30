@@ -14,6 +14,9 @@ import {
   getUserInfoHandler,
   successLoginHandler,
   failLoginHandler,
+  accountCreateHandler,
+  resendEmailHandler,
+  verifyEmailHandler,
 } from './api';
 
 const main = async () => {
@@ -31,7 +34,11 @@ const main = async () => {
   app.get('/', indexHandler);
   app.get('/success_login', successLoginHandler);
   app.get('/fail_login', failLoginHandler);
-  app.get('/getUserInfo', getUserInfoHandler);
+
+  app.get('/account/getUserInfo', getUserInfoHandler);
+  app.post('/account/create', accountCreateHandler(db));
+  app.post('/account/resend_email', resendEmailHandler(db));
+  app.post('/account/verify_email', verifyEmailHandler(db));
 
   app.post(
     '/login',
@@ -57,21 +64,6 @@ const main = async () => {
   });
 
   //create
-  app.get('/account/create', async (req, rsp) => {
-    const { username, password } = req.query;
-    // TOOD: Please writting to db, we should check
-    // 1. is username already be used?
-    // 2. username and password is legal?
-    // 3. hash password.
-    await db.collection('accounts').insertOne({
-      username,
-      password,
-    });
-
-    rsp.status(HTTPStatus.OK).send({
-      message: 'Create account successfully',
-    });
-  });
 
   //list
   app.get('/account/list', async (req, rsp) => {

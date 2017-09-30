@@ -1,0 +1,20 @@
+.root {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #fff;
+}
+
+.title {
+  margin: 40px auto;
+  width: 640px;
+  color: #222;
+  font-size: 24px;
+  line-height: 1.5em;
+  text-align: center;
+}
+
+.btn {
+  margin: 80px auto;
+  width: 200px;
+  font-size: 16px;
+}

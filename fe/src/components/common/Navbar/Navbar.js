@@ -21,7 +21,7 @@ class Navbar extends React.PureComponent {
   };
 
   componentWillMount() {
-    API.API('/getUserInfo').then(res => {
+    API.API('/account/getUserInfo').then(res => {
       if (res.status === 401) {
         window.location.href = '#/';
       } else {
