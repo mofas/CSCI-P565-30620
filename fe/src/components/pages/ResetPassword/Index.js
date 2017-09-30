@@ -3,27 +3,21 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import LabelInput from '../../common/Input/LabelInput';
 import Btn from '../../common/Btn/Btn';
-
+import { withRouter } from 'react-router';
 import API from '../../../middleware/API';
 
-import { validateEmail } from '../../../util';
 import classnames from 'classnames/bind';
 import style from './Index.css';
 const cx = classnames.bind(style);
 
-class CreateAccount extends React.PureComponent {
+class ForgetPassword extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      email: '',
       password: '',
       confirm_password: '',
     };
   }
-
-  changeEmail = e => {
-    this.setState({ email: e.target.value });
-  };
 
   changePassword = e => {
     this.setState({ password: e.target.value });
@@ -33,14 +27,9 @@ class CreateAccount extends React.PureComponent {
     this.setState({ confirm_password: e.target.value });
   };
 
-  register = () => {
-    const { email, password, confirm_password } = this.state;
-
-    // DO the validation
-    if (!validateEmail(email)) {
-      window.alert('Email is not valid');
-      return;
-    }
+  reset = () => {
+    const { id, code } = this.props.match.params;
+    const { password, confirm_password } = this.state;
 
     if (password !== confirm_password) {
       window.alert('Passwords are not matched');
@@ -49,52 +38,46 @@ class CreateAccount extends React.PureComponent {
 
     API.API((request, endpoint) => {
       return request
-        .post(`${endpoint}/account/create`)
+        .post(`${endpoint}/account/reset_password`)
         .type('form')
         .send({
-          email,
+          id,
+          code,
           password,
         });
     }).then(res => {
+      alert(res.message);
       if (res.err === 0) {
-        window.location.href = '#/go_verify_email/' + email;
-      } else {
-        alert(res.message);
+        window.location.href = '#/';
       }
     });
   };
 
   render() {
     const { props } = this;
-    const { email, password, confirm_password } = this.state;
+    const { password, confirm_password } = this.state;
     return (
       <div className={cx('root')}>
         <div className={cx('content', 'abs-center')}>
-          <div className={cx('title')}>Crate your NFL account</div>
+          <div className={cx('title')}>Forgot Your Password?</div>
           <div className={cx('box')}>
             <div className={cx('form')}>
               <LabelInput
-                label="Email"
-                type="text"
-                value={email}
-                onChange={this.changeEmail}
-              />
-              <LabelInput
-                label="Password"
+                label="New Password"
                 type="password"
                 value={password}
                 onChange={this.changePassword}
               />
               <LabelInput
-                label="Confirm Password"
+                label="Confirm New Password"
                 type="password"
                 value={confirm_password}
                 onChange={this.changeConfirmPassword}
               />
             </div>
 
-            <Btn type="secondary" onClick={this.register}>
-              Register
+            <Btn type="secondary" onClick={this.reset}>
+              Submit
             </Btn>
           </div>
         </div>
@@ -103,4 +86,4 @@ class CreateAccount extends React.PureComponent {
   }
 }
 
-export default CreateAccount;
+export default withRouter(ForgetPassword);

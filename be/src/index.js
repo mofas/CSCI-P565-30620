@@ -17,6 +17,8 @@ import {
   accountCreateHandler,
   resendEmailHandler,
   verifyEmailHandler,
+  forgetPasswordHandler,
+  resetPasswordHandler,
 } from './api';
 
 const main = async () => {
@@ -39,6 +41,8 @@ const main = async () => {
   app.post('/account/create', accountCreateHandler(db));
   app.post('/account/resend_email', resendEmailHandler(db));
   app.post('/account/verify_email', verifyEmailHandler(db));
+  app.post('/account/forget_password', forgetPasswordHandler(db));
+  app.post('/account/reset_password', resetPasswordHandler(db));
 
   app.post(
     '/login',
