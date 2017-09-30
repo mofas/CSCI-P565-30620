@@ -17,7 +17,8 @@
     "react-scripts-appier": "6.3.0",
     "redux": "^3.7.2",
     "redux-duck": "^1.0.2",
-    "redux-thunk": "^2.2.0"
+    "redux-thunk": "^2.2.0",
+    "superagent": "^3.6.1"
   },
   "scripts": {
     "predeploy": "yarn run build",

@@ -14,7 +14,7 @@ const setupPassport = (app, { config, db }) => {
 
   passport.use(
     new passportLocal.Strategy((username, password, done) => {
-      console.log('hooooo', username, password);
+      // console.log('hooooo', username, password);
       if (username === 'admin' && password === '1234') {
         return done(null, { username });
       }

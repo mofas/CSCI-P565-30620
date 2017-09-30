@@ -12,6 +12,16 @@
   font-weight: bold;
 }
 
+.user-info {
+  display: flex;
+  color: #fff;
+}
+
+.user-name {
+  font-weight: bold;
+  margin-right: 20px;
+}
+
 .logout-btn {
   color: #cfdbf2;
   cursor: pointer;

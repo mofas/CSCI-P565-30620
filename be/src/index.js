@@ -9,7 +9,12 @@ import passport from 'passport';
 import HTTPStatus from 'http-status';
 import { setup } from './serverUtil';
 
-import { successLoginHandler, failLoginHandler } from './api';
+import {
+  indexHandler,
+  getUserInfoHandler,
+  successLoginHandler,
+  failLoginHandler,
+} from './api';
 
 const main = async () => {
   // setup DB
@@ -23,17 +28,10 @@ const main = async () => {
 
   let app = setup(express(), { config, db });
 
-  app.get('/getUserInfo', (req, rsp) => {
-    rsp.status(HTTPStatus.OK).send(req.user);
-  });
-
-  app.get('/success_login', (req, rsp) => {
-    rsp.status(HTTPStatus.OK).send({
-      message: 'success login',
-    });
-  });
-
+  app.get('/', indexHandler);
+  app.get('/success_login', successLoginHandler);
   app.get('/fail_login', failLoginHandler);
+  app.get('/getUserInfo', getUserInfoHandler);
 
   app.post(
     '/login',
@@ -42,15 +40,6 @@ const main = async () => {
       failureRedirect: '/fail_login',
     })
   );
-
-  app.post('/test', (req, rsp) => {
-    console.log(req.query);
-    console.log(req.body);
-    console.log(req.params);
-    rsp.status(HTTPStatus.OK).send({
-      message: 'success login',
-    });
-  });
 
   app.get('/logout', (req, rsp) => {
     req.logout();
