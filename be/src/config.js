@@ -5,6 +5,9 @@ const defaultConfig = {
     hostname: '127.0.0.1',
     port: 5000,
   },
+  fe: {
+    hostname: 'http://localhost:3000/#/',
+  },
   mongo: {
     url: `mongodb://localhost:27017/local`,
   },
@@ -22,6 +25,9 @@ const testingConfig = {
   server: {
     hostname: '127.0.0.1',
     port: 5000,
+  },
+  fe: {
+    hostname: 'https://mofas.github.io/CSCI-P565-30620/#/',
   },
   mongo: {
     url: `mongodb://localhost:27017/local`, //TODO: should target to testing db

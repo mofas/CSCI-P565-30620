@@ -1,11 +1,15 @@
 import express from 'express';
 import config from './config';
 import mongodb from 'mongodb';
+import passport from 'passport';
+
 // import graphqlHTTP from 'express-graphql';
 // import { schema } from './graphql/schema';
 
 import HTTPStatus from 'http-status';
 import { setup } from './serverUtil';
+
+import { successLoginHandler, failLoginHandler } from './api';
 
 const main = async () => {
   // setup DB
@@ -19,6 +23,41 @@ const main = async () => {
 
   let app = setup(express(), { config, db });
 
+  app.get('/getUserInfo', (req, rsp) => {
+    rsp.status(HTTPStatus.OK).send(req.user);
+  });
+
+  app.get('/success_login', (req, rsp) => {
+    rsp.status(HTTPStatus.OK).send({
+      message: 'success login',
+    });
+  });
+
+  app.get('/fail_login', failLoginHandler);
+
+  app.post(
+    '/login',
+    passport.authenticate('local', {
+      successRedirect: '/success_login',
+      failureRedirect: '/fail_login',
+    })
+  );
+
+  app.post('/test', (req, rsp) => {
+    console.log(req.query);
+    console.log(req.body);
+    console.log(req.params);
+    rsp.status(HTTPStatus.OK).send({
+      message: 'success login',
+    });
+  });
+
+  app.get('/logout', (req, rsp) => {
+    req.logout();
+    rsp.redirect('/');
+  });
+
+  /**
   //read
   app.get('/account/read/:username', async (req, rsp) => {
     const ret = await db
@@ -53,6 +92,7 @@ const main = async () => {
       .toArray();
     rsp.status(HTTPStatus.OK).send(ret);
   });
+  **/
 
   app.listen(config.server.port);
 };
