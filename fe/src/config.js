@@ -16,4 +16,6 @@ const getEndpoint = () => {
 
 const targetEndpoint = getEndpoint();
 
+console.log(process.env.ENDPOINT, targetEndpoint);
+
 export const ENDPOINT = targetEndpoint.ENDPOINT;
