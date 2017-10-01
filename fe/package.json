@@ -21,8 +21,8 @@
     "superagent": "^3.6.1"
   },
   "scripts": {
-    "predeploy": "yarn run build",
-    "deploy": "ENDPOINT=testing gh-pages -d build",
+    "predeploy": "ENDPOINT=testing yarn run build",
+    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
