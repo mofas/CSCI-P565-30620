@@ -2,13 +2,13 @@ const DEFAULT_ENDPOINT_SET = {
   ENDPOINT: 'http://localhost:5000',
 };
 
-const STAGING_ENDPOINT_SET = {
-  ENDPOINT: 'http://localhost:5000',
+const TESTING_ENDPOINT_SET = {
+  ENDPOINT: 'https://game-server-kaolkhbour.now.sh',
 };
 
 const getEndpoint = () => {
-  if (process.env.ENDPOINT === 'staging') {
-    return STAGING_ENDPOINT_SET;
+  if (process.env.ENDPOINT === 'testing') {
+    return TESTING_ENDPOINT_SET;
   }
 
   return DEFAULT_ENDPOINT_SET;
