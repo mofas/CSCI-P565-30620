@@ -4,8 +4,7 @@
   "scripts": {
     "babel-node": "babel-node",
     "dev": "nodemon --exec npm run babel-node -- ./src/index.js",
-    "start":
-      "source db.env && source sendgrid.env && CONFIG=testing babel-node ./src/index.js"
+    "start": "CONFIG=testing babel-node ./src/index.js"
   },
   "dependencies": {
     "@sendgrid/mail": "^6.1.3",
