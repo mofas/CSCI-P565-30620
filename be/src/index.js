@@ -37,7 +37,7 @@ const main = async () => {
   app.get('/success_login', successLoginHandler);
   app.get('/fail_login', failLoginHandler);
 
-  app.get('/account/getUserInfo', getUserInfoHandler);
+  app.get('/account/get_user_info', getUserInfoHandler);
   app.post('/account/create', accountCreateHandler(db));
   app.post('/account/resend_email', resendEmailHandler(db));
   app.post('/account/verify_email', verifyEmailHandler(db));

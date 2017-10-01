@@ -20,12 +20,14 @@ class Navbar extends React.PureComponent {
   };
 
   componentWillMount() {
-    API.API('/account/getUserInfo').then(res => {
+    API.API('/account/get_user_info').then(res => {
       if (res.status === 401) {
         window.location.href = '#/';
-      } else {
-        this.setState({ email: res.email });
+      } else if (res.status === -1) {
+        window.location.href = '#/go_verify_email/' + res.email;
       }
+
+      this.setState({ email: res.email });
     });
   }
 

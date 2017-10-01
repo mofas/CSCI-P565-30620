@@ -14,7 +14,7 @@ const defaultConfig = {
   },
   session: {
     cookie: {
-      secure: false, // TODO: should be true in production environment
+      secure: false,
     },
     saveUninitialized: false,
     resave: false,
@@ -32,11 +32,12 @@ const testingConfig = {
     url: 'https://mofas.github.io/CSCI-P565-30620/#',
   },
   mongo: {
-    url: `mongodb://localhost:27017/local`, //TODO: should target to testing db
+    url: `mongodb://${process.env.DB_ACC}:${process.env
+      .DB_PWD}@ds155684.mlab.com:55684/football`,
   },
   session: {
     cookie: {
-      secure: true,
+      secure: false,
     },
     saveUninitialized: false,
     resave: false,

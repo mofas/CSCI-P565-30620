@@ -6,10 +6,12 @@ import config from '../config';
 import { sendVerifyEmail, sendResetPasswordEmail } from '../emailService';
 
 const genValCode = () => {
-  return crypto
-    .createHash('sha256')
-    .update(new Date().valueOf().toString() + config.server.salt)
-    .digest('base64');
+  return encodeURIComponent(
+    crypto
+      .createHash('sha256')
+      .update(new Date().valueOf().toString() + config.server.salt)
+      .digest('base64')
+  );
 };
 
 const hashPassword = password => {
@@ -27,15 +29,22 @@ export const indexHandler = (req, rsp, next) => {
 };
 
 export const getUserInfoHandler = (req, rsp, next) => {
-  rsp.status(HTTPStatus.OK).send(
-    Object.assign(
-      {},
-      {
-        err: 0,
-      },
-      req.user
-    )
-  );
+  if (req.user) {
+    rsp.status(HTTPStatus.OK).send(
+      Object.assign(
+        {},
+        {
+          err: 0,
+        },
+        req.user
+      )
+    );
+  } else {
+    rsp.status(HTTPStatus.OK).send({
+      err: 1,
+      message: 'Please verify your email',
+    });
+  }
 };
 
 export const successLoginHandler = (req, rsp, next) => {

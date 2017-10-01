@@ -23,21 +23,16 @@ const setupPassport = (app, { config, db }) => {
       const ret = await db
         .collection('accounts')
         .findOne({ email, password: hashpwd });
-
       if (ret) {
-        return done(null, {
-          email: ret.email,
-          role: ret.role,
-          status: ret.status,
-        });
+        return done(null, ret.email);
       }
 
       return done(null, false);
     })
   );
 
-  passport.serializeUser(function(user, cb) {
-    cb(null, user.email);
+  passport.serializeUser(function(email, cb) {
+    cb(null, email);
   });
 
   passport.deserializeUser(function(email, cb) {
@@ -72,7 +67,7 @@ export const setup = (app, { config, db }) => {
     rsp.sendStatus(HTTPStatus.OK).end();
   });
 
-  app.use('/getUserInfo', checkAuth);
+  app.use('/account/get_user_info', checkAuth);
   //app.use('/graphql', checkAuth);
 
   app.locals.db = db;

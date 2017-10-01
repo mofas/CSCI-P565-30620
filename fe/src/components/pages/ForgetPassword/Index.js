@@ -40,6 +40,7 @@ class ForgetPassword extends React.PureComponent {
         });
     }).then(res => {
       alert(res.message);
+      window.location.href = '#/';
     });
   };
 
