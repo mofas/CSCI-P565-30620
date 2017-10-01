@@ -7,7 +7,7 @@ const TESTING_ENDPOINT_SET = {
 };
 
 const getEndpoint = () => {
-  if (process.env.ENDPOINT === 'testing') {
+  if (process.env.REACT_APP_ENDPOINT === 'testing') {
     return TESTING_ENDPOINT_SET;
   }
 
@@ -15,7 +15,5 @@ const getEndpoint = () => {
 };
 
 const targetEndpoint = getEndpoint();
-
-console.log(process.env.ENDPOINT, targetEndpoint);
 
 export const ENDPOINT = targetEndpoint.ENDPOINT;

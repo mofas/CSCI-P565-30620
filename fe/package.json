@@ -24,7 +24,7 @@
     "predeploy": "yarn run build",
     "deploy": "gh-pages -d build",
     "start": "react-scripts start",
-    "build": "ENDPOINT=testing react-scripts build",
+    "build": "REACT_APP_ENDPOINT=testing react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   }
