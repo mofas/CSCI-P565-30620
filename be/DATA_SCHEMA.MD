@@ -47,8 +47,6 @@
   kickret_tds: 12, //Integer
   puntret_tds: 12, //Integer
   defense_tds: 12, //Integer
-
-
 }
 ```
 
@@ -70,9 +68,12 @@
   name: "Chicago Bears",
   code: "CHI",
 }
+```
 
 
 #### LEAGUES
+
+```js
 {
   league_id: "xxxx",
   name: "Our First Leagues",
@@ -120,9 +121,11 @@
 #### SCHEDULE
 
 ```js
+{
   week_no: 1, //Integer
   first_team: "xxxxx",
   second_team: "xxxxx",
+}
 ```
 
 
