@@ -21,7 +21,17 @@ Click `Add deploy key` and paste it.
 
 Then go back slio, clone the repo.
 
-````
+```
 git clone git@github.com:mofas/CSCI-P565-30620.git
 ```
+
+
+### Build front-end server
+
+```
+cd fe && npm install
+```
+
+It should take minutes.
+
 
