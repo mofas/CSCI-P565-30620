@@ -85,14 +85,12 @@ Edit the config file like following set.
 30
 ```
 
-Save & Exit vim, then hit
-
-Run the following command to run your mongodb on background
+Save & Exit vim, then hit the following command to run mongodb on background
 ```
 nohup mongod --config /u/<username>/mongodb/mongod.conf &
 ```
 
-If you encounter error like following:
+If you encounter an error like following:
 ```
 2017-10-04T21:03:33.060-0400 SEVERE: Failed global initialization: BadValue Invalid or no user locale set. Please ensure LANG and/or LC_* environment variables are set correctly.
 ```
@@ -102,5 +100,4 @@ Please try the following command, and try it again.
 export LC_ALL=C
 ```
 
-You can use `kill %1` to stop mongoDB. (I assume you know how kill work in linux).
-You can use mongo shell `mongo localhost:27017` to inspect your DB now.
+You can use `kill %1` to stop mongoDB. (I assume you know how kill work in linux), and you can use mongo shell `mongo localhost:27017` to inspect your DB now.
