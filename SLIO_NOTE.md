@@ -37,6 +37,10 @@ It should take minutes.
 
 ## Launch mongodb
 
+
+
+### Option 1: Install mongodb locally
+
 Change \<username\> to your net ID in the following commands.
 
 ```
@@ -99,3 +103,24 @@ export LC_ALL=C
 ```
 
 You can use `kill %1` to stop mongoDB. (I assume you know how kill work in linux), and you can use mongo shell `mongo localhost:27017` to inspect your DB now.
+
+
+#### Option 2: Run mongodb inside docker
+
+
+```
+mkdir /u/<username>/mongodb
+mkdir /u/<username>/mongodb/data
+mkdir /u/<username>/mongodb/data/db
+docker run -p 27017:27017 -v /u/<username>/mongodb/data/db:/data/db --name my-mongo-db -d mongo --storageEngine wiredTiger
+```
+
+If it start successfully, you can use `docker ps` to check.
+It should look like
+
+```
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                      NAMES
+7164be7891c7        mongo               "docker-entrypoint..."   2 days ago          Up 3 seconds        0.0.0.0:27017->27017/tcp   my-mongo-db
+```
+
+You can use mongo shell `mongo localhost:27017` to inspect your DB now.
