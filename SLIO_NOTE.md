@@ -39,7 +39,7 @@ It should take minutes.
 
 ### Launch mongodb
 
-Change <username> to your net ID in the following commands.
+Change \<username\> to your net ID in the following commands.
 
 ```
 mkdir /u/<username>/mongodb
