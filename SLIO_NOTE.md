@@ -57,9 +57,10 @@ Hit the following commands to build file.
 npm run build
 ```
 
-Then we just need to copy our page to that folder
+Then we just need to copy our page to that folder,
 ```
-mv ./build ./cgi-pub && mv ./cgi-pub /u/<username>
+rm -rf /u/<username>/cgi-pub
+mv ./build ./cgi-pub && mv -f ./cgi-pub /u/<username>/
 ```
 
 Then you can visit page
