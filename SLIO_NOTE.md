@@ -28,11 +28,45 @@ git clone git@github.com:mofas/CSCI-P565-30620.git
 
 ## Build front-end server
 
+Then you will need to create homepage by SICE Homepage Management
+
+```
+https://help.sice.indiana.edu/homes/
+```
+
+Select HTML/PHP/CGI Options, and then there is folder `cgi-pub` will be creatd in your user folder.
+
+
+Follwoing commands will install dependency, and it should take minutes.
+
 ```
 cd fe && npm install
 ```
 
-It should take minutes.
+Before you build file, edit package.json
+
+```git
+-  "homepage": "http://mofas.github.io/CSCI-P565-30620",
++  "homepage": "http://homes.soic.indiana.edu/<username>/",
+```
+
+
+Hit the following commands to build file.
+
+```
+npm run build
+```
+
+Then we just need to copy our page to that folder
+```
+mv ./build ./cgi-pub && mv ./cgi-pub /u/<username>
+```
+
+Then you can visit page
+
+```
+http://homes.soic.indiana.edu/<username>
+```
 
 
 ## Launch mongodb
