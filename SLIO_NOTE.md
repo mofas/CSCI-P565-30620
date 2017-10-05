@@ -26,7 +26,7 @@ git clone git@github.com:mofas/CSCI-P565-30620.git
 ```
 
 
-### Build front-end server
+## Build front-end server
 
 ```
 cd fe && npm install
@@ -35,9 +35,7 @@ cd fe && npm install
 It should take minutes.
 
 
-
-
-### Launch mongodb
+## Launch mongodb
 
 Change \<username\> to your net ID in the following commands.
 
