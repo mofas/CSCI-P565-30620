@@ -1,15 +1,39 @@
 import React, { Component } from 'react';
-import { Route } from 'react-router-dom';
+import { Link, Route } from 'react-router-dom';
 
 import Navbar from '../components/common/Navbar/Navbar';
-import Landing from '../components/pages/Landing/Index';
+import News from '../components/pages/News/Index';
+import PlayerList from '../components/pages/PlayerList/Index';
+import PlayerDetail from '../components/pages/PlayerDetail/Index';
+
+import classnames from 'classnames/bind';
+import style from './App.css';
+const cx = classnames.bind(style);
 
 export default class MainLayout extends Component {
   render() {
     return (
       <div>
         <Navbar />
-        <Route exact path="/app/landing" component={Landing} />
+        <div className={cx('container')}>
+          <div className={cx('menu')}>
+            <Link className={cx('link')} to="/app/news">
+              News
+            </Link>
+            <Link className={cx('link')} to="/app/player/list">
+              Players
+            </Link>
+          </div>
+          <div className={cx('content')}>
+            <Route exact path="/app/news" component={News} />
+            <Route exact path="/app/player/list" component={PlayerList} />
+            <Route
+              exact
+              path="/app/player/detail/:p_id"
+              component={PlayerDetail}
+            />
+          </div>
+        </div>
       </div>
     );
   }

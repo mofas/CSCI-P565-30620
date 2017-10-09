@@ -1,0 +1,17 @@
+.menu {
+  display: flex;
+  background: #333;
+}
+
+.link {
+  width: 200px;
+  color: #aaa;
+  padding: 16px;
+  text-decoration: none;
+  text-align: center;
+  border-right: 2px solid #888;
+  &:hover {
+    color: #fff;
+    background: #555;
+  }
+}

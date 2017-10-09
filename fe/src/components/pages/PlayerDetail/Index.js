@@ -4,11 +4,11 @@ import classnames from 'classnames/bind';
 import style from './Index.css';
 const cx = classnames.bind(style);
 
-class Landing extends React.PureComponent {
+class PlayerDetail extends React.PureComponent {
   render() {
     const { props } = this;
     return <div className={cx('root')}>Welcome onboard</div>;
   }
 }
 
-export default Landing;
+export default PlayerDetail;
