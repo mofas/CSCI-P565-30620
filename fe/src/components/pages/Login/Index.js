@@ -43,7 +43,7 @@ class Login extends React.PureComponent {
         .send(param);
     }).then(res => {
       if (res.err === 0) {
-        window.location.href = '#/app/landing';
+        window.location.href = '#/app/news';
       } else {
         alert('Passowrd is not correct, or account not existed');
       }
