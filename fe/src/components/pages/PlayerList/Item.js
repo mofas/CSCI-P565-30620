@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { Link } from 'react-router-dom';
+
 import classnames from 'classnames/bind';
 import style from './Index.css';
 const cx = classnames.bind(style);
@@ -9,7 +11,7 @@ class PlayerItem extends React.PureComponent {
     const { props } = this;
     const { data } = props;
     return (
-      <div className={cx('item')}>
+      <Link className={cx('item')} to="/app/player/detail/14135">
         <div className={cx('thumb')} />
         <div className={cx('info')}>
           <div className={cx('basic-info')}>
@@ -53,7 +55,7 @@ class PlayerItem extends React.PureComponent {
             </div>
           </div>
         </div>
-      </div>
+      </Link>
     );
   }
 }

@@ -1,5 +1,42 @@
 .root {
+  margin: 0 auto;
+  width: 640px;
   padding: 16px;
-  text-align: center;
   font-size: 20px;
+}
+
+.block {
+  background-color: #efefef;
+  font-size: 16px;
+  padding: 20px;
+  margin-bottom: 10px;
+}
+
+.main-title {
+  font-size: 20px;
+  margin: 20px 0;
+}
+
+.basic-info {
+  display: flex;
+
+  .thumb {
+    width: 80px;
+    height: 80px;
+    background-color: #555;
+    margin-right: 16px;
+  }
+
+  .info {
+    display: flex;
+  }
+  .name {
+    width: 160px;
+  }
+  .position {
+    width: 120px;
+  }
+  .rank {
+    flex: 1;
+  }
 }
