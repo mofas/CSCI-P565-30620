@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 import { fromJS } from 'immutable';
 
@@ -39,6 +40,7 @@ class PlayerDetail extends React.PureComponent {
     const { props } = this;
     return (
       <div className={cx('root')}>
+        <Link to="/app/player/list">Back to Player List</Link>
         <div className={cx('main-title')}>Player Info</div>
 
         <div className={cx('basic-info', 'block')}>
