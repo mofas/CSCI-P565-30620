@@ -1,5 +1,55 @@
 .root {
   padding: 16px;
-  text-align: center;
-  font-size: 20px;
+}
+
+.item {
+  display: flex;
+  font-size: 14px;
+  margin-bottom: 20px;
+  padding: 20px;
+  background-color: #eee;
+}
+
+.thumb {
+  width: 80px;
+  height: 80px;
+  background-color: #555;
+  margin-right: 16px;
+}
+
+.basic-info {
+  font-size: 16px;
+  display: flex;
+  margin-bottom: 10px;
+  .name {
+    width: 160px;
+  }
+  .position {
+    width: 120px;
+  }
+  .rank {
+    flex: 1;
+  }
+}
+
+.ability-title {
+  color: #777;
+  font-size: 11px;
+  margin: 10px 0;
+  padding-bottom: 5px;
+  border-bottom: 1px solid #ddd;
+}
+
+.ability {
+  display: flex;
+}
+
+.ab-item {
+  color: #555;
+  font-size: 13px;
+  width: 140px;
+  .type {
+    font-weight: bold;
+    margin-right: 10px;
+  }
 }

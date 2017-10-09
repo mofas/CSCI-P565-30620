@@ -41,7 +41,7 @@
   defense_int: 12, //Integer
   defense_ffum: 12, //Integer
   defense_sk: 12, //Integer
-  defense_xpblk+defense_fgblk: 12, //Integer
+  defense_xpblk_defense_fgblk: 12, //Integer
   defense_puntblk: 12, //Integer
   defense_safe: 12, //Integer
   kickret_tds: 12, //Integer
