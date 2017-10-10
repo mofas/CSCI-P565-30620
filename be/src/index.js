@@ -3,8 +3,8 @@ import config from './config';
 import mongodb from 'mongodb';
 import passport from 'passport';
 
-// import graphqlHTTP from 'express-graphql';
-// import { schema } from './graphql/schema';
+import graphqlHTTP from 'express-graphql';
+import { schema } from './graphql/schema';
 
 import HTTPStatus from 'http-status';
 import { setup } from './serverUtil';
@@ -57,27 +57,19 @@ const main = async () => {
     rsp.redirect('/');
   });
 
-  /**
-  //read
-  app.get('/account/read/:username', async (req, rsp) => {
-    const ret = await db
-      .collection('accounts')
-      .find({ username: req.params.username })
-      .toArray();
-    rsp.status(HTTPStatus.OK).send(ret);
+  app.use('/graphql', (req, rsp, next) => {
+    const context = {
+      cfg: config,
+      db,
+      req,
+    };
+    return graphqlHTTP({
+      schema,
+      context: context,
+      rootValue: context,
+      graphiql: true,
+    })(req, rsp, next);
   });
-
-  //create
-
-  //list
-  app.get('/account/list', async (req, rsp) => {
-    const ret = await db
-      .collection('accounts')
-      .find({})
-      .toArray();
-    rsp.status(HTTPStatus.OK).send(ret);
-  });
-  **/
 
   app.listen(config.server.port);
 };
