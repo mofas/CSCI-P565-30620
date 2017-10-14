@@ -53,6 +53,16 @@ const API = Connector(
   }
 );
 
+const GraphQL = query => {
+  return API((request, endpoint) => {
+    return request
+      .post(endpoint + '/graphql')
+      .type('json')
+      .send(JSON.stringify({ query }));
+  });
+};
+
 export default {
   API,
+  GraphQL,
 };

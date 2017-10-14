@@ -11,13 +11,13 @@ class PlayerItem extends React.PureComponent {
     const { props } = this;
     const { data } = props;
     return (
-      <Link className={cx('item')} to="/app/player/detail/14135">
+      <Link className={cx('item')} to={`/app/player/detail/${data.get('_id')}`}>
         <div className={cx('thumb')} />
         <div className={cx('info')}>
           <div className={cx('basic-info')}>
-            <div className={cx('name')}>Name: {data.get('name')}</div>
+            <div className={cx('name')}>Name: {data.get('Name')}</div>
             <div className={cx('position')}>
-              Position: {data.get('position')}
+              Position: {data.get('Position')}
             </div>
             <div className={cx('rank')}>
               Fantasy Rank: {data.get('fancy_score_rank')}
@@ -27,31 +27,27 @@ class PlayerItem extends React.PureComponent {
           <div className={cx('ability')}>
             <div className={cx('ab-item')}>
               <span className={cx('type')}>Passing Yds</span>
-              {data.get('passing_yds')}
+              {data.get('Passing_Yards')}
             </div>
             <div className={cx('ab-item')}>
               <span className={cx('type')}>Rushing Yds</span>
-              {data.get('rushing_yds')}
+              {data.get('Rushing_Yards')}
             </div>
             <div className={cx('ab-item')}>
               <span className={cx('type')}>Receiving Yds</span>
-              {data.get('receiving_yds')}
+              {data.get('Receiving_Yards')}
             </div>
             <div className={cx('ab-item')}>
               <span className={cx('type')}>Passing Tds</span>
-              {data.get('passing_tds')}
+              {data.get('Passing_TDs')}
             </div>
             <div className={cx('ab-item')}>
               <span className={cx('type')}>Rushing Tds</span>
-              {data.get('rushing_tds')}
+              {data.get('Rushing_TDs')}
             </div>
             <div className={cx('ab-item')}>
-              <span className={cx('type')}>Puntret Tds</span>
-              {data.get('puntret_tds')}
-            </div>
-            <div className={cx('ab-item')}>
-              <span className={cx('type')}>Defense Tds</span>
-              {data.get('defense_tds')}
+              <span className={cx('type')}>Receiving Tds</span>
+              {data.get('Receiving_TD')}
             </div>
           </div>
         </div>
