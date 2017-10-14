@@ -2,7 +2,7 @@ import { graphql, GraphQLObjectType, GraphQLSchema } from 'graphql';
 
 import { ListPlayer, QueryPlayer, ListLeague } from './query';
 
-import { CreateLeague } from './mutation';
+import { CreateLeague, JoinLeague } from './mutation';
 
 export const schema = new GraphQLSchema({
   query: new GraphQLObjectType({
@@ -17,6 +17,7 @@ export const schema = new GraphQLSchema({
     name: 'RootMutationType',
     fields: {
       CreateLeague,
+      JoinLeague,
     },
   }),
 });

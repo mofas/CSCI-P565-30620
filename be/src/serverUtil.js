@@ -39,8 +39,8 @@ const setupPassport = (app, { config, db }) => {
     db
       .collection('accounts')
       .findOne({ email })
-      .then(({ email, role, status }) => {
-        cb(null, { email, role, status });
+      .then(({ _id, email, role, status }) => {
+        cb(null, { _id: String(_id), email, role, status });
       });
   });
 };

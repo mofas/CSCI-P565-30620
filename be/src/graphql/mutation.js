@@ -36,3 +36,37 @@ export const CreateLeague = {
     return savedData;
   },
 };
+
+export const JoinLeague = {
+  type: LeagueType,
+  args: {
+    _id: { type: GraphQLString },
+  },
+  resolve: async ({ req, db }, { _id }, info) => {
+    const query = {
+      _id: ObjectId(_id),
+    };
+
+    const result = await db.collection('leagues').findOne(query);
+    if (
+      result.accounts.length < result.limit &&
+      req.user &&
+      !result.accounts.includes(req.user._id)
+    ) {
+      const { value } = await db.collection('leagues').findOneAndUpdate(
+        {
+          _id: ObjectId(result._id),
+        },
+        {
+          $set: { accounts: [req.user._id, ...result.accounts] },
+        },
+        {
+          returnOriginal: false,
+        }
+      );
+      return value;
+    } else {
+      return result;
+    }
+  },
+};

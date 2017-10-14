@@ -55,8 +55,27 @@ export const LeagueType = new GraphQLObjectType({
     stage: { type: GraphQLString }, //Initial, Draft, Game, Finish
     limit: { type: GraphQLInt },
     draft_run: { type: GraphQLInt },
-    accounts: { type: new GraphQLList(AccountType) },
-    current_pickup_accounts: { type: AccountType },
+    accounts: {
+      type: new GraphQLList(AccountType),
+      resolve: async ({ accounts }, args, { db }) => {
+        const ret = await db
+          .collection('accounts')
+          .find({ _id: { $in: accounts.map(ObjectId) } })
+          .toArray();
+        return ret;
+      },
+    },
+    current_pickup_accounts: {
+      type: AccountType,
+      resolve: async ({ current_pickup_accounts }, args, { db }) => {
+        if (current_pickup_accounts) {
+          const ret = await db
+            .collection('accounts')
+            .findOne({ _id: ObjectId(current_pickup_accounts) });
+          return ret;
+        }
+      },
+    },
   },
 });
 
