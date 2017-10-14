@@ -14,26 +14,7 @@ import {
   GraphQLBoolean,
 } from 'graphql';
 
-const PlayerType = new GraphQLObjectType({
-  name: 'PlayerType',
-  fields: {
-    _id: { type: GraphQLString },
-    Name: { type: GraphQLString },
-    Position: { type: GraphQLString },
-    Team: { type: GraphQLString },
-    Passing_Yards: { type: GraphQLInt },
-    Rushing_Yards: { type: GraphQLInt },
-    Receiving_Yards: { type: GraphQLInt },
-    Passing_TDs: { type: GraphQLInt },
-    Rushing_TDs: { type: GraphQLInt },
-    Receiving_TD: { type: GraphQLInt },
-    FG_Made: { type: GraphQLInt },
-    FG_Missed: { type: GraphQLInt },
-    Extra_Points_Made: { type: GraphQLInt },
-    Interceptions: { type: GraphQLInt },
-    Fumbles_Lost: { type: GraphQLInt },
-  },
-});
+import { PlayerType, LeagueType } from './model';
 
 export const ListPlayer = {
   type: new GraphQLList(PlayerType),
@@ -48,7 +29,6 @@ export const ListPlayer = {
     const result = await db
       .collection('players')
       .find(query)
-      .sort({ Name: -1 })
       .skip(skip)
       .limit(limit)
       .toArray();
@@ -66,6 +46,18 @@ export const QueryPlayer = {
       _id: ObjectId(_id),
     };
     const result = await db.collection('players').findOne(query);
+    return result;
+  },
+};
+
+export const ListLeague = {
+  type: new GraphQLList(LeagueType),
+  args: {},
+  resolve: async ({ db }, { _id }, info) => {
+    const result = await db
+      .collection('leagues')
+      .find({})
+      .toArray();
     return result;
   },
 };

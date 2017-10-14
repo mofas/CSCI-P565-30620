@@ -1,6 +1,8 @@
 import { graphql, GraphQLObjectType, GraphQLSchema } from 'graphql';
 
-import { ListPlayer, QueryPlayer } from './query';
+import { ListPlayer, QueryPlayer, ListLeague } from './query';
+
+import { CreateLeague } from './mutation';
 
 export const schema = new GraphQLSchema({
   query: new GraphQLObjectType({
@@ -8,6 +10,13 @@ export const schema = new GraphQLSchema({
     fields: {
       ListPlayer,
       QueryPlayer,
+      ListLeague,
+    },
+  }),
+  mutation: new GraphQLObjectType({
+    name: 'RootMutationType',
+    fields: {
+      CreateLeague,
     },
   }),
 });
