@@ -3,6 +3,7 @@ import { fromJS, List, Map } from 'immutable';
 
 import API from '../../../middleware/API';
 
+import LabelInput from '../../common/Input/LabelInput';
 import Item from './Item';
 
 import classnames from 'classnames/bind';
@@ -118,6 +119,7 @@ class PlayerList extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
+      keyword: '',
       players: List([]),
     };
   }
@@ -153,12 +155,68 @@ class PlayerList extends React.PureComponent {
     });
   }
 
+  changeKeyword = e => {
+    this.setState({
+      keyword: e.target.value,
+    });
+  };
+
   render() {
     const { state, props } = this;
-    const { players } = state;
+    const { keyword, players } = state;
+
+    let tableData = players;
+
+    if (keyword && keyword.length > 0) {
+      tableData = tableData.filter(d => {
+        return d
+          .get('Name')
+          .toLowerCase()
+          .includes(keyword.toLowerCase());
+      });
+    }
+
     return (
       <div className={cx('root')}>
-        {players.map(d => {
+        <div className={cx('search-bar')}>
+          <LabelInput
+            label="Search by Name"
+            type="text"
+            value={keyword}
+            onChange={this.changeKeyword}
+          />
+        </div>
+
+        <div className={cx('header', 'item')}>
+          <div className={cx('info')}>
+            <div className={cx('basic-info')}>
+              <div className={cx('thumb-placeholder')} />
+              <div className={cx('name')}>Name</div>
+              <div className={cx('position')}>Position</div>
+            </div>
+          </div>
+          <div className={cx('ability')}>
+            <div className={cx('ab-item')}>
+              <span className={cx('type')}>Passing Yds</span>
+            </div>
+            <div className={cx('ab-item')}>
+              <span className={cx('type')}>Rushing Yds</span>
+            </div>
+            <div className={cx('ab-item')}>
+              <span className={cx('type')}>Receiving Yds</span>
+            </div>
+            <div className={cx('ab-item')}>
+              <span className={cx('type')}>Passing Tds</span>
+            </div>
+            <div className={cx('ab-item')}>
+              <span className={cx('type')}>Rushing Tds</span>
+            </div>
+            <div className={cx('ab-item')}>
+              <span className={cx('type')}>Receiving Tds</span>
+            </div>
+          </div>
+        </div>
+        {tableData.map(d => {
           return <Item key={d.get('_id')} data={d} />;
         })}
       </div>

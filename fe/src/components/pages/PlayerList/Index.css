@@ -3,34 +3,47 @@
 }
 
 .item {
-  text-decoration: none;
   display: flex;
   font-size: 14px;
-  margin-bottom: 20px;
-  padding: 20px;
+  margin-bottom: 5px;
   background-color: #eee;
+  .header {
+    background-color: transparent;
+    padding: 10px;
+  }
 }
 
 .thumb {
-  width: 80px;
-  height: 80px;
+  width: 40px;
+  height: 40px;
   background-color: #555;
-  margin-right: 16px;
+  margin-right: 20px;
+}
+.thumb-placeholder {
+  width: 40px;
+  margin-right: 20px;
+}
+
+.info {
+  display: flex;
+  width: 300px;
+  padding: 10px;
+  border-right: 1px solid #fff;
 }
 
 .basic-info {
+  display: flex;
+  flex: 1;
   color: #203d71;
   font-size: 16px;
-  display: flex;
-  margin-bottom: 10px;
+  text-decoration: none;
   .name {
-    width: 160px;
+    width: 100%;
+    flex: 1;
+    margin-right: 20px;
   }
   .position {
-    width: 120px;
-  }
-  .rank {
-    flex: 1;
+    width: 60px;
   }
 }
 
@@ -47,11 +60,12 @@
 }
 
 .ab-item {
+  padding: 10px;
   color: #555;
-  font-size: 13px;
   width: 140px;
+  text-align: right;
+  border-right: 1px solid #fff;
   .type {
     font-weight: bold;
-    margin-right: 10px;
   }
 }
