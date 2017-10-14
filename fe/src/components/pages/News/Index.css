@@ -10,6 +10,7 @@
 }
 
 .item {
+  display: flex;
   margin: 0 40px 16px 40px;
   font-size: 13px;
   line-height: 16px;
@@ -17,10 +18,12 @@
 }
 
 .date {
+  width: 80px;
   font-size: 16px;
   letter-spacing: 0.4em;
   font-weight: bold;
-  margin-right: 20px;
+  text-align: right;
+  margin-right: 40px;
 }
 
 .text {

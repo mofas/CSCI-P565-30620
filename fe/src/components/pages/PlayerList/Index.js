@@ -3,8 +3,11 @@ import { fromJS, List, Set } from 'immutable';
 
 import API from '../../../middleware/API';
 
+import Spinner from '../../common/Spinner/Spinner';
+
 import Btn from '../../common/Btn/Btn';
 import LabelInput from '../../common/Input/LabelInput';
+
 import TableHeader from './TableHeader';
 import Item from './Item';
 
@@ -16,6 +19,7 @@ class PlayerList extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
+      loading: false,
       sortKey: '',
       sortDesc: true,
       keyword: '',
@@ -60,6 +64,10 @@ class PlayerList extends React.PureComponent {
       }
     `;
 
+    this.setState({
+      loading: true,
+    });
+
     API.GraphQL(query).then(res => {
       // console.log('cool!', res);
       const players = fromJS(res.data.ListPlayer);
@@ -70,6 +78,7 @@ class PlayerList extends React.PureComponent {
         return acc;
       }, Set());
       this.setState({
+        loading: false,
         players: players,
         allPosition: allPosition.toList(),
       });
@@ -106,6 +115,7 @@ class PlayerList extends React.PureComponent {
   render() {
     const { state, props } = this;
     const {
+      loading,
       selectPosition,
       keyword,
       sortKey,
@@ -144,6 +154,7 @@ class PlayerList extends React.PureComponent {
 
     return (
       <div className={cx('root')}>
+        <Spinner show={loading} />
         <div className={cx('search-bar')}>
           <LabelInput
             label="Search by Name"
@@ -158,6 +169,7 @@ class PlayerList extends React.PureComponent {
             {allPosition.map(d => {
               return (
                 <Btn
+                  key={d}
                   type={selectPosition === d ? 'secondary' : 'primary'}
                   className={cx('position-btn')}
                   onClick={() => this.toggleSelectPosition(d)}

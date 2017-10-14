@@ -1,6 +1,8 @@
 import React from 'react';
 
 import { Link } from 'react-router-dom';
+
+import Spinner from '../../common/Spinner/Spinner';
 import LabelInput from '../../common/Input/LabelInput';
 import Btn from '../../common/Btn/Btn';
 
@@ -14,6 +16,7 @@ class Login extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
+      loading: false,
       username: '',
       password: '',
     };
@@ -36,12 +39,19 @@ class Login extends React.PureComponent {
       password,
     };
 
+    this.setState({
+      loading: true,
+    });
+
     API.API((request, endpoint) => {
       return request
         .post(`${endpoint}/login`)
         .type('form')
         .send(param);
     }).then(res => {
+      this.setState({
+        loading: false,
+      });
       if (res.err === 0) {
         window.location.href = '#/app/news';
       } else {
@@ -52,7 +62,7 @@ class Login extends React.PureComponent {
 
   render() {
     const { state, props } = this;
-    const { username, password } = state;
+    const { loading, username, password } = state;
     return (
       <div className={cx('root')}>
         <div className={cx('bg', 'abs-center')}>
@@ -61,7 +71,8 @@ class Login extends React.PureComponent {
         <div className={cx('content', 'abs-center')}>
           <div className={cx('main-title')}>Your Game, Your Team</div>
           <div className={cx('title')}>Sing in to your NFL account</div>
-          <div className={cx('box')}>
+          <form className={cx('box')}>
+            <Spinner className={cx('loader')} show={loading} />
             <div className={cx('form')}>
               <LabelInput
                 label="Email"
@@ -88,7 +99,7 @@ class Login extends React.PureComponent {
             <Btn type="secondary" onClick={this.signin}>
               SIGN IN
             </Btn>
-          </div>
+          </form>
         </div>
       </div>
     );
