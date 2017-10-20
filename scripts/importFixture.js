@@ -1,7 +1,7 @@
 const csv = require('csvtojson');
 const mongodb = require('mongodb');
 
-const csvFilePath = '../nfl_stats.csv';
+const csvFilePath = '../dataset/nfl_stats.csv';
 
 const dbUrl = 'mongodb://localhost:27017/local';
 
