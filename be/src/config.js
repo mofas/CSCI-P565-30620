@@ -12,6 +12,11 @@ const defaultConfig = {
   mongo: {
     url: `mongodb://localhost:27017/local`,
   },
+  oauth: {
+    clientID: process.env.G_OAUTH_CLIENT_ID,
+    clientSecret: process.env.G_OAUTH_SECRET,
+    callbackURL: 'http://localhost:5000/oauth2callback',
+  },
   session: {
     cookie: {
       secure: false,
@@ -34,6 +39,11 @@ const testingConfig = {
   mongo: {
     url: `mongodb://${process.env.DB_ACC}:${process.env
       .DB_PWD}@ds155684.mlab.com:55684/football`,
+  },
+  oauth: {
+    clientID: process.env.G_OAUTH_CLIENT_ID,
+    clientSecret: process.env.G_OAUTH_SECRET,
+    callbackURL: 'https://csci.now.sh/oauth2callback',
   },
   session: {
     cookie: {

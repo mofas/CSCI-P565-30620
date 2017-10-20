@@ -37,6 +37,19 @@ const main = async () => {
   app.get('/success_login', successLoginHandler);
   app.get('/fail_login', failLoginHandler);
 
+  app.get(
+    '/auth/google',
+    passport.authenticate('google', { scope: ['email'] })
+  );
+
+  app.get(
+    '/oauth2callback',
+    passport.authenticate('google', { failureRedirect: '/fail_login' }),
+    (req, res) => {
+      res.redirect(config.fe.url);
+    }
+  );
+
   app.get('/account/get_user_info', getUserInfoHandler);
   app.post('/account/create', accountCreateHandler(db));
   app.post('/account/resend_email', resendEmailHandler(db));

@@ -3,10 +3,14 @@ import crypto from 'crypto';
 
 import passport from 'passport';
 import passportLocal from 'passport-local';
+import passportGoogleOAuth from 'passport-google-oauth20';
+
 import session from 'express-session';
 
 import config from './config';
 import bodyParser from 'body-parser';
+
+import { createAccount } from './accountUtil';
 
 const setupPassport = (app, { config, db }) => {
   app.use(session(config.session));
@@ -29,6 +33,33 @@ const setupPassport = (app, { config, db }) => {
 
       return done(null, false);
     })
+  );
+
+  // console.log(
+  //   config.oauth.clientID,
+  //   config.oauth.clientSecret,
+  //   config.oauth.callbackURL
+  // );
+
+  passport.use(
+    new passportGoogleOAuth.Strategy(
+      {
+        clientID: config.oauth.clientID,
+        clientSecret: config.oauth.clientSecret,
+        callbackURL: config.oauth.callbackURL,
+      },
+      async (accessToken, refreshToken, profile, cb) => {
+        const email = profile.emails[0].value;
+        const ret = await db.collection('accounts').findOne({ email });
+        console.log(ret);
+        if (!ret) {
+          await createAccount(db)({ email, status: 0 });
+          cb(null, email);
+        } else {
+          cb(null, email);
+        }
+      }
+    )
   );
 
   passport.serializeUser(function(email, cb) {

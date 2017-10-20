@@ -1,18 +1,9 @@
 import HTTPStatus from 'http-status';
-import crypto from 'crypto';
+
 import { ObjectId } from 'mongodb';
-
 import config from '../config';
+import { createAccount, genValCode } from '../accountUtil';
 import { sendVerifyEmail, sendResetPasswordEmail } from '../emailService';
-
-const genValCode = () => {
-  return encodeURIComponent(
-    crypto
-      .createHash('sha256')
-      .update(new Date().valueOf().toString() + config.server.salt)
-      .digest('base64')
-  );
-};
 
 const hashPassword = password => {
   return crypto
@@ -68,14 +59,7 @@ export const accountCreateHandler = db => async (req, rsp) => {
   const hashpwd = hashPassword(password);
 
   if (!ret) {
-    await db.collection('accounts').insertOne({
-      email,
-      password: hashpwd,
-      role: 'player',
-      status: -1,
-      valCode: genValCode(),
-    });
-
+    await createAccount(db)({ email, hashpwd });
     await sendVerifyEmail(db)(email);
 
     rsp.status(HTTPStatus.OK).send({
