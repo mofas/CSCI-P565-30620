@@ -14,7 +14,7 @@ import {
   GraphQLBoolean,
 } from 'graphql';
 
-import { PlayerType, LeagueType } from './model';
+import { AccountType, PlayerType, LeagueType } from './model';
 
 export const ListPlayer = {
   type: new GraphQLList(PlayerType),
@@ -58,6 +58,20 @@ export const ListLeague = {
       .collection('leagues')
       .find({})
       .toArray();
+    return result;
+  },
+};
+
+export const QueryAccount = {
+  type: AccountType,
+  args: {
+    _id: { type: GraphQLString },
+  },
+  resolve: async ({ db }, { _id }, info) => {
+    const query = {
+      _id: ObjectId(_id),
+    };
+    const result = await db.collection('accounts').findOne(query);
     return result;
   },
 };

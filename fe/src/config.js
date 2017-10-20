@@ -3,7 +3,7 @@ const DEFAULT_ENDPOINT_SET = {
 };
 
 const TESTING_ENDPOINT_SET = {
-  ENDPOINT: 'https://game-server-kaolkhbour.now.sh',
+  ENDPOINT: 'https://csci.now.sh',
 };
 
 const getEndpoint = () => {
