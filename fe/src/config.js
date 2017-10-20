@@ -16,4 +16,5 @@ const getEndpoint = () => {
 
 const targetEndpoint = getEndpoint();
 
+export const OAUTH_URL = targetEndpoint.ENDPOINT + '/auth/google';
 export const ENDPOINT = targetEndpoint.ENDPOINT;

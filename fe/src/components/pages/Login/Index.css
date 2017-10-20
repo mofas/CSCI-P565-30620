@@ -72,3 +72,7 @@
 .link {
   text-decoration: none;
 }
+
+.oauth-btn {
+  margin-top: 20px;
+}

@@ -46,7 +46,7 @@ const main = async () => {
     '/oauth2callback',
     passport.authenticate('google', { failureRedirect: '/fail_login' }),
     (req, res) => {
-      res.redirect(config.fe.url);
+      res.redirect(config.fe.url + '/#/app/news');
     }
   );
 

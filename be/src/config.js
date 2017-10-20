@@ -7,7 +7,7 @@ const defaultConfig = {
     salt: 'eewew',
   },
   fe: {
-    url: 'http://localhost:3000/#',
+    url: 'http://localhost:3000',
   },
   mongo: {
     url: `mongodb://localhost:27017/local`,
@@ -34,7 +34,7 @@ const testingConfig = {
     salt: 'eewew',
   },
   fe: {
-    url: 'https://mofas.github.io/CSCI-P565-30620/#',
+    url: 'https://mofas.github.io/CSCI-P565-30620',
   },
   mongo: {
     url: `mongodb://${process.env.DB_ACC}:${process.env

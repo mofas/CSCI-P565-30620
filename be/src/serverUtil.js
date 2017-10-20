@@ -35,12 +35,6 @@ const setupPassport = (app, { config, db }) => {
     })
   );
 
-  // console.log(
-  //   config.oauth.clientID,
-  //   config.oauth.clientSecret,
-  //   config.oauth.callbackURL
-  // );
-
   passport.use(
     new passportGoogleOAuth.Strategy(
       {
@@ -51,7 +45,6 @@ const setupPassport = (app, { config, db }) => {
       async (accessToken, refreshToken, profile, cb) => {
         const email = profile.emails[0].value;
         const ret = await db.collection('accounts').findOne({ email });
-        console.log(ret);
         if (!ret) {
           await createAccount(db)({ email, status: 0 });
           cb(null, email);

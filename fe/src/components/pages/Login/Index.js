@@ -7,6 +7,7 @@ import LabelInput from '../../common/Input/LabelInput';
 import Btn from '../../common/Btn/Btn';
 
 import API from '../../../middleware/API';
+import { OAUTH_URL } from '../../../config';
 
 import classnames from 'classnames/bind';
 import style from './Index.css';
@@ -60,6 +61,10 @@ class Login extends React.PureComponent {
     });
   };
 
+  oauth = () => {
+    window.location.href = OAUTH_URL;
+  };
+
   render() {
     const { state, props } = this;
     const { loading, username, password } = state;
@@ -98,6 +103,13 @@ class Login extends React.PureComponent {
 
             <Btn type="secondary" onClick={this.signin}>
               SIGN IN
+            </Btn>
+            <Btn
+              className={cx('oauth-btn')}
+              type="primary"
+              onClick={this.oauth}
+            >
+              LOGIN WITH GOOGLE OAUTH
             </Btn>
           </form>
         </div>
