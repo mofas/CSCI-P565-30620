@@ -2,7 +2,7 @@ import { graphql, GraphQLObjectType, GraphQLSchema } from 'graphql';
 
 import { ListPlayer, QueryPlayer, ListLeague, QueryAccount } from './query';
 
-import { CreateLeague, JoinLeague } from './mutation';
+import { CreateLeague, JoinLeague, DeleteLeague } from './mutation';
 
 export const schema = new GraphQLSchema({
   query: new GraphQLObjectType({
@@ -19,6 +19,7 @@ export const schema = new GraphQLSchema({
     fields: {
       CreateLeague,
       JoinLeague,
+      DeleteLeague,
     },
   }),
 });

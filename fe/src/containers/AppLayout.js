@@ -3,6 +3,9 @@ import { Link, Route } from 'react-router-dom';
 
 import Navbar from '../components/common/Navbar/Navbar';
 import News from '../components/pages/News/Index';
+
+import LeagueList from '../components/pages/LeagueList/Index';
+
 import PlayerList from '../components/pages/PlayerList/Index';
 import PlayerDetail from '../components/pages/PlayerDetail/Index';
 
@@ -23,6 +26,9 @@ export default class MainLayout extends Component {
             <Link className={cx('link')} to="/app/player/list">
               Players
             </Link>
+            <Link className={cx('link')} to="/app/league/list">
+              Leagues
+            </Link>
           </div>
           <div className={cx('content')}>
             <Route exact path="/app/news" component={News} />
@@ -32,6 +38,7 @@ export default class MainLayout extends Component {
               path="/app/player/detail/:p_id"
               component={PlayerDetail}
             />
+            <Route exact path="/app/league/list" component={LeagueList} />
           </div>
         </div>
       </div>

@@ -14,7 +14,7 @@ import {
   GraphQLBoolean,
 } from 'graphql';
 
-import { LeagueType, LeagueInputType } from './model';
+import { ResultType, LeagueType, LeagueInputType } from './model';
 
 export const CreateLeague = {
   type: LeagueType,
@@ -67,6 +67,30 @@ export const JoinLeague = {
       return value;
     } else {
       return result;
+    }
+  },
+};
+
+export const DeleteLeague = {
+  type: ResultType,
+  args: {
+    _id: { type: GraphQLString },
+  },
+  resolve: async ({ db }, { _id }, info) => {
+    const query = {
+      _id: ObjectId(_id),
+    };
+    const { result } = await db.collection('leagues').remove(query);
+    if (result.ok) {
+      return {
+        error: '',
+        success: true,
+      };
+    } else {
+      return {
+        error: JSON.stringify(result),
+        success: false,
+      };
     }
   },
 };

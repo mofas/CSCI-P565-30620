@@ -16,6 +16,14 @@ import {
   GraphQLUnionType,
 } from 'graphql';
 
+export const ResultType = new GraphQLObjectType({
+  name: 'ResultType',
+  fields: {
+    success: { type: GraphQLBoolean },
+    error: { type: GraphQLString },
+  },
+});
+
 export const AccountType = new GraphQLObjectType({
   name: 'AccountType',
   fields: {
@@ -67,13 +75,17 @@ export const LeagueType = new GraphQLObjectType({
     },
     current_pickup_accounts: {
       type: AccountType,
-      resolve: async ({ current_pickup_accounts }, args, { db }) => {
-        if (current_pickup_accounts) {
-          const ret = await db
-            .collection('accounts')
-            .findOne({ _id: ObjectId(current_pickup_accounts) });
-          return ret;
-        }
+      resolve: async ({ limit, draft_run, accounts }, args, { db }) => {
+        const round = Math.round(draft_run / limit);
+        const remind = draft_run % limit;
+        // console.log(round, remind);
+        const currentAccountId =
+          round % 2 === 0 ? accounts[remind] : accounts[-remind];
+        // console.log(currentAccountId);
+        const ret = await db
+          .collection('accounts')
+          .findOne({ _id: ObjectId(currentAccountId) });
+        return ret;
       },
     },
   },

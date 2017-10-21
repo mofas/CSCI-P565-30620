@@ -24,6 +24,7 @@
       }
     }
     &.secondary {
+      border: solid 0.063rem #41a9ff;
       background-color: #41a9ff;
       color: #fff;
       &:hover {
@@ -37,6 +38,22 @@
       &.disabled {
         border-color: rgba(65, 168, 255, 0.5);
         background-color: rgba(65, 168, 255, 0.5);
+      }
+    }
+    &.danger {
+      border: solid 0.063rem #ff4164;
+      background-color: #ff4164;
+      color: #fff;
+      &:hover {
+        border-color: #ee4164;
+        background-color: #ee4164;
+      }
+      &:active {
+        border-color: #dd4164;
+        background-color: #dd4164;
+      }
+      &.disabled {
+        opacity: 0.5;
       }
     }
   }

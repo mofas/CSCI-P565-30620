@@ -79,8 +79,7 @@
   stage: "Initial", //Initial, Draft, Game, Finish
   limit: 4,
   accounts: ["user_id1", "user_id2"],
-  draft_run: 0, //if draft_run is 20, we move to game stage.
-  current_pickup_accounts: "user_id3",
+  draft_run: 0, //draft_run are from 0 to 79 = 20(player in each team) * 4(limit) - 1
 }
 ```
 

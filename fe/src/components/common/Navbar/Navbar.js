@@ -1,44 +1,33 @@
 import React from 'react';
-import API from '../../../middleware/API';
+import { connect } from 'react-redux';
+
+import { getUserInfo, logout } from '../../../reducers/account';
 
 import classnames from 'classnames/bind';
 import style from './Navbar.css';
 const cx = classnames.bind(style);
 
 class Navbar extends React.PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      email: '',
-    };
-  }
-
-  logout = () => {
-    API.API('/logout').then(res => {
-      window.location.href = '#/';
-    });
-  };
-
   componentWillMount() {
-    API.API('/account/get_user_info').then(res => {
-      if (res.status === 401) {
-        window.location.href = '#/';
-      } else if (res.status === -1) {
-        window.location.href = '#/go_verify_email/' + res.email;
-      }
-
-      this.setState({ email: res.email });
-    });
+    this.props.dispatch(getUserInfo());
   }
+
+  logout = logout;
 
   render() {
     const { props } = this;
-    const { email } = this.state;
+    const { accountStore } = props;
     return (
       <div className={cx('root')}>
         <div className={cx('logo')}>NFL Fantasy Game</div>
         <div className={cx('user-info')}>
-          <div className={cx('user-name')}>Hi: {email}</div>
+          {accountStore.get('loading') ? (
+            <div className={cx('user-name')}>Loading</div>
+          ) : (
+            <div className={cx('user-name')}>
+              Hi: {accountStore.getIn(['userInfo', 'email'])}
+            </div>
+          )}
           <div className={cx('logout-btn')} onClick={this.logout}>
             Logout
           </div>
@@ -48,4 +37,8 @@ class Navbar extends React.PureComponent {
   }
 }
 
-export default Navbar;
+export default connect(stores => {
+  return {
+    accountStore: stores.account,
+  };
+})(Navbar);
