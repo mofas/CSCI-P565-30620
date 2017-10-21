@@ -91,6 +91,10 @@ Ask CY, CY will do it for you.
 now
 ```
 
+```
+now alias game-server-cknryfkvyr.now.sh csci.now.sh
+```
+
 
 
 

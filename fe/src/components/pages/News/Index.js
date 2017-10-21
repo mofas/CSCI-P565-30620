@@ -11,6 +11,14 @@ class News extends React.PureComponent {
       <div className={cx('root')}>
         <div className={cx('main-title')}>Recent News:</div>
         <div className={cx('item')}>
+          <span className={cx('date')}>10/20</span>
+          <span className={cx('text')}>Add League List</span>
+        </div>
+        <div className={cx('item')}>
+          <span className={cx('date')}>10/18</span>
+          <span className={cx('text')}>Add Google OAuth Login</span>
+        </div>
+        <div className={cx('item')}>
           <span className={cx('date')}>10/14</span>
           <span className={cx('text')}>
             Player List Page Add Search/Filter Function
