@@ -80,6 +80,7 @@
 
 ```js
 {
+  _id: "....",
   league_id: "xxxx",
   player_id: "xxxx",
   fancy_team_id: "xxxx",
