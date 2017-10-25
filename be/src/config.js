@@ -13,8 +13,8 @@ const defaultConfig = {
     url: `mongodb://localhost:27017/local`,
   },
   oauth: {
-    clientID: process.env.G_OAUTH_CLIENT_ID,
-    clientSecret: process.env.G_OAUTH_SECRET,
+    clientID: process.env.G_OAUTH_CLIENT_ID || '',
+    clientSecret: process.env.G_OAUTH_SECRET || '',
     callbackURL: 'http://localhost:5000/oauth2callback',
   },
   session: {
