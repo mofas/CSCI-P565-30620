@@ -1,10 +1,10 @@
 
 
-#### ACCOUNTS:
+#### ACCOUNTS: (accounts)
 
 ```js
 {
-  user_id: ""
+  _id: ""
   email: "admin",
   password: "password",
   role: "player", // admin, player
@@ -13,11 +13,11 @@
 }
 ```
 
-#### PLAYERS:
+#### PLAYERS: (players)
 
 ```js
 {
-  player_id: xxxxx,
+  _id: xxxxx,
   picture: "./img/player"
   name: "Tom Brady",
   position: "QB",
@@ -53,37 +53,30 @@
 
 ```js
 {
-  league_id: "xxxx",
+  _id: "xxxx",
   p_id: "xxxx",
   score: [2, 3, 5], //scores by weeks
 }
 ```
 
-#### TEAMS:
+
+#### LEAGUES (leagues)
 
 ```js
 {
-  team_id: "xxx",
-  name: "Chicago Bears",
-  code: "CHI",
-}
-```
-
-
-#### LEAGUES
-
-```js
-{
-  league_id: "xxxx",
+  _id: "xxxx",
   name: "Our First Leagues",
   stage: "Initial", //Initial, Draft, Game, Finish
   limit: 4,
   accounts: ["user_id1", "user_id2"],
   draft_run: 0, //draft_run are from 0 to 79 = 20(player in each team) * 4(limit) - 1
+  formula: {
+    td_passway_weight: 4,
+  }
 }
 ```
 
-#### POOL
+#### POOL (pool)
 
 ```js
 {
@@ -93,7 +86,7 @@
 }
 ```
 
-#### FANTASY TEAMS
+#### FANTASY TEAMS (fantsay_team)
 
 ```js
 {
@@ -121,7 +114,7 @@
 }
 ```
 
-#### SCHEDULE
+#### SCHEDULE (schedule)
 
 ```js
 {
@@ -130,6 +123,11 @@
   second_team: "xxxxx",
 }
 ```
+
+
+
+
+
 
 
 
