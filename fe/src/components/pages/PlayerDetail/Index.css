@@ -12,6 +12,11 @@
   margin-bottom: 10px;
 }
 
+.logo {
+  height: 40px;
+  width:  130px;
+}
+
 .main-title {
   font-size: 20px;
   margin: 20px 0;
@@ -34,9 +39,16 @@
     width: 160px;
   }
   .position {
-    width: 120px;
+    width: 100px;
+  }
+  .team {
+    width: 80px
   }
   .rank {
     flex: 1;
+  }
+
+  .thick {
+    font-weight: bold;
   }
 }
