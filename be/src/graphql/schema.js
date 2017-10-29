@@ -8,7 +8,14 @@ import {
   QueryPoolPlayer,
 } from './query';
 
-import { CreateLeague, JoinLeague, DeleteLeague } from './mutation';
+import {
+  CreateLeague,
+  JoinLeague,
+  DeleteLeague,
+  UpdateLeague,
+  UpdateDraftNoLeague,
+  SelectedPlayer,
+} from './mutation';
 
 export const schema = new GraphQLSchema({
   query: new GraphQLObjectType({
@@ -28,6 +35,9 @@ export const schema = new GraphQLSchema({
       JoinLeague,
       DeleteLeague,
       //SelectPlayer, TODO
+      UpdateLeague,
+      UpdateDraftNoLeague,
+      SelectedPlayer,
     },
   }),
 });

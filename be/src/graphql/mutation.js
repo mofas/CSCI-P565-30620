@@ -37,6 +37,84 @@ export const CreateLeague = {
   },
 };
 
+
+export const UpdateLeague = {
+  type: LeagueType,
+  args: {
+    _id: { type: GraphQLString },
+    stage:{ type: GraphQLString}
+  },
+  resolve: async ({ req, db }, { _id, stage }, info) => {
+    const query = {
+      _id: ObjectId(_id),
+    };
+
+    console.log("456 stage:" , stage);
+    //console.log("print " , req);
+    //req.user = "test";
+
+    const result = await db.collection('leagues').findOne(query);
+    if (
+      result.accounts.length === result.limit &&
+      req.user
+    ) {
+      const { value } = await db.collection('leagues').findOneAndUpdate(
+        {
+          _id: ObjectId(result._id),
+        },
+        {
+          $set: {"stage": stage },
+        },
+        {
+          returnOriginal: false,
+        }
+      );
+      return value;
+    } else {
+      //console.log("in else section");
+      return result;
+    }
+  },
+};
+
+export const UpdateDraftNoLeague = {
+  type: LeagueType,
+  args: {
+    _id: { type: GraphQLString }
+  },
+  resolve: async ({ req, db }, { _id }, info) => {
+    const query = {
+      _id: ObjectId(_id),
+    };
+
+    //console.log("456 draft_no:" , draft_no);
+    //console.log("print " , req);
+    //req.user = "test";
+
+    const result = await db.collection('leagues').findOne(query);
+    if (
+      result.accounts.length === result.limit &&
+      req.user
+    ) {
+      const { value } = await db.collection('leagues').findOneAndUpdate(
+        {
+          _id: ObjectId(result._id),
+        },
+        {
+          $set: {"draft_run": result.draft_run + 1 },
+        },
+        {
+          returnOriginal: false,
+        }
+      );
+      return value;
+    } else {
+      //console.log("in else section");
+      return result;
+    }
+  },
+};
+
 export const JoinLeague = {
   type: LeagueType,
   args: {
@@ -98,3 +176,40 @@ export const DeleteLeague = {
     }
   },
 };
+
+
+
+
+export const PoolPlayer = new GraphQLObjectType({
+  name: 'PoolPlayer',
+  fields: {
+    //league_id:{type : GraphQLString},
+    //fancy_team_id: {type: GraphQLString},
+    player_id: {type: GraphQLString},
+  },
+});
+
+export const SelectedPlayer = {
+  type: new GraphQLList(PoolPlayer),
+  args:{
+    league_id: {type: GraphQLString},
+    player_id: {type: GraphQLString},
+    fancy_team_id: {type: GraphQLString},
+  },
+  resolve: async({db}, {league_id, player_id, fancy_team_id}, info) => {
+    const query = {
+      league_id: league_id,
+      player_id: player_id,
+      fancy_team_id: fancy_team_id,
+    };
+    console.log("39847293", league_id, player_id, fancy_team_id);
+    const result = await db.collection('pool').findOne(query);
+    //console.log(JSON.stringify(result, null, 2))
+    if(!result){
+      db.collection('pool').insertOne(query);
+    }
+
+    return await db.collection('pool').find({league_id : league_id}, {player_id:1, _id: 0}).toArray();
+  },
+};
+
