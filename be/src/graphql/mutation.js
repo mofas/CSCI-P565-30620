@@ -136,7 +136,11 @@ export const JoinLeague = {
           _id: ObjectId(result._id),
         },
         {
-          $set: { accounts: [req.user._id, ...result.accounts] },
+          $set: {
+            accounts: [req.user._id, ...result.accounts],
+            stage:
+              result.accounts.length === result.limit - 1 ? 'Draft' : 'Initial',
+          },
         },
         {
           returnOriginal: false,

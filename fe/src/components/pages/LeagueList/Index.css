@@ -42,4 +42,8 @@
   .btn {
     margin-right: 10px;
   }
+  .left-bar {
+    display: flex;
+    flex: 1;
+  }
 }

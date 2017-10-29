@@ -1,5 +1,7 @@
 import React from 'react';
 import { List, Map } from 'immutable';
+import { Link } from 'react-router-dom';
+
 import Btn from '../../common/Btn/Btn';
 
 import classnames from 'classnames/bind';
@@ -12,11 +14,16 @@ class LeagueItem extends React.PureComponent {
     userInfo: Map(),
     joinLeague: () => {},
     deleteLeague: () => {},
+    inviteFriend: () => {},
   };
 
   render() {
     const { props } = this;
-    const { joinLeague, deleteLeague, userInfo, data } = props;
+    const { joinLeague, deleteLeague, inviteFriend, userInfo, data } = props;
+
+    const leagueStatus = data.get('stage');
+    const participantEmails = (data.getIn(['accounts']) || List())
+      .map(d => d.get('email'));
     return (
       <div className={cx('item')}>
         <div className={cx('name')}>{data.get('name')}</div>
@@ -31,10 +38,10 @@ class LeagueItem extends React.PureComponent {
           <div className={cx('info-content')}>{data.get('stage')}</div>
         </div>
         <div className={cx('function-bar')}>
-          <div>
-            {data.get('stage') === 'Initial' ? data
-              .get('accounts')
-              .filter(d => d.get('email') === userInfo.get('email'))
+          <div className={cx('left-bar')}>
+            {leagueStatus === 'Initial' &&
+            participantEmails
+              .filter(email => email === userInfo.get('email'))
               .count() === 0 ? (
               <Btn
                 className={cx('btn')}
@@ -42,13 +49,22 @@ class LeagueItem extends React.PureComponent {
               >
                 Join
               </Btn>
-            ) : (
-              <Btn className={cx('btn')} disabled>
-                Joined
-              </Btn>
+            ) : null}
+
+            {leagueStatus === 'Initial' ? (
+              <Btn onClick={() => inviteFriend}>Invite Your Friend</Btn>
+            ) : null}
+
+            {leagueStatus === 'Draft' &&
+            participantEmails
+              .filter(email => email === userInfo.get('email'))
+              .count() > 0 ? (
+              <Link to={`/app/league/draft/${data.get('_id')}`}>
+                <Btn>Go to Draft Player</Btn>
+              </Link>
             ) : null}
           </div>
-          <div>
+          <div className={cx('right-bar')}>
             {userInfo.get('role') === 'admin' ? (
               <Btn type="danger" onClick={() => deleteLeague(data.get('_id'))}>
                 {' '}
