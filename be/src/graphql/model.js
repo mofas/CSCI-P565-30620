@@ -77,11 +77,14 @@ export const LeagueType = new GraphQLObjectType({
       type: AccountType,
       resolve: async ({ limit, draft_run, accounts }, args, { db }) => {
         const round = Math.round(draft_run / limit);
+        //const round = Math.floor(draft_run / limit);
         const remind = draft_run % limit;
-        // console.log(round, remind);
-        const currentAccountId =
-          round % 2 === 0 ? accounts[remind] : accounts[-remind];
-        // console.log(currentAccountId);
+        //const round = 1;
+        //const remind = 1;
+        //console.log("qwee",round, remind, limit, draft_run);
+        
+        const currentAccountId = round % 2 === 0 ? accounts[remind] : accounts[accounts.length-remind-1];
+        //console.log(round, remind, currentAccountId);
         const ret = await db
           .collection('accounts')
           .findOne({ _id: ObjectId(currentAccountId) });
