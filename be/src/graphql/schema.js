@@ -11,6 +11,7 @@ export const schema = new GraphQLSchema({
       ListPlayer,
       QueryPlayer,
       ListLeague,
+      // QueryLeaguePlayer, TODO
       QueryAccount,
     },
   }),
@@ -20,6 +21,7 @@ export const schema = new GraphQLSchema({
       CreateLeague,
       JoinLeague,
       DeleteLeague,
+      //SelectPlayer, TODO
     },
   }),
 });
