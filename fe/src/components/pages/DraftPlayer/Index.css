@@ -1,3 +1,99 @@
 .root {
   padding: 16px;
 }
+
+.player-list {
+  padding: 20px;
+}
+
+.player-item-wrap {
+  max-height: 400px;
+  padding: 10px;
+  overflow-y: scroll;
+}
+
+.item {
+  display: flex;
+  font-size: 14px;
+  margin-bottom: 5px;
+  background-color: #eee;
+  .header {
+    background-color: transparent;
+    padding: 10px;
+  }
+}
+
+.thumb {
+  width: 40px;
+  height: 40px;
+  background-color: #555;
+  margin-right: 20px;
+}
+.thumb-placeholder {
+  width: 40px;
+  margin-right: 20px;
+}
+
+.info {
+  display: flex;
+  width: 300px;
+  padding: 10px;
+  border-right: 1px solid #fff;
+}
+
+.basic-info {
+  display: flex;
+  flex: 1;
+  color: #203d71;
+  font-size: 16px;
+  text-decoration: none;
+  .name {
+    width: 100%;
+    flex: 1;
+    margin-right: 20px;
+  }
+  .position {
+    width: 60px;
+  }
+}
+
+.ability-title {
+  color: #777;
+  font-size: 11px;
+  margin: 10px 0;
+  padding-bottom: 5px;
+  border-bottom: 1px solid #ddd;
+}
+
+.ability {
+  display: flex;
+}
+
+.ab-item {
+  padding: 10px;
+  color: #555;
+  width: 140px;
+  text-align: right;
+  border-right: 1px solid #fff;
+  .type {
+    font-weight: bold;
+  }
+
+  .sort-indicator {
+    position: relative;
+    top: 4px;
+    margin-left: 4px;
+    width: 10px;
+  }
+}
+
+.op {
+  flex: 1;
+  padding: 10px;
+  :global {
+    .component-btn {
+      width: 200px;
+      margin: 0 auto;
+    }
+  }
+}

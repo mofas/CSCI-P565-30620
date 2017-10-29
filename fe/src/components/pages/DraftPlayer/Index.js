@@ -1,9 +1,10 @@
 import React from 'react';
-import { fromJS, List, Set } from 'immutable';
+import { fromJS, List } from 'immutable';
 
 import API from '../../../middleware/API';
-
 import Spinner from '../../common/Spinner/Spinner';
+
+import PlayerList from './PlayerList';
 
 import classnames from 'classnames/bind';
 import style from './Index.css';
@@ -14,6 +15,7 @@ class DraftPlayer extends React.PureComponent {
     super(props);
     this.state = {
       loading: false,
+      players: List(),
     };
   }
 
@@ -45,24 +47,21 @@ class DraftPlayer extends React.PureComponent {
     });
 
     API.GraphQL(query).then(res => {
-      // console.log('cool!', res);
       const players = fromJS(res.data.ListPlayer);
-      const allPosition = players.reduce((acc, d) => {
-        if (d.get('Position') !== '') {
-          return acc.add(d.get('Position'));
-        }
-        return acc;
-      }, Set());
       this.setState({
         loading: false,
         players: players,
-        allPosition: allPosition.toList(),
       });
     });
   }
 
+  selectPlayer = id => {
+    window.alert('You select player with id:' + id);
+  };
+
   render() {
     const { state, props } = this;
+    const { loading, players } = state;
 
     const MessageData = []; //query by league_id
     const leagueData = []; //query by league_id
@@ -71,9 +70,10 @@ class DraftPlayer extends React.PureComponent {
 
     return (
       <div className={cx('root')}>
+        <Spinner show={loading} />
         <h1>This is draft page!!</h1>
         <div>TODO: Draft Sequence</div>
-        <div>Data: playerListData / playerPoolData TODO: Player List</div>
+        <PlayerList players={players} selectPlayer={this.selectPlayer} />
         <div>
           playerPoolData TODO: Chooseed player for all users Team1: Player1
           Player2 Team2: Player1 Player2
