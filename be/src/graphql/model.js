@@ -83,3 +83,28 @@ export const LeagueInputType = new GraphQLInputObjectType({
     limit: { type: GraphQLInt },
   },
 });
+
+export const PoolPlayerType = new GraphQLObjectType({
+  name: 'PoolPlayerType',
+  fields: {
+    account: {
+      type: AccountType,
+      resolve: async ({ user_id }, args, { db }) => {
+        const ret = await db
+          .collection('accounts')
+          .findOne({ _id: ObjectId(user_id) });
+        return ret;
+      },
+    },
+    players: {
+      type: new GraphQLList(PlayerType),
+      resolve: async ({ players }, args, { db }) => {
+        const ret = await db
+          .collection('players')
+          .find({ _id: { $in: players.map(ObjectId) } })
+          .toArray();
+        return ret;
+      },
+    },
+  },
+});

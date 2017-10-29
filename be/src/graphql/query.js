@@ -14,7 +14,7 @@ import {
   GraphQLBoolean,
 } from 'graphql';
 
-import { AccountType, PlayerType, LeagueType } from './model';
+import { AccountType, PlayerType, LeagueType, PoolPlayerType } from './model';
 
 export const ListPlayer = {
   type: new GraphQLList(PlayerType),
@@ -73,5 +73,37 @@ export const QueryAccount = {
     };
     const result = await db.collection('accounts').findOne(query);
     return result;
+  },
+};
+
+export const QueryPoolPlayer = {
+  type: new GraphQLList(PoolPlayerType),
+  args: {
+    league_id: { type: GraphQLString }, //league id
+  },
+  resolve: async ({ db }, { league_id }, info) => {
+    const query = {
+      league_id: league_id,
+    };
+    const result = await db
+      .collection('pool')
+      .find(query)
+      .toArray();
+
+    const accountsIds = result.map(d => d.account_id);
+    const groupAccountId = accountsIds.reduce((acc, id) => {
+      acc.add(id);
+      return acc;
+    }, new Set());
+
+    const ret = [...groupAccountId].map(user_id => {
+      return {
+        user_id: user_id,
+        players: result
+          .filter(dd => dd.account_id === user_id)
+          .map(dd => dd.player_id),
+      };
+    });
+    return ret;
   },
 };
