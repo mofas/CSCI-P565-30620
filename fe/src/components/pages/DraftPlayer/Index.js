@@ -63,13 +63,22 @@ class DraftPlayer extends React.PureComponent {
 
   render() {
     const { state, props } = this;
+
+    const MessageData = []; //query by league_id
+    const leagueData = []; //query by league_id
+    const playerListData = [];
+    const playerPoolData = []; //query by league_id
+
     return (
       <div className={cx('root')}>
         <h1>This is draft page!!</h1>
         <div>TODO: Draft Sequence</div>
-        <div>TODO: Player List </div>
-        <div>TODO: Chat room</div>
-        <div>TODO: Choose player status for all players</div>
+        <div>Data: playerListData / playerPoolData TODO: Player List</div>
+        <div>
+          playerPoolData TODO: Chooseed player for all users Team1: Player1
+          Player2 Team2: Player1 Player2
+        </div>
+        <div>Data: MessageData TODO: Chat room</div>
       </div>
     );
   }
