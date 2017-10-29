@@ -8,6 +8,7 @@ import LeagueList from '../components/pages/LeagueList/Index';
 
 import PlayerList from '../components/pages/PlayerList/Index';
 import PlayerDetail from '../components/pages/PlayerDetail/Index';
+import DraftPlayer from '../components/pages/DraftPlayer/Index';
 
 import classnames from 'classnames/bind';
 import style from './App.css';
@@ -39,6 +40,11 @@ export default class MainLayout extends Component {
               component={PlayerDetail}
             />
             <Route exact path="/app/league/list" component={LeagueList} />
+            <Route
+              exact
+              path="/app/league/draft/:l_id"
+              component={DraftPlayer}
+            />
           </div>
         </div>
       </div>
