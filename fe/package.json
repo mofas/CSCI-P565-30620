@@ -5,6 +5,7 @@
   "homepage": "http://mofas.github.io/CSCI-P565-30620",
   "dependencies": {
     "classnames": "^2.2.5",
+    "date-fns": "^1.29.0",
     "gh-pages": "^1.0.0",
     "immutable": "^3.8.1",
     "normalize.css": "^7.0.0",

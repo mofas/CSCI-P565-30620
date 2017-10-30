@@ -126,6 +126,16 @@
 ```
 
 
+#### Message (messages)
+
+```js
+{
+  room_id: "1341324",
+  sender: "email@cool.com",
+  message: "this is message",
+}
+```
+
 
 
 

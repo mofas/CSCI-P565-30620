@@ -79,7 +79,7 @@ const checkAuth = (req, rsp, next) => {
   });
 };
 
-export const setup = (app, { config, db }) => {
+export const setup = (app, { config, db, wsUserMap }) => {
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -96,6 +96,7 @@ export const setup = (app, { config, db }) => {
 
   app.locals.db = db;
   app.locals.config = config;
+  app.locals.ws = wsUserMap;
   return app;
 };
 

@@ -1,7 +1,9 @@
+import http from 'http';
 import express from 'express';
 import config from './config';
 import mongodb from 'mongodb';
 import passport from 'passport';
+import WebSocket from 'ws';
 
 import graphqlHTTP from 'express-graphql';
 import { schema } from './graphql/schema';
@@ -31,7 +33,41 @@ const main = async () => {
     throw err;
   }
 
-  let app = setup(express(), { config, db });
+  let wsUserMap = {};
+
+  let app = setup(express(), { config, db, wsUserMap });
+  const server = http.createServer(app);
+  const wss = new WebSocket.Server({
+    server,
+  });
+
+  wss.on('connection', (ws, req) => {
+    ws.on('message', message => {
+      try {
+        const msg = JSON.parse(message);
+        if (msg.type === 'initial') {
+          wsUserMap[Math.random()] = ws;
+        }
+      } catch (e) {
+        //do nothing ...
+      }
+    });
+  });
+
+  app.use('/graphql', (req, rsp, next) => {
+    const context = {
+      cfg: config,
+      db,
+      req,
+      ws: wsUserMap,
+    };
+    return graphqlHTTP({
+      schema,
+      context: context,
+      rootValue: context,
+      graphiql: true,
+    })(req, rsp, next);
+  });
 
   app.get('/', indexHandler);
   app.get('/success_login', successLoginHandler);
@@ -70,21 +106,7 @@ const main = async () => {
     rsp.redirect('/');
   });
 
-  app.use('/graphql', (req, rsp, next) => {
-    const context = {
-      cfg: config,
-      db,
-      req,
-    };
-    return graphqlHTTP({
-      schema,
-      context: context,
-      rootValue: context,
-      graphiql: true,
-    })(req, rsp, next);
-  });
-
-  app.listen(config.server.port);
+  server.listen(config.server.port);
 };
 
 main();

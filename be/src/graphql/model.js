@@ -108,3 +108,13 @@ export const PoolPlayerType = new GraphQLObjectType({
     },
   },
 });
+
+export const MessageType = new GraphQLObjectType({
+  name: 'MessageType',
+  fields: {
+    room_id: { type: GraphQLString },
+    sender: { type: GraphQLString },
+    message: { type: GraphQLString },
+    date_time: { type: GraphQLInt },
+  },
+});

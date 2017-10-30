@@ -4,6 +4,7 @@ import { fromJS, List } from 'immutable';
 import API from '../../../middleware/API';
 import Spinner from '../../common/Spinner/Spinner';
 
+import ChatRoom from '../../common/ChatRoom/ChatRoom';
 import PlayerList from './PlayerList';
 
 import classnames from 'classnames/bind';
@@ -78,7 +79,7 @@ class DraftPlayer extends React.PureComponent {
           playerPoolData TODO: Chooseed player for all users Team1: Player1
           Player2 Team2: Player1 Player2
         </div>
-        <div>Data: MessageData TODO: Chat room</div>
+        <ChatRoom roomId={this.props.match.params.l_id} />
       </div>
     );
   }

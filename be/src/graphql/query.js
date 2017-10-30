@@ -14,7 +14,13 @@ import {
   GraphQLBoolean,
 } from 'graphql';
 
-import { AccountType, PlayerType, LeagueType, PoolPlayerType } from './model';
+import {
+  AccountType,
+  PlayerType,
+  LeagueType,
+  PoolPlayerType,
+  MessageType,
+} from './model';
 
 export const ListPlayer = {
   type: new GraphQLList(PlayerType),
@@ -105,5 +111,24 @@ export const QueryPoolPlayer = {
       };
     });
     return ret;
+  },
+};
+
+export const GetMessages = {
+  type: new GraphQLList(MessageType),
+  args: {
+    room_id: { type: new GraphQLNonNull(GraphQLString) },
+    skip: { type: GraphQLInt },
+    limit: { type: GraphQLInt },
+  },
+  resolve: async ({ db }, { room_id, skip = 0, limit = 100 }, info) => {
+    const query = { room_id };
+    const result = await db
+      .collection('messages')
+      .find(query)
+      .skip(skip)
+      .limit(limit)
+      .toArray();
+    return result;
   },
 };
