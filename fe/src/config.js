@@ -5,7 +5,7 @@ const DEFAULT_ENDPOINT_SET = {
 
 const TESTING_ENDPOINT_SET = {
   ENDPOINT: 'https://csci.now.sh',
-  WS_ENDPOINT: 'ws://csci.now.sh',
+  WS_ENDPOINT: 'wss://csci.now.sh',
 };
 
 const getEndpoint = () => {
