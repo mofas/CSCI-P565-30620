@@ -18,15 +18,23 @@ export const indexHandler = (req, rsp, next) => {
 export const getUserInfoHandler = (req, rsp, next) => {
   if (req.user) {
     if (duoPass[req.user.email]) {
-      rsp.status(HTTPStatus.OK).send(
-        Object.assign(
-          {},
-          {
-            err: 0,
-          },
-          req.user
-        )
-      );
+      if (req.user.status === -1) {
+        rsp.status(HTTPStatus.OK).send({
+          err: 1,
+          message: 'Please verify your email',
+          email: req.user.email,
+        });
+      } else {
+        rsp.status(HTTPStatus.OK).send(
+          Object.assign(
+            {},
+            {
+              err: 0,
+            },
+            req.user
+          )
+        );
+      }
     } else {
       rsp.status(HTTPStatus.OK).send({
         err: 2,
@@ -34,11 +42,6 @@ export const getUserInfoHandler = (req, rsp, next) => {
         loginUrl: '/duo_login/' + duoSigTokenStore[req.user.email],
       });
     }
-  } else {
-    rsp.status(HTTPStatus.OK).send({
-      err: 1,
-      message: 'Please verify your email',
-    });
   }
 };
 
@@ -92,6 +95,7 @@ export const accountCreateHandler = db => async (req, rsp) => {
     rsp.status(HTTPStatus.OK).send({
       err: 0,
       message: 'Create account successfully.',
+      email,
     });
   } else {
     rsp.status(HTTPStatus.OK).send({
