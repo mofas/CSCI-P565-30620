@@ -18,8 +18,8 @@ class Login extends React.PureComponent {
     super(props);
     this.state = {
       loading: false,
-      username: '',
-      password: '',
+      username: 'cli3@iu.edu',
+      password: 'qqww1122',
     };
   }
 
@@ -55,6 +55,8 @@ class Login extends React.PureComponent {
       });
       if (res.err === 0) {
         window.location.href = '#/app/news';
+      } else if (res.err === 2) {
+        window.location.href = '#' + res.duoUrl;
       } else {
         alert('Passowrd is not correct, or account not existed');
       }

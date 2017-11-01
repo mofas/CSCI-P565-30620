@@ -4487,7 +4487,7 @@ object-keys@^1.0.8:
   version "1.0.11"
   resolved "https://registry.yarnpkg.com/object-keys/-/object-keys-1.0.11.tgz#c54601778ad560f1142ce0e01bcca8b56d13426d"
 
-object.omit@^2.0.0:
+object.omit@^2.0.0, object.omit@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/object.omit/-/object.omit-2.0.1.tgz#1a9c744829f39dbb858c76ca3579ae2a54ebd1fa"
   dependencies:
@@ -5277,6 +5277,12 @@ react-dev-utils@^4.0.1:
     loose-envify "^1.1.0"
     object-assign "^4.1.0"
     prop-types "^15.5.10"
+
+react-duo-web@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/react-duo-web/-/react-duo-web-1.0.0.tgz#653af0a8baee91973a86bc179026ac41c0f6f7b9"
+  dependencies:
+    object.omit "^2.0.1"
 
 react-error-overlay@^2.0.1:
   version "2.0.1"

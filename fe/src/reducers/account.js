@@ -23,8 +23,10 @@ export const getUserInfo = () => dispatch => {
   API.API('/account/get_user_info').then(res => {
     if (res.status === 401) {
       window.location.href = '#/';
-    } else if (res.status === -1) {
+    } else if (res.err === 1) {
       window.location.href = '#/go_verify_email/' + res.email;
+    } else if (res.err === 2) {
+      window.location.href = '#' + res.duoUrl;
     } else {
       dispatch(duck.createAction(ACCOUNT_LOADED)(res));
     }
