@@ -23,3 +23,10 @@ export const createAccount = db => async ({
     valCode: genValCode(),
   });
 };
+
+export const hashPassword = password => {
+  return crypto
+    .createHash('sha256')
+    .update(password + config.server.salt)
+    .digest('base64');
+};

@@ -1,16 +1,12 @@
 import HTTPStatus from 'http-status';
 
+import { verify_response } from 'duo_web';
+
 import { ObjectId } from 'mongodb';
 import config from '../config';
-import { createAccount, genValCode } from '../accountUtil';
+import { createAccount, genValCode, hashPassword } from '../accountUtil';
 import { sendVerifyEmail, sendResetPasswordEmail } from '../emailService';
-
-const hashPassword = password => {
-  return crypto
-    .createHash('sha256')
-    .update(password + config.server.salt)
-    .digest('base64');
-};
+import { duoSigTokenStore, duoPass } from '../duoCache';
 
 export const indexHandler = (req, rsp, next) => {
   rsp.status(HTTPStatus.OK).send({
@@ -21,27 +17,39 @@ export const indexHandler = (req, rsp, next) => {
 
 export const getUserInfoHandler = (req, rsp, next) => {
   if (req.user) {
-    rsp.status(HTTPStatus.OK).send(
-      Object.assign(
-        {},
-        {
-          err: 0,
-        },
-        req.user
-      )
-    );
-  } else {
-    rsp.status(HTTPStatus.OK).send({
-      err: 1,
-      message: 'Please verify your email',
-    });
+    if (duoPass[req.user.email]) {
+      if (req.user.status === -1) {
+        rsp.status(HTTPStatus.OK).send({
+          err: 1,
+          message: 'Please verify your email',
+          email: req.user.email,
+        });
+      } else {
+        rsp.status(HTTPStatus.OK).send(
+          Object.assign(
+            {},
+            {
+              err: 0,
+            },
+            req.user
+          )
+        );
+      }
+    } else {
+      rsp.status(HTTPStatus.OK).send({
+        err: 2,
+        message: 'fail to login',
+        loginUrl: '/duo_login/' + duoSigTokenStore[req.user.email],
+      });
+    }
   }
 };
 
 export const successLoginHandler = (req, rsp, next) => {
   rsp.status(HTTPStatus.OK).send({
-    err: 0,
-    message: 'success login',
+    err: 2,
+    message: 'duo check',
+    duoUrl: '/duo_login/' + duoSigTokenStore[req.user.email],
   });
 };
 
@@ -50,6 +58,28 @@ export const failLoginHandler = (req, rsp, next) => {
     err: 1,
     message: 'fail to login',
   });
+};
+
+export const verifyDuoHandler = async (req, rsp) => {
+  const { sigResponse } = req.body;
+  const result = await verify_response(
+    config.duo.integrationKey,
+    config.duo.secretKey,
+    hashPassword(req.user.email),
+    sigResponse
+  );
+  if (result === req.user.email) {
+    duoPass[result] = true;
+    rsp.status(HTTPStatus.OK).send({
+      err: 0,
+      message: 'success verify duo',
+    });
+  } else {
+    rsp.status(HTTPStatus.OK).send({
+      err: 1,
+      message: 'fail to verify duo',
+    });
+  }
 };
 
 export const accountCreateHandler = db => async (req, rsp) => {
@@ -65,6 +95,7 @@ export const accountCreateHandler = db => async (req, rsp) => {
     rsp.status(HTTPStatus.OK).send({
       err: 0,
       message: 'Create account successfully.',
+      email,
     });
   } else {
     rsp.status(HTTPStatus.OK).send({

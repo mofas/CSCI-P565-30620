@@ -1,18 +1,17 @@
 import React from 'react';
-import { fromJS, List, Set } from 'immutable';
+import { fromJS, List } from 'immutable';
 
 import API from '../../../middleware/API';
-
 import Spinner from '../../common/Spinner/Spinner';
 
-import PlayerFilter from '../../common/PlayerFilter/PlayerFilter';
-import Item from './Item';
+import ChatRoom from '../../common/ChatRoom/ChatRoom';
+import PlayerList from './PlayerList';
 
 import classnames from 'classnames/bind';
 import style from './Index.css';
 const cx = classnames.bind(style);
 
-class PlayerList extends React.PureComponent {
+class DraftPlayer extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -57,22 +56,33 @@ class PlayerList extends React.PureComponent {
     });
   }
 
+  selectPlayer = id => {
+    window.alert('You select player with id:' + id);
+  };
+
   render() {
     const { state, props } = this;
     const { loading, players } = state;
 
+    const MessageData = []; //query by league_id
+    const leagueData = []; //query by league_id
+    const playerListData = [];
+    const playerPoolData = []; //query by league_id
+
     return (
       <div className={cx('root')}>
         <Spinner show={loading} />
-        <PlayerFilter data={players}>
-          {tableData =>
-            tableData.map(d => {
-              return <Item key={d.get('_id')} data={d} />;
-            })}
-        </PlayerFilter>
+        <h1>This is draft page!!</h1>
+        <div>TODO: Draft Sequence</div>
+        <PlayerList players={players} selectPlayer={this.selectPlayer} />
+        <div>
+          playerPoolData TODO: Chooseed player for all users Team1: Player1
+          Player2 Team2: Player1 Player2
+        </div>
+        <ChatRoom roomId={this.props.match.params.l_id} />
       </div>
     );
   }
 }
 
-export default PlayerList;
+export default DraftPlayer;

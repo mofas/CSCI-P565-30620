@@ -83,7 +83,7 @@
   _id: "....",
   league_id: "xxxx",
   player_id: "xxxx",
-  fancy_team_id: "xxxx",
+  account_id: "xxxx",
 }
 ```
 
@@ -125,6 +125,16 @@
 }
 ```
 
+
+#### Message (messages)
+
+```js
+{
+  room_id: "1341324",
+  sender: "email@cool.com",
+  message: "this is message",
+}
+```
 
 
 

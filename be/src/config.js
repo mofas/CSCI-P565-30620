@@ -17,6 +17,11 @@ const defaultConfig = {
     clientSecret: process.env.G_OAUTH_SECRET || '',
     callbackURL: 'http://localhost:5000/oauth2callback',
   },
+  duo: {
+    hostname: 'api-00cc3ec1.duosecurity.com',
+    integrationKey: 'DI7GFUB7U9UYCE38XRTG',
+    secretKey: process.env.DUO_SECRET || '',
+  },
   session: {
     cookie: {
       secure: false,
@@ -44,6 +49,11 @@ const testingConfig = {
     clientID: process.env.G_OAUTH_CLIENT_ID,
     clientSecret: process.env.G_OAUTH_SECRET,
     callbackURL: 'https://csci.now.sh/oauth2callback',
+  },
+  duo: {
+    hostname: 'api-00cc3ec1.duosecurity.com',
+    integrationKey: 'DI7GFUB7U9UYCE38XRTG',
+    secretKey: process.env.DUO_SECRET || '',
   },
   session: {
     cookie: {

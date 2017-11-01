@@ -8,6 +8,8 @@ import LeagueList from '../components/pages/LeagueList/Index';
 
 import PlayerList from '../components/pages/PlayerList/Index';
 import PlayerDetail from '../components/pages/PlayerDetail/Index';
+import DraftPlayer from '../components/pages/DraftPlayer/Index';
+import ChatRoom from '../components/pages/ChatRoom/Index';
 
 import classnames from 'classnames/bind';
 import style from './App.css';
@@ -29,6 +31,9 @@ export default class MainLayout extends Component {
             <Link className={cx('link')} to="/app/league/list">
               Leagues
             </Link>
+            <Link className={cx('link')} to="/app/chatroom/main">
+              Main Chat Room
+            </Link>
           </div>
           <div className={cx('content')}>
             <Route exact path="/app/news" component={News} />
@@ -39,6 +44,12 @@ export default class MainLayout extends Component {
               component={PlayerDetail}
             />
             <Route exact path="/app/league/list" component={LeagueList} />
+            <Route
+              exact
+              path="/app/league/draft/:l_id"
+              component={DraftPlayer}
+            />
+            <Route exact path="/app/chatroom/:room_id" component={ChatRoom} />
           </div>
         </div>
       </div>

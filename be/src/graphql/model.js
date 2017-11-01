@@ -73,21 +73,6 @@ export const LeagueType = new GraphQLObjectType({
         return ret;
       },
     },
-    current_pickup_accounts: {
-      type: AccountType,
-      resolve: async ({ limit, draft_run, accounts }, args, { db }) => {
-        const round = Math.round(draft_run / limit);
-        const remind = draft_run % limit;
-        // console.log(round, remind);
-        const currentAccountId =
-          round % 2 === 0 ? accounts[remind] : accounts[-remind];
-        // console.log(currentAccountId);
-        const ret = await db
-          .collection('accounts')
-          .findOne({ _id: ObjectId(currentAccountId) });
-        return ret;
-      },
-    },
   },
 });
 
@@ -96,5 +81,40 @@ export const LeagueInputType = new GraphQLInputObjectType({
   fields: {
     name: { type: GraphQLString },
     limit: { type: GraphQLInt },
+  },
+});
+
+export const PoolPlayerType = new GraphQLObjectType({
+  name: 'PoolPlayerType',
+  fields: {
+    account: {
+      type: AccountType,
+      resolve: async ({ user_id }, args, { db }) => {
+        const ret = await db
+          .collection('accounts')
+          .findOne({ _id: ObjectId(user_id) });
+        return ret;
+      },
+    },
+    players: {
+      type: new GraphQLList(PlayerType),
+      resolve: async ({ players }, args, { db }) => {
+        const ret = await db
+          .collection('players')
+          .find({ _id: { $in: players.map(ObjectId) } })
+          .toArray();
+        return ret;
+      },
+    },
+  },
+});
+
+export const MessageType = new GraphQLObjectType({
+  name: 'MessageType',
+  fields: {
+    room_id: { type: GraphQLString },
+    sender: { type: GraphQLString },
+    message: { type: GraphQLString },
+    date_time: { type: GraphQLInt },
   },
 });

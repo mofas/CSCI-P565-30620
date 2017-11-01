@@ -2,6 +2,16 @@
   padding: 16px;
 }
 
+.player-list {
+  padding: 20px;
+}
+
+.player-item-wrap {
+  max-height: 400px;
+  padding: 10px;
+  overflow-y: scroll;
+}
+
 .item {
   display: flex;
   font-size: 14px;
@@ -74,5 +84,16 @@
     top: 4px;
     margin-left: 4px;
     width: 10px;
+  }
+}
+
+.op {
+  flex: 1;
+  padding: 10px;
+  :global {
+    .component-btn {
+      width: 200px;
+      margin: 0 auto;
+    }
   }
 }

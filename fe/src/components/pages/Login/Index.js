@@ -55,6 +55,8 @@ class Login extends React.PureComponent {
       });
       if (res.err === 0) {
         window.location.href = '#/app/news';
+      } else if (res.err === 2) {
+        window.location.href = '#' + res.duoUrl;
       } else {
         alert('Passowrd is not correct, or account not existed');
       }

@@ -1,5 +1,5 @@
-.root {
-  padding: 16px;
+.position-filter {
+  margin-bottom: 20px;
 }
 
 .item {
@@ -13,14 +13,12 @@
   }
 }
 
-.thumb {
-  width: 40px;
-  height: 40px;
-  background-color: #555;
-  margin-right: 20px;
+.position-btn-wrap {
+  display: flex;
+  padding: 10px 0;
 }
-.thumb-placeholder {
-  width: 40px;
+
+.position-btn {
   margin-right: 20px;
 }
 
@@ -29,6 +27,10 @@
   width: 300px;
   padding: 10px;
   border-right: 1px solid #fff;
+}
+
+.ability {
+  display: flex;
 }
 
 .basic-info {
@@ -45,18 +47,6 @@
   .position {
     width: 60px;
   }
-}
-
-.ability-title {
-  color: #777;
-  font-size: 11px;
-  margin: 10px 0;
-  padding-bottom: 5px;
-  border-bottom: 1px solid #ddd;
-}
-
-.ability {
-  display: flex;
 }
 
 .ab-item {

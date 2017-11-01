@@ -37,6 +37,77 @@ export const CreateLeague = {
   },
 };
 
+export const UpdateLeague = {
+  type: LeagueType,
+  args: {
+    _id: { type: GraphQLString },
+    stage: { type: GraphQLString },
+  },
+  resolve: async ({ req, db }, { _id, stage }, info) => {
+    const query = {
+      _id: ObjectId(_id),
+    };
+
+    console.log('456 stage:', stage);
+    //console.log("print " , req);
+    //req.user = "test";
+
+    const result = await db.collection('leagues').findOne(query);
+    if (result.accounts.length === result.limit && req.user) {
+      const { value } = await db.collection('leagues').findOneAndUpdate(
+        {
+          _id: ObjectId(result._id),
+        },
+        {
+          $set: { stage: stage },
+        },
+        {
+          returnOriginal: false,
+        }
+      );
+      return value;
+    } else {
+      //console.log("in else section");
+      return result;
+    }
+  },
+};
+
+export const UpdateDraftNoLeague = {
+  type: LeagueType,
+  args: {
+    _id: { type: GraphQLString },
+  },
+  resolve: async ({ req, db }, { _id }, info) => {
+    const query = {
+      _id: ObjectId(_id),
+    };
+
+    //console.log("456 draft_no:" , draft_no);
+    //console.log("print " , req);
+    //req.user = "test";
+
+    const result = await db.collection('leagues').findOne(query);
+    if (result.accounts.length === result.limit && req.user) {
+      const { value } = await db.collection('leagues').findOneAndUpdate(
+        {
+          _id: ObjectId(result._id),
+        },
+        {
+          $set: { draft_run: result.draft_run + 1 },
+        },
+        {
+          returnOriginal: false,
+        }
+      );
+      return value;
+    } else {
+      //console.log("in else section");
+      return result;
+    }
+  },
+};
+
 export const JoinLeague = {
   type: LeagueType,
   args: {
@@ -58,7 +129,11 @@ export const JoinLeague = {
           _id: ObjectId(result._id),
         },
         {
-          $set: { accounts: [req.user._id, ...result.accounts] },
+          $set: {
+            accounts: [req.user._id, ...result.accounts],
+            stage:
+              result.accounts.length === result.limit - 1 ? 'Draft' : 'Initial',
+          },
         },
         {
           returnOriginal: false,
@@ -81,6 +156,88 @@ export const DeleteLeague = {
       _id: ObjectId(_id),
     };
     const { result } = await db.collection('leagues').remove(query);
+    if (result.ok) {
+      return {
+        error: '',
+        success: true,
+      };
+    } else {
+      return {
+        error: JSON.stringify(result),
+        success: false,
+      };
+    }
+  },
+};
+
+export const PoolPlayer = new GraphQLObjectType({
+  name: 'PoolPlayer',
+  fields: {
+    //league_id:{type : GraphQLString},
+    //fancy_team_id: {type: GraphQLString},
+    player_id: { type: GraphQLString },
+  },
+});
+
+export const SelectedPlayer = {
+  type: new GraphQLList(PoolPlayer),
+  args: {
+    league_id: { type: GraphQLString },
+    player_id: { type: GraphQLString },
+    fancy_team_id: { type: GraphQLString },
+  },
+  resolve: async ({ db }, { league_id, player_id, fancy_team_id }, info) => {
+    const query = {
+      league_id: league_id,
+      player_id: player_id,
+      fancy_team_id: fancy_team_id,
+    };
+    console.log('39847293', league_id, player_id, fancy_team_id);
+    const result = await db.collection('pool').findOne(query);
+    //console.log(JSON.stringify(result, null, 2))
+    if (!result) {
+      db.collection('pool').insertOne(query);
+    }
+
+    return await db
+      .collection('pool')
+      .find({ league_id: league_id }, { player_id: 1, _id: 0 })
+      .toArray();
+  },
+};
+
+export const SendMessage = {
+  type: ResultType,
+  args: {
+    room_id: { type: new GraphQLNonNull(GraphQLString) },
+    sender: { type: new GraphQLNonNull(GraphQLString) },
+    message: { type: new GraphQLNonNull(GraphQLString) },
+  },
+  resolve: async ({ db, ws }, { room_id, sender, message }, info) => {
+    const savedData = {
+      room_id,
+      sender,
+      message,
+      date_time: Math.floor(new Date().getTime() / 1000),
+    };
+
+    const { result } = await db.collection('messages').insertOne(savedData);
+
+    //notify
+    Object.keys(ws).forEach(connectId => {
+      try {
+        ws[connectId].send(
+          JSON.stringify({
+            type: 'newMessage',
+            ...savedData,
+          })
+        );
+      } catch (e) {
+        // console.log('unable notify', e);
+        ws[connectId] = null;
+      }
+    });
+
     if (result.ok) {
       return {
         error: '',

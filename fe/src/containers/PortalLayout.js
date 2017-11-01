@@ -4,6 +4,7 @@ import { Route } from 'react-router-dom';
 import PortalNavbar from '../components/common/Navbar/PortalNavbar';
 
 import Login from '../components/pages/Login/Index';
+import DuoLogin from '../components/pages/DuoLogin/Index';
 import ForgetPassword from '../components/pages/ForgetPassword/Index';
 import ResetPassword from '../components/pages/ResetPassword/Index';
 import CreateAccount from '../components/pages/CreateAccount/Index';
@@ -22,6 +23,7 @@ export default class MainLayout extends Component {
         <Route exact path="/" component={Login} />
         <Route exact path="/forget_password" component={ForgetPassword} />
         <Route exact path="/create_account" component={CreateAccount} />
+        <Route exact path="/duo_login/:token" component={DuoLogin} />
         <Route exact path="/go_verify_email/:email" component={GoVerifyEmail} />
         <Route exact path="/verify_email/:id/:code" component={VerifyEmail} />
         <Route

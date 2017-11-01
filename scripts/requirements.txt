@@ -1,0 +1,4 @@
+Requirements for update stats.py
+Requires that the schedule collection exists as specified in our data schema.
+The players collection must also exist as specified in our data schema, so just run importfixture.
+It updates the stats in the player collection, but will not change, name, team, rank, etc.
