@@ -13,7 +13,6 @@ collection.update_one({'week_no': week}, {'$inc':{'week_no': 1}}) #increments we
 #Get stats for current week
 games = nflgame.games(2017, week=week)
 players = nflgame.combine(games)
-players = nflgame.combine(games)
 #Connect to players database
 colname = 'players'
 db = client[dbname]
