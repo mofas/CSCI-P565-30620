@@ -982,6 +982,10 @@ dot-prop@^4.1.0:
   dependencies:
     is-obj "^1.0.0"
 
+duo_web@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/duo_web/-/duo_web-1.0.2.tgz#635bb779f1934aed39ef4780d5ad07f9acbade9a"
+
 duplexer3@^0.1.4:
   version "0.1.4"
   resolved "https://registry.yarnpkg.com/duplexer3/-/duplexer3-0.1.4.tgz#ee01dd1cac0ed3cbc7fdbea37dc0a8f1ce002ce2"

@@ -14,6 +14,7 @@ import { setup } from './serverUtil';
 import {
   indexHandler,
   getUserInfoHandler,
+  verifyDuoHandler,
   successLoginHandler,
   failLoginHandler,
   accountCreateHandler,
@@ -35,7 +36,11 @@ const main = async () => {
 
   let wsUserMap = {};
 
-  let app = setup(express(), { config, db, wsUserMap });
+  let app = setup(express(), {
+    config,
+    db,
+    wsUserMap,
+  });
   const server = http.createServer(app);
   const wss = new WebSocket.Server({
     server,
@@ -72,6 +77,8 @@ const main = async () => {
   app.get('/', indexHandler);
   app.get('/success_login', successLoginHandler);
   app.get('/fail_login', failLoginHandler);
+
+  app.post('/verify_duo', verifyDuoHandler);
 
   app.get(
     '/auth/google',

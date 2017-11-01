@@ -5,12 +5,14 @@ import passport from 'passport';
 import passportLocal from 'passport-local';
 import passportGoogleOAuth from 'passport-google-oauth20';
 
+import { sign_request } from 'duo_web';
 import session from 'express-session';
 
 import config from './config';
 import bodyParser from 'body-parser';
 
-import { createAccount } from './accountUtil';
+import { createAccount, hashPassword } from './accountUtil';
+import { duoSigTokenStore, duoPass } from './duoCache';
 
 const setupPassport = (app, { config, db }) => {
   app.use(session(config.session));
@@ -19,15 +21,23 @@ const setupPassport = (app, { config, db }) => {
 
   passport.use(
     new passportLocal.Strategy(async (email, password, done) => {
-      const hashpwd = crypto
-        .createHash('sha256')
-        .update(password + config.server.salt)
-        .digest('base64');
+      const hashpwd = hashPassword(password);
 
       const ret = await db
         .collection('accounts')
         .findOne({ email, password: hashpwd });
+
       if (ret) {
+        const duotoken = await sign_request(
+          config.duo.integrationKey,
+          config.duo.secretKey,
+          crypto
+            .createHash('sha256')
+            .update(ret.email + config.server.salt)
+            .digest('base64'),
+          email
+        );
+        duoSigTokenStore[ret.email] = duotoken;
         return done(null, ret.email);
       }
 
@@ -64,19 +74,32 @@ const setupPassport = (app, { config, db }) => {
       .collection('accounts')
       .findOne({ email })
       .then(({ _id, email, role, status }) => {
-        cb(null, { _id: String(_id), email, role, status });
+        cb(null, {
+          _id: String(_id),
+          email,
+          role,
+          status,
+        });
       });
   });
 };
 
 const checkAuth = (req, rsp, next) => {
   if (req.user) {
-    return next();
+    if (duoPass[req.user.email]) {
+      return next();
+    } else {
+      rsp.status(HTTPStatus.UNAUTHORIZED).send({
+        errMsg: 'Please do duo verify',
+        loginUrl: '/duo_login/' + duoSigTokenStore[req.user.email],
+      });
+    }
+  } else {
+    rsp.status(HTTPStatus.UNAUTHORIZED).send({
+      errMsg: 'Please Login',
+      loginUrl: '/login',
+    });
   }
-  rsp.status(HTTPStatus.UNAUTHORIZED).send({
-    errMsg: 'Please Login',
-    loginUrl: '/login',
-  });
 };
 
 export const setup = (app, { config, db, wsUserMap }) => {

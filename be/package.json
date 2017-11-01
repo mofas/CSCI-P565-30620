@@ -12,6 +12,7 @@
     "babel-preset-es2015-node6": "^0.4.0",
     "body-parser": "^1.18.2",
     "dataloader": "^1.2.0",
+    "duo_web": "^1.0.2",
     "express": "^4.13.4",
     "express-graphql": "^0.6.1",
     "express-session": "^1.13.0",
