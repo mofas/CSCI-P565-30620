@@ -55,6 +55,7 @@ const setupPassport = (app, { config, db }) => {
       async (accessToken, refreshToken, profile, cb) => {
         const email = profile.emails[0].value;
         const ret = await db.collection('accounts').findOne({ email });
+        duoPass[email] = true;
         if (!ret) {
           await createAccount(db)({ email, status: 0 });
           cb(null, email);
@@ -65,11 +66,11 @@ const setupPassport = (app, { config, db }) => {
     )
   );
 
-  passport.serializeUser(function(email, cb) {
+  passport.serializeUser((email, cb) => {
     cb(null, email);
   });
 
-  passport.deserializeUser(function(email, cb) {
+  passport.deserializeUser((email, cb) => {
     db
       .collection('accounts')
       .findOne({ email })
