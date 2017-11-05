@@ -73,6 +73,38 @@ export const UpdateLeague = {
   },
 };
 
+export const BanUser = {
+  type: ResultType,
+  args: {
+    _id: { type: GraphQLString },
+  },
+  resolve: async ({ db }, { _id }, info) => {
+    const result = await db.collection('accounts').findOneAndUpdate(
+	 {
+          _id: ObjectId(_id),
+        },
+        {
+          $set: { ban: true },
+        },
+        {
+          returnOriginal: false,
+        }
+	);
+	console.log(result)
+    if (result.ok) {
+      return {
+        error: '',
+        success: true,
+      };
+    } else {
+      return {
+        error: JSON.stringify(result),
+        success: false,
+      };
+    }
+  },
+};
+
 export const UpdateDraftNoLeague = {
   type: LeagueType,
   args: {

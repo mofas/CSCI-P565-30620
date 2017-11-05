@@ -31,6 +31,7 @@ export const AccountType = new GraphQLObjectType({
     email: { type: GraphQLString },
     role: { type: GraphQLString },
     status: { type: GraphQLString },
+	ban: {type: GraphQLBoolean}
   },
 });
 
