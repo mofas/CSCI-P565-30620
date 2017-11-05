@@ -10,6 +10,7 @@ import PlayerList from '../components/pages/PlayerList/Index';
 import PlayerDetail from '../components/pages/PlayerDetail/Index';
 import DraftPlayer from '../components/pages/DraftPlayer/Index';
 import ChatRoom from '../components/pages/ChatRoom/Index';
+import UserList from '../components/pages/UserList/Index';
 
 import classnames from 'classnames/bind';
 import style from './App.css';
@@ -34,6 +35,9 @@ export default class MainLayout extends Component {
             <Link className={cx('link')} to="/app/chatroom/main">
               Main Chat Room
             </Link>
+			<Link className={cx('link')} to="/app/user/list">
+              Users
+            </Link>
           </div>
           <div className={cx('content')}>
             <Route exact path="/app/news" component={News} />
@@ -50,6 +54,7 @@ export default class MainLayout extends Component {
               component={DraftPlayer}
             />
             <Route exact path="/app/chatroom/:room_id" component={ChatRoom} />
+			<Route exact path="/app/user/list" component={UserList} />
           </div>
         </div>
       </div>

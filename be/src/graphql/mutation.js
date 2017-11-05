@@ -77,14 +77,16 @@ export const BanUser = {
   type: ResultType,
   args: {
     _id: { type: GraphQLString },
+	isBanned: {type: GraphQLBoolean}
   },
-  resolve: async ({ db }, { _id }, info) => {
+  resolve: async ({ db }, { _id, isBanned }, info) => {
     const result = await db.collection('accounts').findOneAndUpdate(
 	 {
           _id: ObjectId(_id),
         },
         {
-          $set: { ban: true },
+          $set: { ban: isBanned },
+		  
         },
         {
           returnOriginal: false,
