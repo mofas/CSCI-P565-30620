@@ -22,6 +22,16 @@ const readData = filePath => {
         data['Extra_Points_Made'] = parseInt(data['Extra_Points_Made'], 10);
         data['Interceptions'] = parseInt(data['Interceptions'], 10);
         data['Fumbles_Lost'] = parseInt(data['Fumbles_Lost'], 10);
+        data['Forced_Fumbles'] = parseInt(data['Forced_Fumbles'], 10);
+        data['Interceptions_Thrown'] = parseInt(data['Interceptions_Thrown'], 10);
+        data['Sacks'] = parseInt(data['Sacks'], 10);
+        data['Blocked_Kicks'] = parseInt(data['Blocked_Kicks'], 10);
+        data['Blocked_Punts'] = parseInt(data['Blocked_Punts'], 10);
+        data['Safeties'] = parseInt(data['Safeties'], 10);
+        data['Kickoff_Return_TD'] = parseInt(data['Kickoff_Return_TD'], 10);
+        data['Punt_Return_TD'] = parseInt(data['Punt_Return_TD'], 10);
+        data['Defensive_TD'] = parseInt(data['Defensive_TD'], 10);
+        data['Rank'] = parseInt(data['Rank'], 10);
         ret.push(data);
       })
       .on('done', error => {

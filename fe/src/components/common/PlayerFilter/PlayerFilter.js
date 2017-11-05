@@ -205,6 +205,27 @@ class PlayerList extends React.PureComponent {
               sortDesc={sortDesc}
               onClick={() => this.setSortKey('Receiving_TD')}
             />
+            <TableHeader
+              headerKey="Interceptions_Thrown"
+              name="Interceptions Thrown"
+              sortKey={sortKey}
+              sortDesc={sortDesc}
+              onClick={() => this.setSortKey('Interceptions_Thrown')}
+            />
+            <TableHeader
+              headerKey="Interceptions"
+              name="Interceptions"
+              sortKey={sortKey}
+              sortDesc={sortDesc}
+              onClick={() => this.setSortKey('Interceptions')}
+            />
+            <TableHeader
+              headerKey="Forced_Fumbles"
+              name="Forced Fumbles"
+              sortKey={sortKey}
+              sortDesc={sortDesc}
+              onClick={() => this.setSortKey('Forced_Fumbles')}
+            />
           </div>
         </div>
         {children(tableData)}

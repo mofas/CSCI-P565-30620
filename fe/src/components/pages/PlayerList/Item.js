@@ -29,6 +29,8 @@ class PlayerItem extends React.PureComponent {
           <div className={cx('ab-item')}>{data.get('Passing_TDs')}</div>
           <div className={cx('ab-item')}>{data.get('Rushing_TDs')}</div>
           <div className={cx('ab-item')}>{data.get('Receiving_TD')}</div>
+          <div className={cx('ab-item')}>{data.get('Interceptions_Thrown')}</div>
+          <div className={cx('ab-item')}>{data.get('Interceptions')}</div>
         </div>
       </div>
     );
