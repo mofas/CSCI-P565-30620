@@ -53,6 +53,16 @@ export const PlayerType = new GraphQLObjectType({
     Extra_Points_Made: { type: GraphQLInt },
     Interceptions: { type: GraphQLInt },
     Fumbles_Lost: { type: GraphQLInt },
+    Kickoff_Return_TD: { type: GraphQLInt },
+    Interceptions_Thrown: {type: GraphQLInt},
+    Forced_Fumbles: {type: GraphQLInt},
+    Sacks: {type: GraphQLInt},
+    Blocked_Kicks: {type: GraphQLInt},
+    Blocked_Punts: {type: GraphQLInt},
+    Safeties: {type: GraphQLInt},
+    Punt_Return_TD: {type: GraphQLInt},
+    Defensive_TD: {type: GraphQLInt},
+    Rank: {type: GraphQLInt}
   },
 });
 
