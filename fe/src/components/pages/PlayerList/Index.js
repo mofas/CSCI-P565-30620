@@ -40,6 +40,15 @@ class PlayerList extends React.PureComponent {
           Extra_Points_Made
           Interceptions
           Fumbles_Lost
+          Interceptions_Thrown
+          Forced_Fumbles
+          Sacks
+          Blocked_Kicks
+          Blocked_Punts
+          Safeties
+          Kickoff_Return_TD
+          Punt_Return_TD
+          Defensive_TD
         }
       }
     `;
@@ -49,6 +58,7 @@ class PlayerList extends React.PureComponent {
     });
 
     API.GraphQL(query).then(res => {
+      console.log(res)
       const players = fromJS(res.data.ListPlayer);
       this.setState({
         loading: false,
@@ -65,9 +75,9 @@ class PlayerList extends React.PureComponent {
       <div className={cx('root')}>
         <Spinner show={loading} />
         <PlayerFilter data={players}>
-          {tableData =>
+          {(tableData, selectPosition) =>
             tableData.map(d => {
-              return <Item key={d.get('_id')} data={d} />;
+              return <Item key={d.get('_id')} data={d} selectPosition={selectPosition} />;
             })}
         </PlayerFilter>
       </div>
