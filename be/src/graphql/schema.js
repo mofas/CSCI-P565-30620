@@ -5,6 +5,7 @@ import {
   QueryPlayer,
   ListLeague,
   QueryAccount,
+  ListAccount,
   QueryPoolPlayer,
   GetMessages,
 } from './query';
@@ -17,6 +18,7 @@ import {
   UpdateDraftNoLeague,
   SelectedPlayer,
   SendMessage,
+  BanUser
 } from './mutation';
 
 export const schema = new GraphQLSchema({
@@ -27,6 +29,7 @@ export const schema = new GraphQLSchema({
       QueryPlayer,
       ListLeague,
       QueryPoolPlayer,
+	  ListAccount,
       QueryAccount,
       GetMessages,
     },
@@ -41,6 +44,7 @@ export const schema = new GraphQLSchema({
       UpdateDraftNoLeague,
       SelectedPlayer,
       SendMessage,
+	  BanUser
     },
   }),
 });

@@ -82,6 +82,19 @@ export const QueryAccount = {
   },
 };
 
+export const ListAccount = {
+  type: new GraphQLList(AccountType),
+  args: {
+  },
+  resolve: async ({ db }, { }, info) => {
+    const query = {};
+    const result = await db.collection('accounts')
+	.find(query)
+	.toArray();
+    return result;
+  },
+};
+
 export const QueryPoolPlayer = {
   type: new GraphQLList(PoolPlayerType),
   args: {
