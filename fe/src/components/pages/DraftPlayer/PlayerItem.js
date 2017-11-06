@@ -16,7 +16,7 @@ class PlayerItem extends React.PureComponent {
 
   render() {
     const { props } = this;
-    const { data, selectPlayer, leagueId } = props;
+    const { data, selectPlayer, leagueId, userId } = props;
     return (
       <div className={cx('item')}>
         <div className={cx('info')}>
@@ -38,7 +38,7 @@ class PlayerItem extends React.PureComponent {
           <div className={cx('ab-item')}>{data.get('Receiving_TD')}</div>
         </div>
         <div className={cx('op')}>
-          <Btn onClick={() => selectPlayer(data.get('_id'), leagueId)}>
+          <Btn onClick={() => selectPlayer(data.get('_id'), leagueId, userId)}>
             Select this Player
           </Btn>
         </div>
