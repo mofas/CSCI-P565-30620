@@ -38,6 +38,9 @@ class PlayerDetail extends React.PureComponent {
           Extra_Points_Made
           Interceptions
           Fumbles_Lost
+          Forced_Fumbles
+          URL
+          Rank
         }
       }
     `;
@@ -50,7 +53,6 @@ class PlayerDetail extends React.PureComponent {
       });
     });
   }
-
   render() {
     const { state, props } = this;
     const { pid, player } = state;
@@ -78,23 +80,24 @@ class PlayerDetail extends React.PureComponent {
               {player.get('Team')}{' '}
             </div>
             <div className={cx('rank')}>
-              <div className={cx('thick')}>Fantasy Rank</div> 44
+              <div className={cx('thick')}>Fantasy Rank</div> {player.get('Rank')}{' '}
             </div>
           </div>
         </div>
-
-        <div className={cx('main-title')}>News</div>
-
+        {player.get('URL') ? 
+        <div className={cx('main-title')}>Highlights</div>
+        : null}
+        {player.get('URL') ? 
         <div className={cx('news', 'block')}>
           <iframe
+            src = {"https://www.youtube.com/embed/".concat((player.get('URL').split('=')[1]))}
             width="560"
             height="315"
-            src="https://www.youtube.com/embed/9xl24Kscrbk"
             frameBorder="0"
-            allowfullscreen
+            allowFullScreen
           />
         </div>
-
+        : null}
         <div className={cx('main-title')}>Ability Record</div>
         <div className={cx('ability', 'block')}>
           <div>Passing Yards: {player.get('Passing_Yards')} </div>

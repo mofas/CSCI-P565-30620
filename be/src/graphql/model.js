@@ -62,7 +62,8 @@ export const PlayerType = new GraphQLObjectType({
     Safeties: {type: GraphQLInt},
     Punt_Return_TD: {type: GraphQLInt},
     Defensive_TD: {type: GraphQLInt},
-    Rank: {type: GraphQLInt}
+    Rank: {type: GraphQLInt},
+    URL: {type: GraphQLString}
   },
 });
 
