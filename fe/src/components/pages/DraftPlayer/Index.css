@@ -97,3 +97,23 @@
     }
   }
 }
+
+.component {
+  padding: 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  width:140px;
+  height:50px;
+  text-decoration: none;
+  border: solid 0.063rem #2c2c2c;
+  background-color: #4256f4;
+  color: #ffffff;
+  display: inline-block;
+  font-size: 12px;
+}
+.thick {
+  width:160px;
+    font-weight: bold;
+    font-size: 14px;
+    background-color: #820303;
+}

@@ -48,10 +48,6 @@ export const UpdateLeague = {
       _id: ObjectId(_id),
     };
 
-    console.log('456 stage:', stage);
-    //console.log("print " , req);
-    //req.user = "test";
-
     const result = await db.collection('leagues').findOne(query);
     if (result.accounts.length === result.limit && req.user) {
       const { value } = await db.collection('leagues').findOneAndUpdate(
@@ -77,14 +73,16 @@ export const BanUser = {
   type: ResultType,
   args: {
     _id: { type: GraphQLString },
+	isBanned: {type: GraphQLBoolean}
   },
-  resolve: async ({ db }, { _id }, info) => {
+  resolve: async ({ db }, { _id, isBanned }, info) => {
     const result = await db.collection('accounts').findOneAndUpdate(
 	 {
           _id: ObjectId(_id),
         },
         {
-          $set: { ban: true },
+          $set: { ban: isBanned },
+		  
         },
         {
           returnOriginal: false,
@@ -120,7 +118,8 @@ export const UpdateDraftNoLeague = {
     //req.user = "test";
 
     const result = await db.collection('leagues').findOne(query);
-    if (result.accounts.length === result.limit && req.user) {
+    //if (result.accounts.length === result.limit && req.user) {
+    if(result){
       const { value } = await db.collection('leagues').findOneAndUpdate(
         {
           _id: ObjectId(result._id),
@@ -226,8 +225,9 @@ export const SelectedPlayer = {
     };
     console.log('39847293', league_id, player_id, fancy_team_id);
     const result = await db.collection('pool').findOne(query);
-    //console.log(JSON.stringify(result, null, 2))
+    //console.log("return data " ,JSON.stringify(result, null, 2))
     if (!result) {
+      console.log("Insert the record");
       db.collection('pool').insertOne(query);
     }
 
