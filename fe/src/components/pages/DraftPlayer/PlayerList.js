@@ -16,7 +16,7 @@ class PlayerList extends React.PureComponent {
 
   render() {
     const { props } = this;
-    const { players, selectPlayer } = props;
+    const { players, selectPlayer, leagueId } = props;
 
     return (
       <div className={cx('player-list')}>
@@ -29,6 +29,7 @@ class PlayerList extends React.PureComponent {
                     key={d.get('_id')}
                     data={d}
                     selectPlayer={selectPlayer}
+                    leagueId={leagueId}
                   />
                 );
               })}

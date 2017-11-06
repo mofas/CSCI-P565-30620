@@ -1,5 +1,7 @@
 import React from 'react';
 import { fromJS, toJS, List, Set } from 'immutable';
+import { connect } from 'react-redux';
+import { getUserInfo, logout } from '../../../reducers/account';
 
 import API from '../../../middleware/API';
 import Spinner from '../../common/Spinner/Spinner';
@@ -22,6 +24,9 @@ class DraftPlayer extends React.PureComponent {
       selectionOrder: fromJS({}),
       totalPlayersInTeam: 15,
     };
+  }
+  componentWillMount() {
+    this.props.dispatch(getUserInfo());
   }
 
   componentDidMount() {
@@ -72,8 +77,8 @@ class DraftPlayer extends React.PureComponent {
     });
   }
 
-  selectPlayer = id => {
-    window.alert('You select player with id:' + id);
+  selectPlayer = (id, leagueId) => {
+    window.alert('You select player with id:' + id + " league_id:" + leagueId);
   };
 setPickingOrder = (strdata) => {
     //const data = this.state.leagueData.toObject(); 
@@ -82,7 +87,7 @@ setPickingOrder = (strdata) => {
     const data = JSON.parse(strdata);
     console.log("from setPickingOrder", data);
     console.log("first data 7687686" , data['name']);
-    
+
 
     if(data['name']){
       const draft = data['draft_run'];
@@ -137,6 +142,7 @@ setPickingOrder = (strdata) => {
   render() {
     const { state, props } = this;
     const { loading, players } = state;
+    const { accountStore } = props;
 
     const MessageData = []; //query by league_id
     const leagueData = []; //query by league_id
@@ -148,6 +154,7 @@ setPickingOrder = (strdata) => {
         <Spinner show={loading} />
         <h1>This is draft page!!</h1>
         <div>Picking Order </div>
+         Hi: {accountStore.getIn(['userInfo', 'email'])}
 	<div>
                 {this.state.selectionOrder.map( (d, index) => { 
                 return (
@@ -163,7 +170,7 @@ setPickingOrder = (strdata) => {
              )}
 
         </div>
-        <PlayerList players={players} selectPlayer={this.selectPlayer} />
+        <PlayerList players={players} selectPlayer={this.selectPlayer} leagueId={this.state.league_id} />
         <div>
           playerPoolData TODO: Chooseed player for all users Team1: Player1
           Player2 Team2: Player1 Player2
@@ -174,4 +181,10 @@ setPickingOrder = (strdata) => {
   }
 }
 
-export default DraftPlayer;
+//export default DraftPlayer;
+
+export default connect(stores => {
+  return {
+    accountStore: stores.account,
+  };
+})(DraftPlayer);
