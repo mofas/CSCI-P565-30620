@@ -68,6 +68,26 @@ export const ListLeague = {
   },
 };
 
+export const QueryLeague = {
+  type: LeagueType,
+  args: {
+    _id: {type: GraphQLString}
+  },
+  resolve: async ({ db }, { _id }, info) => {
+    //console.log("8787 id ", _id);
+    const query = {
+      _id: ObjectId(_id),
+    };
+    const result = await db
+      .collection('leagues')
+      .findOne(query);
+
+      //console.log("from be 9890", result);
+      //console.log()
+    return result;
+  },
+};
+
 export const QueryAccount = {
   type: AccountType,
   args: {
