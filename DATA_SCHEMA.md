@@ -49,6 +49,37 @@
 }
 ```
 
+
+#### PAST_PERF: (past_perf)
+
+```js
+{
+  _id: xxxxx,
+
+  player_id: xxxxx,
+  passing_yds: 12, //Integer
+  rushing_yds: 12, //Integer
+  receiving_yds: 12, //Integer
+  passing_tds: 12, //Integer
+  rushing_tds: 12, //Integer
+  receiving_tds: 12, //Integer
+  kicking_fgm: 12, //Integer
+  kicking_fgmissed: 12, //Integer computed by kicking_fga - kicking_fgm
+  kicking_xpmade: 12, //Integer
+  passing_int: 12, //Integer
+  fumbles_lost: 12, //Integer
+  defense_int: 12, //Integer
+  defense_ffum: 12, //Integer
+  defense_sk: 12, //Integer
+  defense_kick_blocks: 12, //Integer computed by defense_xpblk + defense_fgblk
+  defense_puntblk: 12, //Integer
+  defense_safe: 12, //Integer
+  kickret_tds: 12, //Integer
+  puntret_tds: 12, //Integer
+  defense_tds: 12, //Integer
+}
+```
+
 #### PLAYER_SCORE
 
 ```js
