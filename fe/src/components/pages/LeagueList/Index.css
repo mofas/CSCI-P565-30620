@@ -49,6 +49,10 @@
       flex: inherit;
     }
 
+    &.pa-col {
+      word-break: break-all;
+    }
+
     &.time-col {
       width: 140px;
       flex: inherit;
