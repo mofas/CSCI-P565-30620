@@ -1,6 +1,7 @@
 import React from 'react';
 import { List, Map } from 'immutable';
 import { Link } from 'react-router-dom';
+import { format } from 'date-fns';
 
 import Btn from '../../common/Btn/Btn';
 
@@ -22,23 +23,33 @@ class LeagueItem extends React.PureComponent {
     const { joinLeague, deleteLeague, inviteFriend, userInfo, data } = props;
 
     const leagueStatus = data.get('stage');
-    const participantEmails = (data.getIn(['accounts']) || List())
-      .map(d => d.get('email'));
+    const participantEmails = (data.getIn(['accounts']) || List()).map(d =>
+      d.get('email')
+    );
+
+    const creatorId = data.getIn(['creator', '_id']);
+    const creatorEmail = data.getIn(['creator', 'email']);
     return (
-      <div className={cx('item')}>
-        <div className={cx('name')}>{data.get('name')}</div>
-        <div className={cx('info-wrap')}>
-          <div className={cx('info-title')}>Current Players / Max Players</div>
-          <div className={cx('info-content')}>
-            {data.get('accounts').count()} / {data.get('limit')}
-          </div>
+      <div className={cx('pseudo-row')}>
+        <div className={cx('pseudo-col', 'name-col', 'text-left')}>
+          {data.get('name')}
         </div>
-        <div className={cx('info-wrap')}>
-          <div className={cx('info-title')}>Stage</div>
-          <div className={cx('info-content')}>{data.get('stage')}</div>
+        <div className={cx('pseudo-col', 'pa-col', 'text-left')}>
+          {data
+            .get('accounts')
+            .map(d => d.get('email'))
+            .join(',')}
         </div>
-        <div className={cx('function-bar')}>
-          <div className={cx('left-bar')}>
+        <div className={cx('pseudo-col', 'creator-col')}>{creatorEmail}</div>
+        <div className={cx('pseudo-col', 'time-col')}>
+          {format(new Date(data.get('create_time') * 1000), 'MM/DD HH:mm')}
+        </div>
+        <div className={cx('pseudo-col', 'count-col')}>
+          {data.get('accounts').count()} / {data.get('limit')}
+        </div>
+        <div className={cx('pseudo-col', 'stage-col')}>{data.get('stage')}</div>
+        <div className={cx('pseudo-col', 'action-col')}>
+          <div className={cx('function-bar')}>
             {leagueStatus === 'Initial' &&
             participantEmails
               .filter(email => email === userInfo.get('email'))
@@ -63,9 +74,7 @@ class LeagueItem extends React.PureComponent {
                 <Btn>Go to Draft Player</Btn>
               </Link>
             ) : null}
-          </div>
-          <div className={cx('right-bar')}>
-            {userInfo.get('role') === 'admin' ? (
+            {userInfo.get('_id') === creatorId ? (
               <Btn type="danger" onClick={() => deleteLeague(data.get('_id'))}>
                 {' '}
                 Delete

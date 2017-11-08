@@ -31,7 +31,7 @@ export const AccountType = new GraphQLObjectType({
     email: { type: GraphQLString },
     role: { type: GraphQLString },
     status: { type: GraphQLString },
-	ban: {type: GraphQLBoolean}
+    ban: { type: GraphQLBoolean },
   },
 });
 
@@ -54,16 +54,16 @@ export const PlayerType = new GraphQLObjectType({
     Interceptions: { type: GraphQLInt },
     Fumbles_Lost: { type: GraphQLInt },
     Kickoff_Return_TD: { type: GraphQLInt },
-    Interceptions_Thrown: {type: GraphQLInt},
-    Forced_Fumbles: {type: GraphQLInt},
-    Sacks: {type: GraphQLInt},
-    Blocked_Kicks: {type: GraphQLInt},
-    Blocked_Punts: {type: GraphQLInt},
-    Safeties: {type: GraphQLInt},
-    Punt_Return_TD: {type: GraphQLInt},
-    Defensive_TD: {type: GraphQLInt},
-    Rank: {type: GraphQLInt},
-    URL: {type: GraphQLString}
+    Interceptions_Thrown: { type: GraphQLInt },
+    Forced_Fumbles: { type: GraphQLInt },
+    Sacks: { type: GraphQLInt },
+    Blocked_Kicks: { type: GraphQLInt },
+    Blocked_Punts: { type: GraphQLInt },
+    Safeties: { type: GraphQLInt },
+    Punt_Return_TD: { type: GraphQLInt },
+    Defensive_TD: { type: GraphQLInt },
+    Rank: { type: GraphQLInt },
+    URL: { type: GraphQLString },
   },
 });
 
@@ -75,6 +75,16 @@ export const LeagueType = new GraphQLObjectType({
     stage: { type: GraphQLString }, //Initial, Draft, Game, Finish
     limit: { type: GraphQLInt },
     draft_run: { type: GraphQLInt },
+    creator: {
+      type: AccountType,
+      resolve: async ({ creator }, args, { db }) => {
+        const ret = await db
+          .collection('accounts')
+          .findOne({ _id: ObjectId(creator) });
+        return ret;
+      },
+    },
+    create_time: { type: GraphQLInt },
     accounts: {
       type: new GraphQLList(AccountType),
       resolve: async ({ accounts }, args, { db }) => {

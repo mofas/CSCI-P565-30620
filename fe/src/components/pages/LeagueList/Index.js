@@ -1,11 +1,11 @@
 import React from 'react';
 import { fromJS, List, Set } from 'immutable';
 import { connect } from 'react-redux';
-
+import { Link } from 'react-router-dom';
 import API from '../../../middleware/API';
 
+import Btn from '../../common/Btn/Btn';
 import Item from './Item';
-import CreateLeague from './CreateLeague';
 import Spinner from '../../common/Spinner/Spinner';
 
 import classnames from 'classnames/bind';
@@ -34,6 +34,11 @@ class LeagueList extends React.PureComponent {
           stage
           draft_run
           limit
+          creator {
+            _id
+            email
+          }
+          create_time
           accounts {
             email
           }
@@ -51,31 +56,6 @@ class LeagueList extends React.PureComponent {
         loading: false,
         leagues,
       });
-    });
-  };
-
-  createLeague = ({ name, limit }) => {
-    this.setState({
-      loading: true,
-    });
-
-    const mutation = `
-        mutation{
-          CreateLeague(data: {name: "${name}", limit: ${limit} }){
-            _id
-          }
-        }
-      `;
-
-    API.GraphQL(mutation).then(res => {
-      if (res.data.CreateLeague._id) {
-        this.loadData();
-      } else {
-        window.alert(res);
-        this.setState({
-          loading: false,
-        });
-      }
     });
   };
 
@@ -136,20 +116,44 @@ class LeagueList extends React.PureComponent {
     return (
       <div className={cx('root')}>
         <Spinner show={loading} />
-        {accountStore.getIn(['userInfo', 'role']) === 'admin' ? (
-          <CreateLeague createLeague={this.createLeague} />
-        ) : null}
-        {leagues.map(d => {
-          return (
-            <Item
-              key={d.get('_id')}
-              userInfo={accountStore.get('userInfo')}
-              joinLeague={this.joinLeague}
-              deleteLeague={this.deleteLeague}
-              data={d}
-            />
-          );
-        })}
+        <Link
+          to={'/app/league/create'}
+          style={{ width: 200, display: 'block' }}
+        >
+          <Btn type="secondary">Create New League</Btn>
+        </Link>
+        <div className={cx('list-wrap')}>
+          <div className={cx('pseudo-table')}>
+            <div className={cx('pseudo-thead')}>
+              <div className={cx('pseudo-row')}>
+                <div className={cx('pseudo-col', 'name-col', 'text-left')}>
+                  Name
+                </div>
+                <div className={cx('pseudo-col', 'pa-col', 'text-left')}>
+                  Particpants
+                </div>
+                <div className={cx('pseudo-col', 'creator-col')}>Creator</div>
+                <div className={cx('pseudo-col', 'time-col')}>Created at</div>
+                <div className={cx('pseudo-col', 'count-col')}>Capacity</div>
+                <div className={cx('pseudo-col', 'stage-col')}>Stage</div>
+                <div className={cx('pseudo-col', 'action-col')}>Action</div>
+              </div>
+            </div>
+            <div className={cx('pseudo-tbody')}>
+              {leagues.map(d => {
+                return (
+                  <Item
+                    key={d.get('_id')}
+                    userInfo={accountStore.get('userInfo')}
+                    joinLeague={this.joinLeague}
+                    deleteLeague={this.deleteLeague}
+                    data={d}
+                  />
+                );
+              })}
+            </div>
+          </div>
+        </div>
       </div>
     );
   }

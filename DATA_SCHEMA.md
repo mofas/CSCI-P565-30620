@@ -70,6 +70,9 @@
   limit: 4,
   accounts: ["user_id1", "user_id2"],
   draft_run: 0, //draft_run are from 0 to 79 = 20(player in each team) * 4(limit) - 1
+
+  creator: '_account id', // now we can do permission control
+  create_time: 12312312312, // unix time
   formula: {
     td_passway_weight: 4,
   }

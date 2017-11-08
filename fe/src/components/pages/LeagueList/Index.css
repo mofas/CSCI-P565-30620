@@ -1,49 +1,95 @@
 .root {
-  width: 640px;
   margin: 0 auto;
   padding: 16px;
 }
 
-.item {
-  font-size: 14px;
-  margin-bottom: 20px;
-  border: 1px solid #eee;
+.list-wrap {
+  margin: 20px 0;
 }
 
-.name {
-  padding: 10px;
-  font-size: 20px;
-  border-bottom: 1px solid #eee;
-  background-color: #fafafa;
-}
-.info-wrap {
+.pseudo-table {
+  border: 1px solid #ddd;
+  border-radius: 5px;
   background-color: #fff;
-  padding: 10px;
-  display: flex;
-}
+  text-align: center;
+  margin: 0;
 
-.info-title {
-  flex: 1;
-}
+  .pseudo-row {
+    display: flex;
 
-.info-content {
-  flex: 1;
-  text-align: right;
-}
-.input-wrap {
-  padding: 5px;
+    border-bottom: 1px solid #ddd;
+    font-weight: normal;
+    &:last-child {
+      border-bottom: 0;
+      border-bottom-left-radius: 5px;
+      border-bottom-right-radius: 5px;
+    }
+    &:nth-child(even) {
+      background-color: #fafafa;
+    }
+  }
+  .pseudo-col {
+    flex: 1;
+    border-left: 1px solid #ddd;
+    padding: 5px 10px;
+
+    &:first-child {
+      border-left: 0;
+    }
+
+    &.text-left {
+      text-align: left;
+      padding-left: 12px;
+      padding-right: 4px;
+    }
+
+    &.action-col,
+    &.creator-col {
+      width: 200px;
+      flex: inherit;
+    }
+
+    &.time-col {
+      width: 140px;
+      flex: inherit;
+    }
+
+    &.count-col,
+    &.stage-col {
+      width: 100px;
+      flex: inherit;
+    }
+  }
+
+  .pseudo-thead {
+    background-color: #fbfbfb;
+    color: #999;
+    border-bottom: 1px solid #ddd;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    overflow: hidden;
+    .pseudo-col {
+      line-height: 30px;
+    }
+  }
+
+  .pseudo-tbody {
+    .pseudo-row {
+      border-bottom: 0;
+    }
+    .pseudo-col {
+    }
+  }
 }
 
 .function-bar {
-  background-color: #1f3c71;
   padding: 10px;
-  display: flex;
-  justify-content: space-between;
-  .btn {
-    margin-right: 10px;
-  }
-  .left-bar {
-    display: flex;
-    flex: 1;
+  text-align: center;
+  :global {
+    .component-btn {
+      margin: 0 0 5px 0;
+      width: 200px;
+      line-height: 12px;
+    }
   }
 }

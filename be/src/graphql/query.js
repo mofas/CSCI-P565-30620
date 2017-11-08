@@ -63,6 +63,7 @@ export const ListLeague = {
     const result = await db
       .collection('leagues')
       .find({})
+      .sort({ create_time: -1 })
       .toArray();
     return result;
   },
@@ -71,19 +72,14 @@ export const ListLeague = {
 export const QueryLeague = {
   type: LeagueType,
   args: {
-    _id: {type: GraphQLString}
+    _id: { type: GraphQLString },
   },
   resolve: async ({ db }, { _id }, info) => {
-    //console.log("8787 id ", _id);
     const query = {
       _id: ObjectId(_id),
     };
-    const result = await db
-      .collection('leagues')
-      .findOne(query);
+    const result = await db.collection('leagues').findOne(query);
 
-      //console.log("from be 9890", result);
-      //console.log()
     return result;
   },
 };
@@ -104,13 +100,13 @@ export const QueryAccount = {
 
 export const ListAccount = {
   type: new GraphQLList(AccountType),
-  args: {
-  },
-  resolve: async ({ db }, { }, info) => {
+  args: {},
+  resolve: async ({ db }, {}, info) => {
     const query = {};
-    const result = await db.collection('accounts')
-	.find(query)
-	.toArray();
+    const result = await db
+      .collection('accounts')
+      .find(query)
+      .toArray();
     return result;
   },
 };

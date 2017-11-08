@@ -23,7 +23,7 @@ export const CreateLeague = {
   args: {
     data: { type: LeagueInputType },
   },
-  resolve: async ({ db }, { data }, info) => {
+  resolve: async ({ req, db }, { data }, info) => {
     const { name, limit } = data;
     const savedData = {
       name,
@@ -31,6 +31,8 @@ export const CreateLeague = {
       stage: 'Initial',
       accounts: [],
       draft_run: 0,
+      creator: req.user._id,
+      create_time: Math.floor(new Date() / 1000),
       current_pickup_accounts: null,
     };
 

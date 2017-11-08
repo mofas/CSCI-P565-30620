@@ -6,6 +6,7 @@ import Navbar from '../components/common/Navbar/Navbar';
 import News from '../components/pages/News/Index';
 
 import LeagueList from '../components/pages/LeagueList/Index';
+import CreateLeague from '../components/pages/CreateLeague/Index';
 
 import PlayerList from '../components/pages/PlayerList/Index';
 import PlayerDetail from '../components/pages/PlayerDetail/Index';
@@ -54,6 +55,7 @@ class MainLayout extends Component {
               component={PlayerDetail}
             />
             <Route exact path="/app/league/list" component={LeagueList} />
+            <Route exact path="/app/league/create" component={CreateLeague} />
             <Route
               exact
               path="/app/league/draft/:l_id"
