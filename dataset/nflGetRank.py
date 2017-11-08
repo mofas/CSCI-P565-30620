@@ -40,7 +40,7 @@ with open('nfl_stats_first3.csv', 'r') as f:
     for row in reader:
         if row[0] in positions and row[1] == '':
             row[1] = positions[row[0]]
-        if row[1] not in ['G', 'T', 'P', 'C', 'LT', 'LG', 'RG', 'RT', 'LS', 'OG', 'OT']:
+        if row[1] not in ['G', 'T', 'C', 'LT', 'LG', 'RG', 'RT', 'LS', 'OG', 'OT']:
             writer.writerow(row)
     print "Done"
     newdata.close()
@@ -57,14 +57,14 @@ with open('nfl_scores.csv', 'w') as fp:
         score = score + row['Rushing_TDs'] * 6 + row['Receiving_TD'] * 6 + row['FG_Made'] * 3 - row['FG_Missed'] + row['Extra_Points_Made']
         score = score - row['Interceptions_Thrown'] * 2 - row['Fumbles_Lost'] * 2 + row['Interceptions'] * 2 + row['Forced_Fumbles'] * 2
         score = score + row['Sacks'] + row['Blocked_Kicks'] * 2 + row['Blocked_Punts'] * 2 + row['Safeties'] * 2 + row['Kickoff_Return_TD'] * 6
-        score = score + row['Punt_Return_TD']*6 + row['Defensive_TD'] * 6
+        score = score + row['Punt_Return_TD']*6 + row['Defensive_TD'] * 6 + row['Punting_Yards'] // 50 + row['Punting_i20']
         #Write the data
         wr.writerow([row['Name'], row['Position'], row['Team'], int(math.ceil(score))])
         
 #---------------------------CALC RANK -----------------------------------------------
 df = pd.read_csv('nfl_scores.csv')
 
-kickers = df[df['Position'] == 'K']
+kickers = df[df['Position'].isin(['K', 'P'])]
 kickers['Rank'] = kickers['Score'].rank(ascending=False)
 kickers['Rank'] = kickers['Rank'].apply(math.floor)
 
@@ -92,7 +92,7 @@ players = nflgame.combine(games)
 
 header = ['Name', 'Position', 'Team', 'Passing_Yards','Rushing_Yards','Receiving_Yards',	'Passing_TDs',	'Rushing_TDs',	
           'Receiving_TD',	'FG_Made', 'FG_Missed',	'Extra_Points_Made', 'Interceptions_Thrown', 'Fumbles_Lost', 'Interceptions',
-          'Forced_Fumbles','Sacks','Blocked_Kicks','Blocked_Punts','Safeties','Kickoff_Return_TD','Punt_Return_TD','Defensive_TD', 'Rank']
+          'Forced_Fumbles','Sacks','Blocked_Kicks','Blocked_Punts','Safeties','Kickoff_Return_TD','Punt_Return_TD','Defensive_TD', 'Rank', 'Punting_i20', 'Punting_Yards']
 
 with open('nfl_stats.csv', 'w') as fp:
     df = pd.read_csv('player_data.csv')
@@ -102,9 +102,10 @@ with open('nfl_stats.csv', 'w') as fp:
         #score = rankDict[(row['Name'], row['Team'])]
         try:
             score = rankDict[(row['Name'], row['Team'])]
-            wr.writerow( [row['Name'], row['Position'], row['Team'], row['Passing_Yards'],row['Rushing_Yards'],row['Receiving_Yards'],row['Passing_TDs'],row['Rushing_TDs'],	
+            wr.writerow( [row['Name'][:2]+ ' ' + row['Name'][2:], row['Position'], row['Team'], row['Passing_Yards'],row['Rushing_Yards'],row['Receiving_Yards'],row['Passing_TDs'],row['Rushing_TDs'],	
           row['Receiving_TD'],	row['FG_Made'], row['FG_Missed'],	row['Extra_Points_Made'], row['Interceptions_Thrown'], row['Fumbles_Lost'], row['Interceptions'],
-          row['Forced_Fumbles'],row['Sacks'],row['Blocked_Kicks'],row['Blocked_Punts'],row['Safeties'],row['Kickoff_Return_TD'],row['Punt_Return_TD'],row['Defensive_TD'], int(score)]
+          row['Forced_Fumbles'],row['Sacks'],row['Blocked_Kicks'],row['Blocked_Punts'],row['Safeties'],row['Kickoff_Return_TD'],row['Punt_Return_TD'],row['Defensive_TD'], int(score),
+          row['Punting_i20'], row['Punting_Yards']]
             )
         except:
             print(row['Name'])
