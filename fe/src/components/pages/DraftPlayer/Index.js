@@ -23,6 +23,7 @@ class DraftPlayer extends React.PureComponent {
       leagueData: fromJS({}),
       selectionOrder: [],
       totalPlayersInTeam: 15,
+      poolPlayers: List(),
       //userId : this.props.accountStore.getIn(['userInfo', 'email'])
     };
   }
@@ -63,6 +64,11 @@ class DraftPlayer extends React.PureComponent {
               email,
             }
           }
+          PoolPlayers: QueryPoolPlayer(league_id: "${this.state.league_id}"){
+            players {
+              _id
+            }
+          }
         }
       `;
 
@@ -73,11 +79,34 @@ class DraftPlayer extends React.PureComponent {
       API.GraphQL(query).then(res => {
         const players = fromJS(res.data.ListPlayer);
         const leagueData = fromJS(res.data.LeagueData);
+        const poolPlayers = fromJS(res.data.PoolPlayers);
         this.setPickingOrder(JSON.stringify(leagueData));
+        // console.log("poolplayers342342", JSON.stringify(poolPlayers));
+
+        //console.log()
+        let poolData = JSON.parse(JSON.stringify(poolPlayers));
+        // console.log("--->",JSON.stringify(poolData[0]['players']));
+        
+      let poolPlayersId = [];
+      poolPlayersId = poolData[0]['players'].map( player => {
+        return player['_id'];
+      });
+      // console.log("poolplayers ids---->", JSON.stringify(poolPlayersId));
+      let filterPlayers = players.filter((player) => {
+          if(poolPlayersId.indexOf(player.get('_id')) >= 0){
+              return false;
+            }else{
+              return true;
+            }
+      });
+      // console.log("print- 9779879897 ---->>>-", JSON.stringify(filterPlayers) );  
+
+
         this.setState({
           loading: false,
-          players: players,
+          players: filterPlayers,
           leagueData: leagueData,
+          poolPlayers: poolPlayers,
         });
       });
   }

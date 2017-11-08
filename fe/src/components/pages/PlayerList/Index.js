@@ -75,6 +75,7 @@ class PlayerList extends React.PureComponent {
       <div className={cx('root')}>
         <Spinner show={loading} />
         <PlayerFilter data={players}>
+      
           {(tableData, selectPosition) =>
             tableData.map(d => {
               return <Item key={d.get('_id')} data={d} selectPosition={selectPosition} />;
