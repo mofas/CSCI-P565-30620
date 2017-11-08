@@ -63,7 +63,11 @@ class LeagueItem extends React.PureComponent {
             ) : null}
 
             {leagueStatus === 'Initial' ? (
-              <Btn onClick={() => inviteFriend}>Invite Your Friend</Btn>
+              <Btn
+                onClick={() => inviteFriend(data.get('_id'), data.get('name'))}
+              >
+                Invite Your Friend
+              </Btn>
             ) : null}
 
             {leagueStatus === 'Draft' &&

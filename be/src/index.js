@@ -22,6 +22,7 @@ import {
   verifyEmailHandler,
   forgetPasswordHandler,
   resetPasswordHandler,
+  sendinvitation,
 } from './api';
 
 const main = async () => {
@@ -99,6 +100,7 @@ const main = async () => {
   app.post('/account/verify_email', verifyEmailHandler(db));
   app.post('/account/forget_password', forgetPasswordHandler(db));
   app.post('/account/reset_password', resetPasswordHandler(db));
+  app.post('/league/invitation', sendinvitation(db));
 
   app.post(
     '/login',

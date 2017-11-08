@@ -8,6 +8,8 @@ import Btn from '../../common/Btn/Btn';
 import Item from './Item';
 import Spinner from '../../common/Spinner/Spinner';
 
+import { validateEmail } from '../../../util';
+
 import classnames from 'classnames/bind';
 import style from './Index.css';
 const cx = classnames.bind(style);
@@ -109,6 +111,29 @@ class LeagueList extends React.PureComponent {
     });
   };
 
+  inviteFriend = (leagueID, leagueName) => {
+    // league/invitation
+    console.log(leagueID, leagueName);
+    const receiver = window.prompt('please input your frined email');
+    if (!validateEmail(receiver)) {
+      window.alert('Email is not valid');
+      return;
+    }
+
+    API.API((request, endpoint) => {
+      return request
+        .post(`${endpoint}/league/invitation`)
+        .type('form')
+        .send({
+          leagueName,
+          inviter: this.props.accountStore.getIn(['userInfo', 'email']),
+          receiver,
+        });
+    }).then(res => {
+      alert(res.message);
+    });
+  };
+
   render() {
     const { state, props } = this;
     const { accountStore } = props;
@@ -147,6 +172,7 @@ class LeagueList extends React.PureComponent {
                     userInfo={accountStore.get('userInfo')}
                     joinLeague={this.joinLeague}
                     deleteLeague={this.deleteLeague}
+                    inviteFriend={this.inviteFriend}
                     data={d}
                   />
                 );

@@ -5,7 +5,11 @@ import { verify_response } from 'duo_web';
 import { ObjectId } from 'mongodb';
 import config from '../config';
 import { createAccount, genValCode, hashPassword } from '../accountUtil';
-import { sendVerifyEmail, sendResetPasswordEmail } from '../emailService';
+import {
+  sendVerifyEmail,
+  sendResetPasswordEmail,
+  sendInvitationEmail,
+} from '../emailService';
 import { duoSigTokenStore, duoPass } from '../cache';
 
 export const indexHandler = (req, rsp, next) => {
@@ -205,5 +209,21 @@ export const resetPasswordHandler = db => async (req, rsp) => {
   rsp.status(HTTPStatus.OK).send({
     err: 1,
     message: 'This code is used before or not valid.',
+  });
+};
+
+export const sendinvitation = db => async (req, rsp) => {
+  const { inviter, receiver, leagueName } = req.body;
+  if (inviter && receiver && leagueName) {
+    sendInvitationEmail({ inviter, receiver, leagueName });
+    return rsp.status(HTTPStatus.OK).send({
+      err: 0,
+      message: 'Send invitation successfully.',
+    });
+  }
+
+  rsp.status(HTTPStatus.OK).send({
+    err: 1,
+    message: 'Some thing goes wrong!',
   });
 };

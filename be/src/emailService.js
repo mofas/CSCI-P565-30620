@@ -47,3 +47,28 @@ export const sendResetPasswordEmail = db => async email => {
 
   sgMail.send(msg);
 };
+
+export const sendInvitationEmail = async ({
+  inviter,
+  receiver,
+  leagueName,
+}) => {
+  const text = `${config.fe.url}`;
+  const html = `<h2>Hi:</h2>
+    <p>Your friends ${inviter} invite you to join his league "<bold>${
+    leagueName
+  }</bold>" on
+    <a href="${config.fe.url}" target="_blank">Football Fantasy Game</a></p>
+  `;
+
+  const msg = {
+    to: receiver,
+    from: inviter,
+    subject:
+      'Your friends invite to join his/her league in Football Fantasy Game',
+    text: text,
+    html: html,
+  };
+
+  sgMail.send(msg);
+};
