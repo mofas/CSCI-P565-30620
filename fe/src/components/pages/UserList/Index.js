@@ -39,7 +39,7 @@ class PlayerList extends React.PureComponent {
     });
 
     API.GraphQL(query).then(res => {
-      console.log(res);
+      // console.log(res);
       const users = fromJS(res.data.ListAccount);
       this.setState({
         loading: false,
@@ -49,7 +49,7 @@ class PlayerList extends React.PureComponent {
   }
 
   toggleBan = (_id, isBan) => {
-    console.log(_id, isBan);
+    // console.log(_id, isBan);
 
     this.setState({
       loading: true,

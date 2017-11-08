@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Link, Route } from 'react-router-dom';
 
 import Navbar from '../components/common/Navbar/Navbar';
@@ -16,8 +17,12 @@ import classnames from 'classnames/bind';
 import style from './App.css';
 const cx = classnames.bind(style);
 
-export default class MainLayout extends Component {
+class MainLayout extends Component {
   render() {
+    const { props } = this;
+    const { accountStore } = props;
+    const role = accountStore.getIn(['userInfo', 'role']);
+    console.log(role);
     return (
       <div>
         <Navbar />
@@ -35,9 +40,11 @@ export default class MainLayout extends Component {
             <Link className={cx('link')} to="/app/chatroom/main">
               Main Chat Room
             </Link>
-			<Link className={cx('link')} to="/app/user/list">
-              Users
-            </Link>
+            {role === 'admin' ? (
+              <Link className={cx('link')} to="/app/user/list">
+                Users
+              </Link>
+            ) : null}
           </div>
           <div className={cx('content')}>
             <Route exact path="/app/news" component={News} />
@@ -54,10 +61,16 @@ export default class MainLayout extends Component {
               component={DraftPlayer}
             />
             <Route exact path="/app/chatroom/:room_id" component={ChatRoom} />
-			<Route exact path="/app/user/list" component={UserList} />
+            <Route exact path="/app/user/list" component={UserList} />
           </div>
         </div>
       </div>
     );
   }
 }
+
+export default connect(stores => {
+  return {
+    accountStore: stores.account,
+  };
+})(MainLayout);
