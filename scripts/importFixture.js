@@ -31,6 +31,8 @@ const readData = filePath => {
         data['Kickoff_Return_TD'] = parseInt(data['Kickoff_Return_TD'], 10);
         data['Punt_Return_TD'] = parseInt(data['Punt_Return_TD'], 10);
         data['Defensive_TD'] = parseInt(data['Defensive_TD'], 10);
+        data['Punting_i20'] = parseInt(data['Punting_i20'], 10);
+        data['Punting_Yards'] = parseInt(data['Punting_Yards'], 10);
         data['Rank'] = parseInt(data['Rank'], 10);
         ret.push(data);
       })

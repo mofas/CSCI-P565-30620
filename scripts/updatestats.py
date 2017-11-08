@@ -39,4 +39,6 @@ for p in players:
          'Safeties':p.defense_safe,
          'Kickoff_Return_TD':p.kickret_tds,
          'Punt_Return_TD':p.puntret_tds,
-         'Defensive_TD':p.defense_tds}})
+         'Defensive_TD':p.defense_tds,
+         'Punting_i20': p.punting_i20,
+         'Punting_Yards': p.punting_yds}})

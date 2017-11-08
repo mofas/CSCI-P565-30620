@@ -80,6 +80,12 @@ class PlayerItem extends React.PureComponent {
           {selectPosition === 'Kicking' ? 
           <div className={cx('ab-item')}>{data.get('FG_Missed')}</div>
           : null}
+          {selectPosition === 'Kicking' ? 
+          <div className={cx('ab-item')}>{data.get('Punting_i20')}</div>
+          : null}
+          {selectPosition === 'Kicking' ? 
+          <div className={cx('ab-item')}>{data.get('Punting_Yards')}</div>
+          : null}
         </div>
       </div>
     );

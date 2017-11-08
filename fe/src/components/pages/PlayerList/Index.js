@@ -49,6 +49,8 @@ class PlayerList extends React.PureComponent {
           Kickoff_Return_TD
           Punt_Return_TD
           Defensive_TD
+          Punting_i20
+          Punting_Yards
         }
       }
     `;

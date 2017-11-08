@@ -28,7 +28,7 @@ const PositionMapping = fromJS({
     'SAF',
     'DL',
   ],
-  Kicking: ['K'],
+  Kicking: ['K', 'P'],
 });
 
 class PlayerList extends React.PureComponent {
@@ -332,6 +332,24 @@ class PlayerList extends React.PureComponent {
               sortKey={sortKey}
               sortDesc={sortDesc}
               onClick={() => this.setSortKey('FG_Missed')}
+            /> : null
+          }
+           {selectPosition === 'Kicking' ? 
+            <TableHeader
+              headerKey="Punting_i20"
+              name="Punts Inside 20"
+              sortKey={sortKey}
+              sortDesc={sortDesc}
+              onClick={() => this.setSortKey('Punting_i20')}
+            /> : null
+          }
+           {selectPosition === 'Kicking' ? 
+            <TableHeader
+              headerKey="Punting_Yards"
+              name="Punting Yards"
+              sortKey={sortKey}
+              sortDesc={sortDesc}
+              onClick={() => this.setSortKey('Punting_Yards')}
             /> : null
           }
           </div>
