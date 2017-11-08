@@ -22,7 +22,6 @@ class MainLayout extends Component {
     const { props } = this;
     const { accountStore } = props;
     const role = accountStore.getIn(['userInfo', 'role']);
-    console.log(role);
     return (
       <div>
         <Navbar />

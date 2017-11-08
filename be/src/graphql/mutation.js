@@ -14,6 +14,8 @@ import {
   GraphQLBoolean,
 } from 'graphql';
 
+import { userInfo } from '../cache';
+
 import { ResultType, LeagueType, LeagueInputType } from './model';
 
 export const CreateLeague = {
@@ -73,22 +75,24 @@ export const BanUser = {
   type: ResultType,
   args: {
     _id: { type: GraphQLString },
-	isBanned: {type: GraphQLBoolean}
+    isBanned: { type: GraphQLBoolean },
   },
   resolve: async ({ db }, { _id, isBanned }, info) => {
     const result = await db.collection('accounts').findOneAndUpdate(
-	 {
-          _id: ObjectId(_id),
-        },
-        {
-          $set: { ban: isBanned },
-		  
-        },
-        {
-          returnOriginal: false,
-        }
-	);
-	console.log(result)
+      {
+        _id: ObjectId(_id),
+      },
+      {
+        $set: { ban: isBanned },
+      },
+      {
+        returnOriginal: false,
+      }
+    );
+
+    //clean up cache
+    Object.keys(userInfo, key => (userInfo[key] = null));
+
     if (result.ok) {
       return {
         error: '',
@@ -119,7 +123,7 @@ export const UpdateDraftNoLeague = {
 
     const result = await db.collection('leagues').findOne(query);
     //if (result.accounts.length === result.limit && req.user) {
-    if(result){
+    if (result) {
       const { value } = await db.collection('leagues').findOneAndUpdate(
         {
           _id: ObjectId(result._id),
@@ -227,7 +231,7 @@ export const SelectedPlayer = {
     const result = await db.collection('pool').findOne(query);
     //console.log("return data " ,JSON.stringify(result, null, 2))
     if (!result) {
-      console.log("Insert the record");
+      console.log('Insert the record');
       db.collection('pool').insertOne(query);
     }
 

@@ -12,7 +12,7 @@ import config from './config';
 import bodyParser from 'body-parser';
 
 import { createAccount, hashPassword } from './accountUtil';
-import { duoSigTokenStore, duoPass } from './duoCache';
+import { duoSigTokenStore, duoPass, userInfo } from './cache';
 
 const setupPassport = (app, { config, db }) => {
   app.use(session(config.session));
@@ -38,6 +38,9 @@ const setupPassport = (app, { config, db }) => {
           email
         );
         duoSigTokenStore[ret.email] = duotoken;
+        if (config.duo.disable) {
+          duoPass[email] = true;
+        }
         return done(null, ret.email);
       }
 
@@ -71,17 +74,23 @@ const setupPassport = (app, { config, db }) => {
   });
 
   passport.deserializeUser((email, cb) => {
-    db
-      .collection('accounts')
-      .findOne({ email })
-      .then(({ _id, email, role, status }) => {
-        cb(null, {
-          _id: String(_id),
-          email,
-          role,
-          status,
+    if (userInfo[email]) {
+      cb(null, userInfo[email]);
+    } else {
+      db
+        .collection('accounts')
+        .findOne({ email })
+        .then(({ _id, email, role, status, ban }) => {
+          userInfo[email] = {
+            _id: String(_id),
+            email,
+            role,
+            status,
+            ban,
+          };
+          cb(null, userInfo[email]);
         });
-      });
+    }
   });
 };
 
@@ -103,6 +112,18 @@ const checkAuth = (req, rsp, next) => {
   }
 };
 
+const checkPermission = (req, rsp, next) => {
+  if (req.user && req.user.ban) {
+    rsp.status(HTTPStatus.OK).send({
+      err: 3,
+      message: 'you are banned',
+      email: req.user.email,
+    });
+  } else {
+    next();
+  }
+};
+
 export const setup = (app, { config, db, wsUserMap }) => {
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
@@ -116,7 +137,7 @@ export const setup = (app, { config, db, wsUserMap }) => {
   });
 
   app.use('/account/get_user_info', checkAuth);
-  //app.use('/graphql', checkAuth);
+  app.use('/graphql', checkPermission);
 
   app.locals.db = db;
   app.locals.config = config;

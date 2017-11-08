@@ -21,7 +21,7 @@ export const createAccount = db => async ({
     role: 'player',
     status,
     valCode: genValCode(),
-	ban: false
+    ban: false,
   });
 };
 

@@ -18,6 +18,7 @@ const defaultConfig = {
     callbackURL: 'http://localhost:5000/oauth2callback',
   },
   duo: {
+    disable: false,
     hostname: 'api-00cc3ec1.duosecurity.com',
     integrationKey: 'DI7GFUB7U9UYCE38XRTG',
     secretKey: process.env.DUO_SECRET || '',
@@ -42,8 +43,9 @@ const testingConfig = {
     url: 'https://mofas.github.io/CSCI-P565-30620',
   },
   mongo: {
-    url: `mongodb://${process.env.DB_ACC}:${process.env
-      .DB_PWD}@ds155684.mlab.com:55684/football`,
+    url: `mongodb://${process.env.DB_ACC}:${
+      process.env.DB_PWD
+    }@ds155684.mlab.com:55684/football`,
   },
   oauth: {
     clientID: process.env.G_OAUTH_CLIENT_ID,
@@ -51,6 +53,7 @@ const testingConfig = {
     callbackURL: 'https://csci.now.sh/oauth2callback',
   },
   duo: {
+    disable: false,
     hostname: 'api-00cc3ec1.duosecurity.com',
     integrationKey: 'DI7GFUB7U9UYCE38XRTG',
     secretKey: process.env.DUO_SECRET || '',

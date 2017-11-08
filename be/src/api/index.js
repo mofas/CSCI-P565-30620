@@ -6,7 +6,7 @@ import { ObjectId } from 'mongodb';
 import config from '../config';
 import { createAccount, genValCode, hashPassword } from '../accountUtil';
 import { sendVerifyEmail, sendResetPasswordEmail } from '../emailService';
-import { duoSigTokenStore, duoPass } from '../duoCache';
+import { duoSigTokenStore, duoPass } from '../cache';
 
 export const indexHandler = (req, rsp, next) => {
   rsp.status(HTTPStatus.OK).send({
@@ -22,6 +22,12 @@ export const getUserInfoHandler = (req, rsp, next) => {
         rsp.status(HTTPStatus.OK).send({
           err: 1,
           message: 'Please verify your email',
+          email: req.user.email,
+        });
+      } else if (req.user.ban) {
+        rsp.status(HTTPStatus.OK).send({
+          err: 3,
+          message: 'you are banned',
           email: req.user.email,
         });
       } else {
@@ -46,11 +52,17 @@ export const getUserInfoHandler = (req, rsp, next) => {
 };
 
 export const successLoginHandler = (req, rsp, next) => {
-  rsp.status(HTTPStatus.OK).send({
-    err: 2,
-    message: 'duo check',
-    duoUrl: '/duo_login/' + duoSigTokenStore[req.user.email],
-  });
+  if (duoPass[req.user.email]) {
+    rsp.status(HTTPStatus.OK).send({
+      err: 0,
+    });
+  } else {
+    rsp.status(HTTPStatus.OK).send({
+      err: 2,
+      message: 'duo check',
+      duoUrl: '/duo_login/' + duoSigTokenStore[req.user.email],
+    });
+  }
 };
 
 export const failLoginHandler = (req, rsp, next) => {

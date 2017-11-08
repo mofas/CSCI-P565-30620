@@ -1,0 +1,10 @@
+.root {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #fff;
+}
+
+.main {
+  text-align: center;
+  margin: 50px auto;
+}

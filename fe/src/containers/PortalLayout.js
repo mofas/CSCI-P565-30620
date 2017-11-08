@@ -10,6 +10,7 @@ import ResetPassword from '../components/pages/ResetPassword/Index';
 import CreateAccount from '../components/pages/CreateAccount/Index';
 import GoVerifyEmail from '../components/pages/GoVerifyEmail/Index';
 import VerifyEmail from '../components/pages/VerifyEmail/Index';
+import Ban from '../components/pages/Ban/Index';
 
 import classnames from 'classnames/bind';
 // import style from './App.css';
@@ -26,6 +27,7 @@ export default class MainLayout extends Component {
         <Route exact path="/duo_login/:token" component={DuoLogin} />
         <Route exact path="/go_verify_email/:email" component={GoVerifyEmail} />
         <Route exact path="/verify_email/:id/:code" component={VerifyEmail} />
+        <Route exact path="/ban" component={Ban} />
         <Route
           exact
           path="/reset_password/:id/:code"

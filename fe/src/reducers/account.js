@@ -27,6 +27,8 @@ export const getUserInfo = () => dispatch => {
       window.location.href = '#/go_verify_email/' + res.email;
     } else if (res.err === 2) {
       window.location.href = '#' + res.duoUrl;
+    } else if (res.err === 3) {
+      window.location.href = '#/ban';
     } else {
       dispatch(duck.createAction(ACCOUNT_LOADED)(res));
     }
