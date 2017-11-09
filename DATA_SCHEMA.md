@@ -46,37 +46,27 @@
   kickret_tds: 12, //Integer
   puntret_tds: 12, //Integer
   defense_tds: 12, //Integer
-}
-```
 
-
-#### PAST_PERF: (past_perf)
-
-```js
-{
-  _id: xxxxx,
-
-  player_id: xxxxx,
-  passing_yds: 12, //Integer
-  rushing_yds: 12, //Integer
-  receiving_yds: 12, //Integer
-  passing_tds: 12, //Integer
-  rushing_tds: 12, //Integer
-  receiving_tds: 12, //Integer
-  kicking_fgm: 12, //Integer
-  kicking_fgmissed: 12, //Integer computed by kicking_fga - kicking_fgm
-  kicking_xpmade: 12, //Integer
-  passing_int: 12, //Integer
-  fumbles_lost: 12, //Integer
-  defense_int: 12, //Integer
-  defense_ffum: 12, //Integer
-  defense_sk: 12, //Integer
-  defense_kick_blocks: 12, //Integer computed by defense_xpblk + defense_fgblk
-  defense_puntblk: 12, //Integer
-  defense_safe: 12, //Integer
-  kickret_tds: 12, //Integer
-  puntret_tds: 12, //Integer
-  defense_tds: 12, //Integer
+  passing_yds_past: 12, //Integer
+  rushing_yds_past: 12, //Integer
+  receiving_yds_past: 12, //Integer
+  passing_tds_past: 12, //Integer
+  rushing_tds_past: 12, //Integer
+  receiving_tds_past: 12, //Integer
+  kicking_fgm_past: 12, //Integer
+  kicking_fgmissed_past: 12, //Integer computed by kicking_fga - kicking_fgm
+  kicking_xpmade_past: 12, //Integer
+  passing_int_past: 12, //Integer
+  fumbles_lost_past: 12, //Integer
+  defense_int_past: 12, //Integer
+  defense_ffum_past: 12, //Integer
+  defense_sk_past: 12, //Integer
+  defense_kick_blocks_past: 12, //Integer computed by defense_xpblk + defense_fgblk
+  defense_puntblk_past: 12, //Integer
+  defense_safe_past: 12, //Integer
+  kickret_tds_past: 12, //Integer
+  puntret_tds_past: 12, //Integer
+  defense_tds_past: 12, //Integer
 }
 ```
 
@@ -108,7 +98,7 @@
     td_passway_weight: 4,
   }
   draft_start_time: 12312334312, // draft start time
-  timeout: 2, // how long user should wait, prior to automatic refresh ( # Minutes) 
+  timeout: 2, // how long user should wait, prior to automatic refresh ( # Minutes)
   lastPickTime: 12312312312, // last pick time
 }
 ```
