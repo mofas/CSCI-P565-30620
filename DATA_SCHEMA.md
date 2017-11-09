@@ -107,6 +107,7 @@
   formula: {
     td_passway_weight: 4,
   }
+  draft_start_time: datetime
 }
 ```
 
