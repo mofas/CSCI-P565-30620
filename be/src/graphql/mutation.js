@@ -24,7 +24,20 @@ export const CreateLeague = {
     data: { type: LeagueInputType },
   },
   resolve: async ({ req, db }, { data }, info) => {
-    const { name, limit } = data;
+    const { name, limit, epoc_date } = data;
+    var curr_epoc = Math.floor(new Date().getTime()/1000.0); 
+    if(curr_epoc > epoc_date){
+      return {
+        error: "Enter future date",
+        success: false,
+      };
+    }
+    let date;
+    try{
+      date = new Date(epoc * 1000);
+    } catch(err){
+      date = new Date();
+    }
     const savedData = {
       name,
       limit,
@@ -34,6 +47,7 @@ export const CreateLeague = {
       creator: req.user._id,
       create_time: Math.floor(new Date() / 1000),
       current_pickup_accounts: null,
+      draft_start_time: date,
     };
 
     const { value } = await db.collection('leagues').insertOne(savedData);
@@ -287,5 +301,52 @@ export const SendMessage = {
         success: false,
       };
     }
+  },
+};
+
+
+export const UpdateLeagueTime = {
+  type: ResultType,
+  args: {
+    league_id: { type: GraphQLString },
+    epoc: {type: GraphQLInt},
+  },
+  resolve: async ({ db }, { league_id, epoc }, info) => {
+    const query = {
+      league_id: league_id,
+    };
+    //console.log('39847293', league_id, player_id, fancy_team_id);
+    var curr_epoc = Math.round(new Date().getTime()/1000.0); 
+    if(curr_epoc > epoc){
+      return {
+        error: "Enter future date",
+        success: false,
+      };
+    }
+    let date = new Date(epoc * 1000);
+    const result = await db.collection('leagues').findOneAndUpdate(
+      {
+        _id: ObjectId(league_id),
+      },
+      {
+        $set: { draft_start_time: date},
+      },
+      {
+        returnOriginal: false,
+      }
+    );
+
+    if (result.ok) {
+      return {
+        error: '',
+        success: true,
+      };
+    } else {
+      return {
+        error: JSON.stringify(result),
+        success: false,
+      };
+    }
+
   },
 };

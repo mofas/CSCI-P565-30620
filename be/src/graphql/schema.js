@@ -19,7 +19,8 @@ import {
   UpdateDraftNoLeague,
   SelectedPlayer,
   SendMessage,
-  BanUser
+  BanUser,
+  UpdateLeagueTime,
 } from './mutation';
 
 export const schema = new GraphQLSchema({
@@ -46,7 +47,8 @@ export const schema = new GraphQLSchema({
       UpdateDraftNoLeague,
       SelectedPlayer,
       SendMessage,
-	  BanUser
+      BanUser,
+      UpdateLeagueTime,
     },
   }),
 });

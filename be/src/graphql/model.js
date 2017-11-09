@@ -105,6 +105,7 @@ export const LeagueInputType = new GraphQLInputObjectType({
   fields: {
     name: { type: GraphQLString },
     limit: { type: GraphQLInt },
+    epoc_date: {type: GraphQLInt},
   },
 });
 

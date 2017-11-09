@@ -21,14 +21,19 @@ class CreateLeague extends React.PureComponent {
     };
   }
 
+
+  updateLeagueTime = () => {
+
+  }
   createLeague = ({ name, limit }) => {
     this.setState({
       loading: true,
     });
 
+    var d1 = Math.round(new Date().getTime()/1000.0); // pass date from draft page
     const mutation = `
         mutation{
-          CreateLeague(data: {name: "${name}", limit: ${limit} }){
+          CreateLeague(data: {name: "${name}", limit: ${limit}, epoc_date: ${d1} }){
             _id
           }
         }
