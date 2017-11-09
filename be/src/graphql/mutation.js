@@ -34,9 +34,10 @@ export const CreateLeague = {
     }
     let date;
     try{
-      date = new Date(epoc * 1000);
+      date = new Date(epoc_date * 1000);
     } catch(err){
       date = new Date();
+      epoc_date = curr_epoc;
     }
     const savedData = {
       name,
@@ -47,7 +48,9 @@ export const CreateLeague = {
       creator: req.user._id,
       create_time: Math.floor(new Date() / 1000),
       current_pickup_accounts: null,
-      draft_start_time: date,
+      draft_start_time: epoc_date,
+      timeout: 2,
+      lastPickTime: epoc_date,
     };
 
     const { value } = await db.collection('leagues').insertOne(savedData);
@@ -139,13 +142,14 @@ export const UpdateDraftNoLeague = {
 
     const result = await db.collection('leagues').findOne(query);
     //if (result.accounts.length === result.limit && req.user) {
+    let curr_epoc = Math.round(new Date().getTime()/1000.0);
     if (result) {
       const { value } = await db.collection('leagues').findOneAndUpdate(
         {
           _id: ObjectId(result._id),
         },
         {
-          $set: { draft_run: result.draft_run + 1 },
+          $set: { draft_run: result.draft_run + 1, lastPickTime: curr_epoc },
         },
         {
           returnOriginal: false,
