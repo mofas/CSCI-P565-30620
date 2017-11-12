@@ -27,6 +27,7 @@
     "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "REACT_APP_ENDPOINT=testing react-scripts build",
+    "build:production": "REACT_APP_ENDPOINT=production react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   }
