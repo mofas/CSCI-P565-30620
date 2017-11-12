@@ -41,7 +41,7 @@ export const fantasyTeamLoaderGenerator = db => {
       _id: { $in: ids.map(ObjectId) },
     };
     const result = await db
-      .collection('fantsay_team')
+      .collection('fantasy_team')
       .find(query)
       .toArray();
     return reorderWith(ids, result, '_id');
@@ -52,13 +52,13 @@ export const fantasyTeamLoaderGenerator = db => {
 export const arrangementLoaderGenerator = db => {
   return new DataLoader(async ids => {
     let query = {
-      fancy_team_id: { $in: ids },
+      fantasy_team_id: { $in: ids },
     };
     const result = await db
       .collection('arrangement')
       .find(query)
       .toArray();
-    return reorderWith(ids, result, 'fancy_team_id');
+    return reorderWith(ids, result, 'fantasy_team_id');
   });
 };
 

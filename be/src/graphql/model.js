@@ -217,37 +217,47 @@ export const FantasyTeamType = new GraphQLObjectType({
     account: {
       type: AccountType,
       resolve: async ({ account_id }, args, context) => {
-        const loader = getLoader(
-          context,
-          'accountLoaderGenerator',
-          accountLoaderGenerator
-        );
-        const result = await loader.loadMany([account_id] || []);
-        return result[0];
+        if (account_id) {
+          const loader = getLoader(
+            context,
+            'accountLoaderGenerator',
+            accountLoaderGenerator
+          );
+          const result = await loader.loadMany([account_id] || []);
+          return result[0];
+        }
+        return null;
       },
     },
     league: {
       type: LeagueType,
       resolve: async ({ league_id }, args, context) => {
-        const loader = getLoader(
-          context,
-          'leagueLoaderGenerator',
-          leagueLoaderGenerator
-        );
-        const result = await loader.loadMany([league_id] || []);
-        return result[0];
+        if (league_id) {
+          const loader = getLoader(
+            context,
+            'leagueLoaderGenerator',
+            leagueLoaderGenerator
+          );
+          const result = await loader.loadMany([league_id] || []);
+          return result[0];
+        }
+        return null;
       },
     },
     arrangement: {
       type: ArrangementType,
       resolve: async ({ _id }, args, context) => {
-        const loader = getLoader(
-          context,
-          'arrangementLoaderGenerator',
-          arrangementLoaderGenerator
-        );
-        const result = await loader.loadMany([_id.toString()] || []);
-        return result[0];
+        if (_id) {
+          console.log('arrangement', _id);
+          const loader = getLoader(
+            context,
+            'arrangementLoaderGenerator',
+            arrangementLoaderGenerator
+          );
+          const result = await loader.loadMany([_id.toString()] || []);
+          return result[0];
+        }
+        return null;
       },
     },
     name: { type: GraphQLString },
