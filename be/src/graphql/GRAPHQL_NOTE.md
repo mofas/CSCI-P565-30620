@@ -34,3 +34,34 @@ fragment playerMain on PlayerType {
   Name
   Position
 }
+
+
+
+
+
+{
+  QueryFantasyTeam(_id: "5a07e5ca57c3710de15f645d") {
+    _id
+    name
+    account {
+      _id
+      email
+      role
+      status
+      ban
+    }
+    league {
+      name
+    }
+    arrangement {
+      position_qb {
+        _id
+        Name
+        Position
+      }
+      position_k{
+        Name
+      }
+    }
+  }
+}

@@ -143,16 +143,18 @@ connectDB().then(async db => {
     players,
   });
 
-  const fancy_team_id = await createFantasyTeam(db)({
+  const fantasy_team_id = await createFantasyTeam(db)({
     league_id,
     account_id,
     name: 'test team',
   });
 
   await insertToArrangement(db)({
-    fancy_team_id,
+    fantasy_team_id,
     players,
   });
+
+  console.log('fantasy_team_id is ' + fantasy_team_id);
 
   closeConnection(db);
 });
