@@ -42,7 +42,7 @@ export const ListPlayer = {
   resolve: async ({ db }, { skip, limit, lang }, info) => {
     let query = {};
     skip = skip || 0;
-    limit = limit || 100;
+    limit = limit || 2000;
     const result = await db
       .collection('players')
       .find(query)
