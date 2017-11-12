@@ -114,12 +114,28 @@
 }
 ```
 
+#### ARRANGEMENT (arrangement)
+
+```js
+{
+  _id: "....",
+  fancy_team_id: "xxxx",
+  position_qb: [], // 1
+  position_rb: [], // 1
+  position_wr: [], // 2
+  position_te: [], // 1
+  position_k: [], // 1
+  position_defense: [], // 5
+  position_p: [], // 1
+}
+```
+
 #### FANTASY TEAMS (fantsay_team)
 
 ```js
 {
+  _id: "xxx",
   account_id: "xxxx",
-  fancy_team_id: "xxx",
   league_id: "xxx",
   name: "My awesome teams"
   wins: 2,
