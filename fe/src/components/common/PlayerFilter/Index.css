@@ -3,14 +3,7 @@
 }
 
 .item {
-  display: flex;
   font-size: 14px;
-  margin-bottom: 5px;
-  background-color: #eee;
-  .header {
-    background-color: transparent;
-    padding: 10px;
-  }
 }
 
 .position-btn-wrap {
@@ -22,42 +15,17 @@
   margin-right: 20px;
 }
 
-.info {
-  display: flex;
-  width: 300px;
-  padding: 10px;
-  border-right: 1px solid #fff;
-}
-
-.ability {
-  display: flex;
-}
-
-.basic-info {
-  display: flex;
+.name {
+  width: 100%;
   flex: 1;
-  color: #203d71;
-  font-size: 16px;
-  text-decoration: none;
-  .name {
-    width: 100%;
-    flex: 1;
-    margin-right: 20px;
-  }
-  .position {
-    width: 60px;
-  }
+  margin-right: 20px;
+}
+.position {
+  width: 60px;
 }
 
-.ab-item {
-  padding: 10px;
+.table-header {
   color: #555;
-  width: 140px;
-  text-align: right;
-  border-right: 1px solid #fff;
-  .type {
-    font-weight: bold;
-  }
 
   .sort-indicator {
     position: relative;

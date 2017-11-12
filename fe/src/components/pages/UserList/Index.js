@@ -6,7 +6,7 @@ import API from '../../../middleware/API';
 import Spinner from '../../common/Spinner/Spinner';
 import Btn from '../../common/Btn/Btn';
 
-import PlayerFilter from '../../common/PlayerFilter/PlayerFilter';
+import { Table, Thead, Tbody, Row, Col } from '../../common/Table/Index';
 
 import classnames from 'classnames/bind';
 import style from './Index.css';
@@ -92,21 +92,21 @@ class PlayerList extends React.PureComponent {
     return (
       <div className={cx('root')}>
         <Spinner show={loading} />
-        <table>
-          <thead>
-            <tr>
-              <td>Email</td>
-              <td>Role</td>
-              <td>Action</td>
-            </tr>
-          </thead>
-          <tbody>
+        <Table>
+          <Thead>
+            <Row>
+              <Col>Email</Col>
+              <Col>Role</Col>
+              <Col>Action</Col>
+            </Row>
+          </Thead>
+          <Tbody>
             {users.map(user => {
               return (
-                <tr className={cx('item')}>
-                  <td>{user.get('email')}</td>
-                  <td>{user.get('role')}</td>
-                  <td>
+                <Row className={cx('item')}>
+                  <Col>{user.get('email')}</Col>
+                  <Col>{user.get('role')}</Col>
+                  <Col>
                     {!user.get('ban') ? (
                       <Btn
                         type="secondary"
@@ -121,12 +121,12 @@ class PlayerList extends React.PureComponent {
                         Unban User
                       </Btn>
                     )}
-                  </td>
-                </tr>
+                  </Col>
+                </Row>
               );
             })}
-          </tbody>
-        </table>
+          </Tbody>
+        </Table>
       </div>
     );
   }

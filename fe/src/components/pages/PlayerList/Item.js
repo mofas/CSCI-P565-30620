@@ -2,6 +2,8 @@ import React from 'react';
 
 import { Link } from 'react-router-dom';
 
+import { Row, Col } from '../../common/Table/Index';
+
 import classnames from 'classnames/bind';
 import style from './Index.css';
 const cx = classnames.bind(style);
@@ -9,85 +11,83 @@ const cx = classnames.bind(style);
 class PlayerItem extends React.PureComponent {
   render() {
     const { props } = this;
-    const { data, selectPosition} = props;
+    const { data, selectPosition } = props;
     return (
-      <div className={cx('item')}>
-        <div className={cx('info')}>
+      <Row>
+        <Col>
           <div className={cx('thumb')} />
+        </Col>
+        <Col>
           <Link
             className={cx('basic-info')}
             to={`/app/player/detail/${data.get('_id')}`}
           >
             <div className={cx('name')}>{data.get('Name')}</div>
-            <div className={cx('position')}>{data.get('Position')}</div>
           </Link>
-        </div>
-        <div className={cx('ability')}>
-          {selectPosition === 'Offense' ?  
-          <div className={cx('ab-item')}>{data.get('Passing_Yards')}</div>
-          : null}
-          {selectPosition === 'Offense' ? 
-          <div className={cx('ab-item')}>{data.get('Rushing_Yards')}</div>
-          : null}
-          {selectPosition === 'Offense' ? 
-          <div className={cx('ab-item')}>{data.get('Receiving_Yards')}</div>
-          : null}
-          {selectPosition === 'Offense' ? 
-          <div className={cx('ab-item')}>{data.get('Passing_TDs')}</div>
-          : null}
-          {selectPosition === 'Offense' ? 
-          <div className={cx('ab-item')}>{data.get('Rushing_TDs')}</div>
-          : null}
-          {selectPosition === 'Offense' ? 
-          <div className={cx('ab-item')}>{data.get('Receiving_TD')}</div>
-          : null}
-          {selectPosition === 'Offense' ? 
-          <div className={cx('ab-item')}>{data.get('Interceptions_Thrown')}</div>
-          : null}
-          {selectPosition === 'Defense' ? 
-          <div className={cx('ab-item')}>{data.get('Interceptions')}</div>
-          : null}
-          {selectPosition === 'Defense' ? 
-          <div className={cx('ab-item')}>{data.get('Forced_Fumbles')}</div>
-          : null}
-          {selectPosition === 'Defense' ? 
-          <div className={cx('ab-item')}>{data.get('Sacks')}</div>
-          : null}
-          {selectPosition === 'Defense' ? 
-          <div className={cx('ab-item')}>{data.get('Blocked_Kicks')}</div>
-          : null}
-          {selectPosition === 'Defense' ? 
-          <div className={cx('ab-item')}>{data.get('Blocked_Punts')}</div>
-          : null}
-          {selectPosition === 'Defense' ? 
-          <div className={cx('ab-item')}>{data.get('Safeties')}</div>
-          : null}
-          {selectPosition === 'Offense' ? 
-          <div className={cx('ab-item')}>{data.get('Kickoff_Return_TD')}</div>
-          : null}
-          {selectPosition === 'Offense' ? 
-          <div className={cx('ab-item')}>{data.get('Punt_Return_TD')}</div>
-          : null}
-          {selectPosition === 'Defense' ? 
-          <div className={cx('ab-item')}>{data.get('Defensive_TD')}</div>
-          : null}
-          {selectPosition === 'Kicking' ? 
-          <div className={cx('ab-item')}>{data.get('Extra_Points_Made')}</div>
-          : null}
-          {selectPosition === 'Kicking' ? 
-          <div className={cx('ab-item')}>{data.get('FG_Made')}</div>
-          : null}
-          {selectPosition === 'Kicking' ? 
-          <div className={cx('ab-item')}>{data.get('FG_Missed')}</div>
-          : null}
-          {selectPosition === 'Kicking' ? 
-          <div className={cx('ab-item')}>{data.get('Punting_i20')}</div>
-          : null}
-          {selectPosition === 'Kicking' ? 
-          <div className={cx('ab-item')}>{data.get('Punting_Yards')}</div>
-          : null}
-        </div>
-      </div>
+        </Col>
+        <Col>
+          <div className={cx('position')}>{data.get('Position')}</div>
+        </Col>
+        {selectPosition === 'Offense' ? (
+          <Col>{data.get('Passing_Yards')}</Col>
+        ) : null}
+        {selectPosition === 'Offense' ? (
+          <Col>{data.get('Rushing_Yards')}</Col>
+        ) : null}
+        {selectPosition === 'Offense' ? (
+          <Col>{data.get('Receiving_Yards')}</Col>
+        ) : null}
+        {selectPosition === 'Offense' ? (
+          <Col>{data.get('Passing_TDs')}</Col>
+        ) : null}
+        {selectPosition === 'Offense' ? (
+          <Col>{data.get('Rushing_TDs')}</Col>
+        ) : null}
+        {selectPosition === 'Offense' ? (
+          <Col>{data.get('Receiving_TD')}</Col>
+        ) : null}
+        {selectPosition === 'Offense' ? (
+          <Col>{data.get('Interceptions_Thrown')}</Col>
+        ) : null}
+        {selectPosition === 'Defense' ? (
+          <Col>{data.get('Interceptions')}</Col>
+        ) : null}
+        {selectPosition === 'Defense' ? (
+          <Col>{data.get('Forced_Fumbles')}</Col>
+        ) : null}
+        {selectPosition === 'Defense' ? <Col>{data.get('Sacks')}</Col> : null}
+        {selectPosition === 'Defense' ? (
+          <Col>{data.get('Blocked_Kicks')}</Col>
+        ) : null}
+        {selectPosition === 'Defense' ? (
+          <Col>{data.get('Blocked_Punts')}</Col>
+        ) : null}
+        {selectPosition === 'Defense' ? (
+          <Col>{data.get('Safeties')}</Col>
+        ) : null}
+        {selectPosition === 'Offense' ? (
+          <Col>{data.get('Kickoff_Return_TD')}</Col>
+        ) : null}
+        {selectPosition === 'Offense' ? (
+          <Col>{data.get('Punt_Return_TD')}</Col>
+        ) : null}
+        {selectPosition === 'Defense' ? (
+          <Col>{data.get('Defensive_TD')}</Col>
+        ) : null}
+        {selectPosition === 'Kicking' ? (
+          <Col>{data.get('Extra_Points_Made')}</Col>
+        ) : null}
+        {selectPosition === 'Kicking' ? <Col>{data.get('FG_Made')}</Col> : null}
+        {selectPosition === 'Kicking' ? (
+          <Col>{data.get('FG_Missed')}</Col>
+        ) : null}
+        {selectPosition === 'Kicking' ? (
+          <Col>{data.get('Punting_i20')}</Col>
+        ) : null}
+        {selectPosition === 'Kicking' ? (
+          <Col>{data.get('Punting_Yards')}</Col>
+        ) : null}
+      </Row>
     );
   }
 }

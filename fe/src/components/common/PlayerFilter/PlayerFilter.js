@@ -4,6 +4,7 @@ import { fromJS, List, Set } from 'immutable';
 import Btn from '../../common/Btn/Btn';
 import LabelInput from '../../common/Input/LabelInput';
 
+import { Table, Thead, Tbody, Row, Col } from '../../common/Table/Index';
 import TableHeader from './TableHeader';
 
 import classnames from 'classnames/bind';
@@ -154,207 +155,209 @@ class PlayerList extends React.PureComponent {
           </div>
         </div>
 
-        <div className={cx('header', 'item')}>
-          <div className={cx('info')}>
-            <div className={cx('basic-info')}>
-              <div className={cx('thumb-placeholder')} />
-              <div className={cx('name')}>Name</div>
-              <div className={cx('position')}>Position</div>
-            </div>
-          </div>
-          <div className={cx('ability')}>
-          {selectPosition === 'Offense' ? 
-            <TableHeader
-              headerKey="Passing_Yards"
-              name="Passing Yds"
-              sortKey={sortKey}
-              sortDesc={sortDesc}
-              onClick={() => this.setSortKey('Passing_Yards')}
-            /> : null
-          }
-           {selectPosition === 'Offense' ? 
-            <TableHeader
-              headerKey="Rushing_Yards"
-              name="Rushing Yds"
-              sortKey={sortKey}
-              sortDesc={sortDesc}
-              onClick={() => this.setSortKey('Rushing_Yards')}
-            /> : null
-           }
-            {selectPosition === 'Offense' ? 
-            <TableHeader
-              headerKey="Receiving_Yards"
-              name="Receiving Yds"
-              sortKey={sortKey}
-              sortDesc={sortDesc}
-              onClick={() => this.setSortKey('Receiving_Yards')}
-            /> : null
-            }
-            {selectPosition === 'Offense' ? 
-            <TableHeader
-              headerKey="Passing_TDs"
-              name="Passing Tds"
-              sortKey={sortKey}
-              sortDesc={sortDesc}
-              onClick={() => this.setSortKey('Passing_TDs')}
-            /> : null
-            }
-           {selectPosition === 'Offense' ? 
-            <TableHeader
-              headerKey="Rushing_TDs"
-              name="Rushing Tds"
-              sortKey={sortKey}
-              sortDesc={sortDesc}
-              onClick={() => this.setSortKey('Rushing_TDs')}
-            /> : null
-           }
-          {selectPosition === 'Offense' ? 
-            <TableHeader
-              headerKey="Receiving_TD"
-              name="Receiving Tds"
-              sortKey={sortKey}
-              sortDesc={sortDesc}
-              onClick={() => this.setSortKey('Receiving_TD')}
-            /> : null
-          }
-          {selectPosition === 'Offense' ? 
-            <TableHeader
-              headerKey="Interceptions_Thrown"
-              name="Interceptions Thrown"
-              sortKey={sortKey}
-              sortDesc={sortDesc}
-              onClick={() => this.setSortKey('Interceptions_Thrown')}
-            /> : null
-          }
-          {selectPosition === 'Defense' ? 
-            <TableHeader
-              headerKey="Interceptions"
-              name="Interceptions"
-              sortKey={sortKey}
-              sortDesc={sortDesc}
-              onClick={() => this.setSortKey('Interceptions')}
-            /> : null
-          }
-          {selectPosition === 'Defense' ? 
-            <TableHeader
-              headerKey="Forced_Fumbles"
-              name="Forced Fumbles"
-              sortKey={sortKey}
-              sortDesc={sortDesc}
-              onClick={() => this.setSortKey('Forced_Fumbles')}
-            /> : null
-          }
-          {selectPosition === 'Defense' ? 
-            <TableHeader
-              headerKey="Sacks"
-              name="Sacks"
-              sortKey={sortKey}
-              sortDesc={sortDesc}
-              onClick={() => this.setSortKey('Sacks')}
-            /> : null
-          }
-          {selectPosition === 'Defense' ? 
-            <TableHeader
-              headerKey="Blocked_Kicks"
-              name="Blocked Kicks"
-              sortKey={sortKey}
-              sortDesc={sortDesc}
-              onClick={() => this.setSortKey('Blocked_Kicks')}
-            /> : null
-          }
-          {selectPosition === 'Defense' ? 
-            <TableHeader
-              headerKey="Blocked_Punts"
-              name="Blocked Punts"
-              sortKey={sortKey}
-              sortDesc={sortDesc}
-              onClick={() => this.setSortKey('Blocked_Punts')}
-            /> : null
-          }
-          {selectPosition === 'Defense' ? 
-            <TableHeader
-              headerKey="Safeties"
-              name="Safeties"
-              sortKey={sortKey}
-              sortDesc={sortDesc}
-              onClick={() => this.setSortKey('Safeties')}
-            /> : null
-          }
-            {selectPosition === 'Offense' ? 
-            <TableHeader
-              headerKey="Kickoff_Return_TD"
-              name="Kickoff Return Tds"
-              sortKey={sortKey}
-              sortDesc={sortDesc}
-              onClick={() => this.setSortKey('Kickoff_Return_TD')}
-            /> : null
-            }
-            {selectPosition === 'Offense' ? 
-            <TableHeader
-              headerKey="Punt_Return_TD"
-              name="Punt Return Tds"
-              sortKey={sortKey}
-              sortDesc={sortDesc}
-              onClick={() => this.setSortKey('Punt_Return_TD')}
-            /> : null
-            }
-          {selectPosition === 'Defense' ? 
-            <TableHeader
-              headerKey="Defensive_TD"
-              name="Defensive Tds"
-              sortKey={sortKey}
-              sortDesc={sortDesc}
-              onClick={() => this.setSortKey('Defensive_TD')}
-            /> : null
-          }
-          {selectPosition === 'Kicking' ? 
-            <TableHeader
-              headerKey="Extra_Points_Made"
-              name="Extra Points"
-              sortKey={sortKey}
-              sortDesc={sortDesc}
-              onClick={() => this.setSortKey('Extra_Points_Made')}
-            /> : null
-          }
-          {selectPosition === 'Kicking' ? 
-            <TableHeader
-              headerKey="FG_Made"
-              name="Made Field Goals"
-              sortKey={sortKey}
-              sortDesc={sortDesc}
-              onClick={() => this.setSortKey('FG_Made')}
-            /> : null
-          }
-          {selectPosition === 'Kicking' ? 
-            <TableHeader
-              headerKey="FG_Missed"
-              name="Missed Field Goals"
-              sortKey={sortKey}
-              sortDesc={sortDesc}
-              onClick={() => this.setSortKey('FG_Missed')}
-            /> : null
-          }
-           {selectPosition === 'Kicking' ? 
-            <TableHeader
-              headerKey="Punting_i20"
-              name="Punts Inside 20"
-              sortKey={sortKey}
-              sortDesc={sortDesc}
-              onClick={() => this.setSortKey('Punting_i20')}
-            /> : null
-          }
-           {selectPosition === 'Kicking' ? 
-            <TableHeader
-              headerKey="Punting_Yards"
-              name="Punting Yards"
-              sortKey={sortKey}
-              sortDesc={sortDesc}
-              onClick={() => this.setSortKey('Punting_Yards')}
-            /> : null
-          }
-          </div>
-        </div>
-        {children(tableData, selectPosition)}
+        <Table className={cx('header', 'item')}>
+          <Thead>
+            <Row>
+              <Col />
+              <Col>
+                <div className={cx('table-header')}>Name</div>
+              </Col>
+              <Col>
+                <div className={cx('table-header')}>Position</div>
+              </Col>
+              {selectPosition === 'Offense' ? (
+                <TableHeader
+                  headerKey="Passing_Yards"
+                  name="Passing Yds"
+                  sortKey={sortKey}
+                  sortDesc={sortDesc}
+                  onClick={() => this.setSortKey('Passing_Yards')}
+                />
+              ) : null}
+              {selectPosition === 'Offense' ? (
+                <TableHeader
+                  headerKey="Rushing_Yards"
+                  name="Rushing Yds"
+                  sortKey={sortKey}
+                  sortDesc={sortDesc}
+                  onClick={() => this.setSortKey('Rushing_Yards')}
+                />
+              ) : null}
+              {selectPosition === 'Offense' ? (
+                <TableHeader
+                  headerKey="Receiving_Yards"
+                  name="Receiving Yds"
+                  sortKey={sortKey}
+                  sortDesc={sortDesc}
+                  onClick={() => this.setSortKey('Receiving_Yards')}
+                />
+              ) : null}
+              {selectPosition === 'Offense' ? (
+                <TableHeader
+                  headerKey="Passing_TDs"
+                  name="Passing Tds"
+                  sortKey={sortKey}
+                  sortDesc={sortDesc}
+                  onClick={() => this.setSortKey('Passing_TDs')}
+                />
+              ) : null}
+              {selectPosition === 'Offense' ? (
+                <TableHeader
+                  headerKey="Rushing_TDs"
+                  name="Rushing Tds"
+                  sortKey={sortKey}
+                  sortDesc={sortDesc}
+                  onClick={() => this.setSortKey('Rushing_TDs')}
+                />
+              ) : null}
+              {selectPosition === 'Offense' ? (
+                <TableHeader
+                  headerKey="Receiving_TD"
+                  name="Receiving Tds"
+                  sortKey={sortKey}
+                  sortDesc={sortDesc}
+                  onClick={() => this.setSortKey('Receiving_TD')}
+                />
+              ) : null}
+              {selectPosition === 'Offense' ? (
+                <TableHeader
+                  headerKey="Interceptions_Thrown"
+                  name="Interceptions Thrown"
+                  sortKey={sortKey}
+                  sortDesc={sortDesc}
+                  onClick={() => this.setSortKey('Interceptions_Thrown')}
+                />
+              ) : null}
+              {selectPosition === 'Defense' ? (
+                <TableHeader
+                  headerKey="Interceptions"
+                  name="Interceptions"
+                  sortKey={sortKey}
+                  sortDesc={sortDesc}
+                  onClick={() => this.setSortKey('Interceptions')}
+                />
+              ) : null}
+              {selectPosition === 'Defense' ? (
+                <TableHeader
+                  headerKey="Forced_Fumbles"
+                  name="Forced Fumbles"
+                  sortKey={sortKey}
+                  sortDesc={sortDesc}
+                  onClick={() => this.setSortKey('Forced_Fumbles')}
+                />
+              ) : null}
+              {selectPosition === 'Defense' ? (
+                <TableHeader
+                  headerKey="Sacks"
+                  name="Sacks"
+                  sortKey={sortKey}
+                  sortDesc={sortDesc}
+                  onClick={() => this.setSortKey('Sacks')}
+                />
+              ) : null}
+              {selectPosition === 'Defense' ? (
+                <TableHeader
+                  headerKey="Blocked_Kicks"
+                  name="Blocked Kicks"
+                  sortKey={sortKey}
+                  sortDesc={sortDesc}
+                  onClick={() => this.setSortKey('Blocked_Kicks')}
+                />
+              ) : null}
+              {selectPosition === 'Defense' ? (
+                <TableHeader
+                  headerKey="Blocked_Punts"
+                  name="Blocked Punts"
+                  sortKey={sortKey}
+                  sortDesc={sortDesc}
+                  onClick={() => this.setSortKey('Blocked_Punts')}
+                />
+              ) : null}
+              {selectPosition === 'Defense' ? (
+                <TableHeader
+                  headerKey="Safeties"
+                  name="Safeties"
+                  sortKey={sortKey}
+                  sortDesc={sortDesc}
+                  onClick={() => this.setSortKey('Safeties')}
+                />
+              ) : null}
+              {selectPosition === 'Offense' ? (
+                <TableHeader
+                  headerKey="Kickoff_Return_TD"
+                  name="Kickoff Return Tds"
+                  sortKey={sortKey}
+                  sortDesc={sortDesc}
+                  onClick={() => this.setSortKey('Kickoff_Return_TD')}
+                />
+              ) : null}
+              {selectPosition === 'Offense' ? (
+                <TableHeader
+                  headerKey="Punt_Return_TD"
+                  name="Punt Return Tds"
+                  sortKey={sortKey}
+                  sortDesc={sortDesc}
+                  onClick={() => this.setSortKey('Punt_Return_TD')}
+                />
+              ) : null}
+              {selectPosition === 'Defense' ? (
+                <TableHeader
+                  headerKey="Defensive_TD"
+                  name="Defensive Tds"
+                  sortKey={sortKey}
+                  sortDesc={sortDesc}
+                  onClick={() => this.setSortKey('Defensive_TD')}
+                />
+              ) : null}
+              {selectPosition === 'Kicking' ? (
+                <TableHeader
+                  headerKey="Extra_Points_Made"
+                  name="Extra Points"
+                  sortKey={sortKey}
+                  sortDesc={sortDesc}
+                  onClick={() => this.setSortKey('Extra_Points_Made')}
+                />
+              ) : null}
+              {selectPosition === 'Kicking' ? (
+                <TableHeader
+                  headerKey="FG_Made"
+                  name="Made Field Goals"
+                  sortKey={sortKey}
+                  sortDesc={sortDesc}
+                  onClick={() => this.setSortKey('FG_Made')}
+                />
+              ) : null}
+              {selectPosition === 'Kicking' ? (
+                <TableHeader
+                  headerKey="FG_Missed"
+                  name="Missed Field Goals"
+                  sortKey={sortKey}
+                  sortDesc={sortDesc}
+                  onClick={() => this.setSortKey('FG_Missed')}
+                />
+              ) : null}
+              {selectPosition === 'Kicking' ? (
+                <TableHeader
+                  headerKey="Punting_i20"
+                  name="Punts Inside 20"
+                  sortKey={sortKey}
+                  sortDesc={sortDesc}
+                  onClick={() => this.setSortKey('Punting_i20')}
+                />
+              ) : null}
+              {selectPosition === 'Kicking' ? (
+                <TableHeader
+                  headerKey="Punting_Yards"
+                  name="Punting Yards"
+                  sortKey={sortKey}
+                  sortDesc={sortDesc}
+                  onClick={() => this.setSortKey('Punting_Yards')}
+                />
+              ) : null}
+            </Row>
+          </Thead>
+          {children(tableData, selectPosition)}
+        </Table>
       </div>
     );
   }
