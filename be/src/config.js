@@ -116,6 +116,4 @@ const getConfig = () => {
 
 const targetConfig = getConfig();
 
-console.log(targetConfig);
-
 module.exports = targetConfig;
