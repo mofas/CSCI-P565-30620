@@ -113,7 +113,7 @@ class LeagueList extends React.PureComponent {
 
   inviteFriend = (leagueID, leagueName) => {
     // league/invitation
-    const receiver = window.prompt('please input your frined email');
+    const receiver = window.prompt("Please input your friend's email");
     if (!validateEmail(receiver)) {
       window.alert('Email is not valid');
       return;
