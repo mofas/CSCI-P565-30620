@@ -51,6 +51,7 @@ export const CreateLeague = {
       draft_start_time: epoc_date,
       timeout: 2,
       lastPickTime: epoc_date,
+      formula: 5,
     };
 
     const { value } = await db.collection('leagues').insertOne(savedData);
