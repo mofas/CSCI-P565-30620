@@ -35,6 +35,7 @@ class CreateLeague extends React.PureComponent {
                                                                                             tdrush: 6,
                                                                                             rushyds: 10,
                                                                                             recyds: 10,
+                                                                                            tdrec: 6,
                                                                                             passyds: 5,
                                                                                             fgmade: 3,
                                                                                             fgmissed: -1,
