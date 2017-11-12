@@ -7,7 +7,7 @@ const match = (league_id, week, team1, team2, formula) => {
   //TODO calculate
   let first_score = 0;
   let second_score = 0;
-  let winnner = first_score > second_score ? 0 : 1;
+  let winner = first_score > second_score ? 0 : 1;
 
   return {
     league_id,
@@ -21,6 +21,7 @@ const match = (league_id, week, team1, team2, formula) => {
 };
 
 const team1 = {
+  _id: '5a0892cf1391c723e4f2df23',
   name: 'test team',
   account: {
     _id: '59e988fe76539f281279d241',
@@ -360,6 +361,7 @@ const team1 = {
   },
 };
 const team2 = {
+  _id: '5a0892cf1391c723e4f2df23',
   name: 'test team',
   account: {
     _id: '59e988fe76539f281279d241',

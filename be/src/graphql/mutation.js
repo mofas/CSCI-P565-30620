@@ -25,17 +25,17 @@ export const CreateLeague = {
   },
   resolve: async ({ req, db }, { data }, info) => {
     const { name, limit, epoc_date } = data;
-    var curr_epoc = Math.floor(new Date().getTime()/1000.0); 
-    if(curr_epoc > epoc_date){
+    var curr_epoc = Math.floor(new Date().getTime() / 1000.0);
+    if (curr_epoc > epoc_date) {
       return {
-        error: "Enter future date",
+        error: 'Enter future date',
         success: false,
       };
     }
     let date;
-    try{
+    try {
       date = new Date(epoc_date * 1000);
-    } catch(err){
+    } catch (err) {
       date = new Date();
       epoc_date = curr_epoc;
     }
@@ -142,7 +142,7 @@ export const UpdateDraftNoLeague = {
 
     const result = await db.collection('leagues').findOne(query);
     //if (result.accounts.length === result.limit && req.user) {
-    let curr_epoc = Math.round(new Date().getTime()/1000.0);
+    let curr_epoc = Math.round(new Date().getTime() / 1000.0);
     if (result) {
       const { value } = await db.collection('leagues').findOneAndUpdate(
         {
@@ -308,22 +308,21 @@ export const SendMessage = {
   },
 };
 
-
 export const UpdateLeagueTime = {
   type: ResultType,
   args: {
     league_id: { type: GraphQLString },
-    epoc: {type: GraphQLInt},
+    epoc: { type: GraphQLInt },
   },
   resolve: async ({ db }, { league_id, epoc }, info) => {
     const query = {
       league_id: league_id,
     };
     //console.log('39847293', league_id, player_id, fancy_team_id);
-    var curr_epoc = Math.round(new Date().getTime()/1000.0); 
-    if(curr_epoc > epoc){
+    var curr_epoc = Math.round(new Date().getTime() / 1000.0);
+    if (curr_epoc > epoc) {
       return {
-        error: "Enter future date",
+        error: 'Enter future date',
         success: false,
       };
     }
@@ -333,7 +332,7 @@ export const UpdateLeagueTime = {
         _id: ObjectId(league_id),
       },
       {
-        $set: { draft_start_time: date},
+        $set: { draft_start_time: date },
       },
       {
         returnOriginal: false,
@@ -351,6 +350,5 @@ export const UpdateLeagueTime = {
         success: false,
       };
     }
-
   },
 };
