@@ -72,7 +72,7 @@ const productionConfig = {
   server: {
     hostname: '127.0.0.1',
     port: 50010,
-    salt: 'on_slio',
+    salt: 'eewew',
   },
   fe: {
     url: 'http://homes.soic.indiana.edu/cli3',
