@@ -71,7 +71,7 @@ const createFantasyTeam = db => async ({ league_id, account_id, name }) => {
     lose: 0,
   });
 
-  return insertedId;
+  return insertedId.toString();
 };
 
 //TODO: INSERT
@@ -89,7 +89,7 @@ const insertToArrangement = db => async ({ fancy_team_id, players }) => {
   const data = players.reduce(
     (acc, d) => {
       const position = d.Position;
-      // console.log(d.Position);
+      console.log(d.Name, d.Position);
       if (position === 'QB') {
         acc.position_qb.push(d._id.toString());
       } else if (position === 'RB') {

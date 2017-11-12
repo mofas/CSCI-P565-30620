@@ -8,6 +8,8 @@ import {
   QueryAccount,
   ListAccount,
   QueryPoolPlayer,
+  QueryFantasyTeam,
+  QueryTeamArrangement,
   GetMessages,
 } from './query';
 
@@ -31,10 +33,12 @@ export const schema = new GraphQLSchema({
       QueryPlayer,
       ListLeague,
       QueryPoolPlayer,
-	  ListAccount,
+      ListAccount,
       QueryAccount,
       GetMessages,
       QueryLeague,
+      QueryFantasyTeam,
+      QueryTeamArrangement,
     },
   }),
   mutation: new GraphQLObjectType({

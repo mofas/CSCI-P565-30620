@@ -19,8 +19,19 @@ import {
   PlayerType,
   LeagueType,
   PoolPlayerType,
+  FantasyTeamType,
+  ArrangementType,
   MessageType,
 } from './model';
+
+import {
+  getLoader,
+  playerLoaderGenerator,
+  accountLoaderGenerator,
+  leagueLoaderGenerator,
+  fantasyTeamLoaderGenerator,
+  arrangementLoaderGenerator,
+} from './dataLoader';
 
 export const ListPlayer = {
   type: new GraphQLList(PlayerType),
@@ -108,6 +119,38 @@ export const ListAccount = {
       .find(query)
       .toArray();
     return result;
+  },
+};
+
+export const QueryFantasyTeam = {
+  type: FantasyTeamType,
+  args: {
+    _id: { type: GraphQLString },
+  },
+  resolve: async ({ db }, { _id }, context) => {
+    const loader = getLoader(
+      context,
+      'fantasyTeamLoaderGenerator',
+      fantasyTeamLoaderGenerator
+    );
+    const result = await loader.loadMany([_id] || []);
+    return result[0];
+  },
+};
+
+export const QueryTeamArrangement = {
+  type: ArrangementType,
+  args: {
+    fancy_team_id: { type: GraphQLString },
+  },
+  resolve: async ({ db }, { fancy_team_id }, context) => {
+    const loader = getLoader(
+      context,
+      'arrangementLoaderGenerator',
+      arrangementLoaderGenerator
+    );
+    const result = await loader.loadMany([fancy_team_id] || []);
+    return result[0];
   },
 };
 
