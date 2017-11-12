@@ -54,7 +54,7 @@ Before you build file, edit package.json
 Hit the following commands to build file.
 
 ```
-npm run build
+npm run build:production
 ```
 
 Then we just need to copy our page to that folder,
