@@ -2,10 +2,6 @@
   margin-bottom: 20px;
 }
 
-.item {
-  font-size: 14px;
-}
-
 .position-btn-wrap {
   display: flex;
   padding: 10px 0;
@@ -15,18 +11,22 @@
   margin-right: 20px;
 }
 
-.name {
-  width: 100%;
-  flex: 1;
-  margin-right: 20px;
+.thumb {
+  width: 80px;
+  flex: inherit;
 }
+
+.name {
+  text-align: left;
+}
+
 .position {
-  width: 60px;
+  text-align: left;
+  width: 80px;
+  flex: inherit;
 }
 
 .table-header {
-  color: #555;
-
   .sort-indicator {
     position: relative;
     top: 4px;

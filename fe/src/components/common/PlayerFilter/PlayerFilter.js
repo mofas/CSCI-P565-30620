@@ -42,6 +42,7 @@ class PlayerList extends React.PureComponent {
       sortDesc: true,
       keyword: '',
       selectPosition: 'Offense',
+      extraCol: null,
     };
   }
 
@@ -154,17 +155,12 @@ class PlayerList extends React.PureComponent {
             </Btn>
           </div>
         </div>
-
-        <Table className={cx('header', 'item')}>
+        <Table>
           <Thead>
             <Row>
-              <Col />
-              <Col>
-                <div className={cx('table-header')}>Name</div>
-              </Col>
-              <Col>
-                <div className={cx('table-header')}>Position</div>
-              </Col>
+              <Col className={cx('thumb')} />
+              <Col className={cx('name')}>Name</Col>
+              <Col className={cx('position')}>Position</Col>
               {selectPosition === 'Offense' ? (
                 <TableHeader
                   headerKey="Passing_Yards"
@@ -354,6 +350,7 @@ class PlayerList extends React.PureComponent {
                   onClick={() => this.setSortKey('Punting_Yards')}
                 />
               ) : null}
+              {this.props.extraCol}
             </Row>
           </Thead>
           {children(tableData, selectPosition)}

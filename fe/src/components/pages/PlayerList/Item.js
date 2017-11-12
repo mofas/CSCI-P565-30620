@@ -14,20 +14,16 @@ class PlayerItem extends React.PureComponent {
     const { data, selectPosition } = props;
     return (
       <Row>
-        <Col>
-          <div className={cx('thumb')} />
-        </Col>
-        <Col>
+        <Col className={cx('thumb')} />
+        <Col className={cx('name')}>
           <Link
             className={cx('basic-info')}
             to={`/app/player/detail/${data.get('_id')}`}
           >
-            <div className={cx('name')}>{data.get('Name')}</div>
+            {data.get('Name')}
           </Link>
         </Col>
-        <Col>
-          <div className={cx('position')}>{data.get('Position')}</div>
-        </Col>
+        <Col className={cx('position')}>{data.get('Position')}</Col>
         {selectPosition === 'Offense' ? (
           <Col>{data.get('Passing_Yards')}</Col>
         ) : null}
