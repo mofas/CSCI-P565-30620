@@ -68,9 +68,47 @@ const testingConfig = {
   },
 };
 
+const productionConfig = {
+  server: {
+    hostname: '127.0.0.1',
+    port: 50000,
+    salt: 'on_slio',
+  },
+  fe: {
+    url: 'http://homes.soic.indiana.edu/cli3',
+  },
+  mongo: {
+    url: `mongodb://${process.env.DB_ACC}:${
+      process.env.DB_PWD
+    }@ds155684.mlab.com:55684/football`,
+  },
+  oauth: {
+    clientID: process.env.G_OAUTH_CLIENT_ID,
+    clientSecret: process.env.G_OAUTH_SECRET,
+    callbackURL: 'https://csci.now.sh/oauth2callback',
+  },
+  duo: {
+    disable: false,
+    hostname: 'api-00cc3ec1.duosecurity.com',
+    integrationKey: 'DI7GFUB7U9UYCE38XRTG',
+    secretKey: process.env.DUO_SECRET || '',
+  },
+  session: {
+    cookie: {
+      secure: false,
+    },
+    saveUninitialized: false,
+    resave: false,
+    secret: 'you_should_not_use_default_secret',
+  },
+};
+
 const getConfig = () => {
   if (process.env.CONFIG === 'testing') {
     return testingConfig;
+  }
+  if (process.env.CONFIG === 'production') {
+    return productionConfig;
   }
 
   return defaultConfig;
