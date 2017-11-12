@@ -71,7 +71,7 @@ const testingConfig = {
 const productionConfig = {
   server: {
     hostname: '127.0.0.1',
-    port: 50000,
+    port: 50010,
     salt: 'on_slio',
   },
   fe: {
