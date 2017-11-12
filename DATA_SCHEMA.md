@@ -47,26 +47,27 @@
   puntret_tds: 12, //Integer
   defense_tds: 12, //Integer
 
-  passing_yds_past: 12, //Integer
-  rushing_yds_past: 12, //Integer
-  receiving_yds_past: 12, //Integer
-  passing_tds_past: 12, //Integer
-  rushing_tds_past: 12, //Integer
-  receiving_tds_past: 12, //Integer
-  kicking_fgm_past: 12, //Integer
-  kicking_fgmissed_past: 12, //Integer computed by kicking_fga - kicking_fgm
-  kicking_xpmade_past: 12, //Integer
-  passing_int_past: 12, //Integer
-  fumbles_lost_past: 12, //Integer
-  defense_int_past: 12, //Integer
-  defense_ffum_past: 12, //Integer
-  defense_sk_past: 12, //Integer
-  defense_kick_blocks_past: 12, //Integer computed by defense_xpblk + defense_fgblk
-  defense_puntblk_past: 12, //Integer
-  defense_safe_past: 12, //Integer
-  kickret_tds_past: 12, //Integer
-  puntret_tds_past: 12, //Integer
-  defense_tds_past: 12, //Integer
+//Current week stats
+  passing_yds_curr: 12, //Integer
+  rushing_yds_curr: 12, //Integer
+  receiving_yds_curr: 12, //Integer
+  passing_tds_curr: 12, //Integer
+  rushing_tds_curr: 12, //Integer
+  receiving_tds_curr: 12, //Integer
+  kicking_fgm_curr: 12, //Integer
+  kicking_fgmissed_curr: 12, //Integer computed by kicking_fga - kicking_fgm
+  kicking_xpmade_curr: 12, //Integer
+  passing_int_curr: 12, //Integer
+  fumbles_lost_curr: 12, //Integer
+  defense_int_curr: 12, //Integer
+  defense_ffum_curr: 12, //Integer
+  defense_sk_curr: 12, //Integer
+  defense_kick_blocks_curr: 12, //Integer computed by defense_xpblk + defense_fgblk
+  defense_puntblk_curr: 12, //Integer
+  defense_safe_curr: 12, //Integer
+  kickret_tds_curr: 12, //Integer
+  puntret_tds_curr: 12, //Integer
+  defense_tds_curr: 12, //Integer
 }
 ```
 
