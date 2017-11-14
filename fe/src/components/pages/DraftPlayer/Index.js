@@ -170,7 +170,7 @@ class DraftPlayer extends React.PureComponent {
         filterPlayers = players;
       }
 
-      let abc = [];
+      let acc_to_player = [];
       for (let i = 0; i < res.data.PoolPlayerWithUser.length; i++) {
         console.log(
           i,
@@ -179,13 +179,12 @@ class DraftPlayer extends React.PureComponent {
           ":",
           res.data.PoolPlayerWithUser[i]["account"]["_id"]
         );
-        abc[res.data.PoolPlayerWithUser[i]["account"]["_id"]] = Object.assign(
-          {},
-          res.data.PoolPlayerWithUser[i]["players"]
-        );
+        acc_to_player[
+          res.data.PoolPlayerWithUser[i]["account"]["_id"]
+        ] = Object.assign({}, res.data.PoolPlayerWithUser[i]["players"]);
       }
 
-      console.log("dasdas 67887", abc);
+      console.log("dasdas 67887", acc_to_player);
 
       this.setState({
         loading: false,
@@ -193,7 +192,7 @@ class DraftPlayer extends React.PureComponent {
         leagueData: leagueData,
         poolPlayers: poolPlayers,
         poolPlayerWithUser: res.data.PoolPlayerWithUser,
-        dummy: abc
+        acc_to_players: acc_to_player
       });
       this.setPickingOrder(JSON.stringify(leagueData));
     });
@@ -396,20 +395,22 @@ class DraftPlayer extends React.PureComponent {
                         Close{" "}
                       </Btn>
                       <div>Show the selected player by that user</div>
-                      <b>{JSON.stringify(this.state.dummy[d["_id"]])}</b>
+                      <b>
+                        {JSON.stringify(this.state.acc_to_players[d["_id"]])}
+                      </b>
                       <table>
                         <tr>
                           {" "}
                           <th> Players </th>{" "}
                         </tr>
-                        {Object.keys(this.state.dummy[d["_id"]]).forEach(
-                          function(key, index) {
+                        {Object.keys(this.state.acc_to_players).length > 0 &&
+                          Object.keys(
+                            this.state.acc_to_players[d["_id"]]
+                          ).forEach(function(key, index) {
                             <tr>
                               <td>{"print something"}</td>
                             </tr>;
-                          },
-                          this.state.dummy[d["_id"]]
-                        )}
+                          }, this.state.acc_to_players[d["_id"]])}
                       </table>
                     </Modal>
                   </div>
