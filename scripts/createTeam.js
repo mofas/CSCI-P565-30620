@@ -58,12 +58,12 @@ const insertToPool = db => async ({ league_id, account_id, players }) => {
 };
 
 const createFantasyTeam = db => async ({ league_id, account_id, name }) => {
-  await db.collection('fantsay_team').remove({
+  await db.collection('fantasy_team').remove({
     league_id,
     account_id,
   });
 
-  const { insertedId } = await db.collection('fantsay_team').insertOne({
+  const { insertedId } = await db.collection('fantasy_team').insertOne({
     account_id,
     league_id,
     name,
@@ -76,7 +76,7 @@ const createFantasyTeam = db => async ({ league_id, account_id, name }) => {
 
 //TODO: INSERT
 // {
-//   fancy_team_id: "xxxx",
+//   fantasy_team_id: "xxxx",
 //   position_qb: [], // 1
 //   position_rb: [], // 1
 //   position_wr: [], // 2
@@ -85,7 +85,7 @@ const createFantasyTeam = db => async ({ league_id, account_id, name }) => {
 //   position_defense: [], // 5
 //   position_p: [], // 1
 // }
-const insertToArrangement = db => async ({ fancy_team_id, players }) => {
+const insertToArrangement = db => async ({ fantasy_team_id, players }) => {
   const data = players.reduce(
     (acc, d) => {
       const position = d.Position;
@@ -110,7 +110,7 @@ const insertToArrangement = db => async ({ fancy_team_id, players }) => {
       return acc;
     },
     {
-      fancy_team_id,
+      fantasy_team_id,
       position_qb: [], // 1
       position_rb: [], // 1
       position_wr: [], // 2
@@ -122,7 +122,7 @@ const insertToArrangement = db => async ({ fancy_team_id, players }) => {
   );
 
   await db.collection('arrangement').remove({
-    fancy_team_id,
+    fantasy_team_id,
   });
   return await db.collection('arrangement').insertOne(data);
 };

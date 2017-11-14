@@ -6,6 +6,7 @@ import API from '../../../middleware/API';
 import Spinner from '../../common/Spinner/Spinner';
 
 import PlayerFilter from '../../common/PlayerFilter/PlayerFilter';
+import { Tbody } from '../../common/Table/Index';
 import Item from './Item';
 
 import classnames from 'classnames/bind';
@@ -60,7 +61,7 @@ class PlayerList extends React.PureComponent {
     });
 
     API.GraphQL(query).then(res => {
-      console.log(res)
+      console.log(res);
       const players = fromJS(res.data.ListPlayer);
       this.setState({
         loading: false,
@@ -77,11 +78,19 @@ class PlayerList extends React.PureComponent {
       <div className={cx('root')}>
         <Spinner show={loading} />
         <PlayerFilter data={players}>
-      
-          {(tableData, selectPosition) =>
-            tableData.map(d => {
-              return <Item key={d.get('_id')} data={d} selectPosition={selectPosition} />;
-            })}
+          {(tableData, selectPosition) => (
+            <Tbody>
+              {tableData.map(d => {
+                return (
+                  <Item
+                    key={d.get('_id')}
+                    data={d}
+                    selectPosition={selectPosition}
+                  />
+                );
+              })}
+            </Tbody>
+          )}
         </PlayerFilter>
       </div>
     );

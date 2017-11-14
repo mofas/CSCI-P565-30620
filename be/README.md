@@ -96,6 +96,20 @@ now alias game-server-cknryfkvyr.now.sh csci.now.sh
 ```
 
 
+## Deploy to SLIO
+
+
+Compile file
+```
+yarn run compile
+```
+
+Start Server or Restart
+```
+npm run start:production
+```
+
+
 
 
 

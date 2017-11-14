@@ -10,9 +10,17 @@ const TESTING_ENDPOINT_SET = {
   DUO_ENDPOINT: 'api-00cc3ec1.duosecurity.com',
 };
 
+const PRODUCTION_ENDPOINT_SET = {
+  ENDPOINT: 'http://burrow.soic.indiana.edu:50010',
+  WS_ENDPOINT: 'ws://burrow.soic.indiana.edu:50010',
+  DUO_ENDPOINT: 'api-00cc3ec1.duosecurity.com',
+};
+
 const getEndpoint = () => {
   if (process.env.REACT_APP_ENDPOINT === 'testing') {
     return TESTING_ENDPOINT_SET;
+  } else if (process.env.REACT_APP_ENDPOINT === 'production') {
+    return PRODUCTION_ENDPOINT_SET;
   }
 
   return DEFAULT_ENDPOINT_SET;

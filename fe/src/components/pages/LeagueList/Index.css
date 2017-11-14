@@ -5,84 +5,32 @@
 
 .list-wrap {
   margin: 20px 0;
-}
 
-.pseudo-table {
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  background-color: #fff;
-  text-align: center;
-  margin: 0;
-
-  .pseudo-row {
-    display: flex;
-
-    border-bottom: 1px solid #ddd;
-    font-weight: normal;
-    &:last-child {
-      border-bottom: 0;
-      border-bottom-left-radius: 5px;
-      border-bottom-right-radius: 5px;
-    }
-    &:nth-child(even) {
-      background-color: #fafafa;
-    }
-  }
-  .pseudo-col {
-    flex: 1;
-    border-left: 1px solid #ddd;
-    padding: 5px 10px;
-
-    &:first-child {
-      border-left: 0;
-    }
-
-    &.text-left {
-      text-align: left;
-      padding-left: 12px;
-      padding-right: 4px;
-    }
-
-    &.action-col,
-    &.creator-col {
-      width: 200px;
-      flex: inherit;
-    }
-
-    &.pa-col {
-      word-break: break-all;
-    }
-
-    &.time-col {
-      width: 140px;
-      flex: inherit;
-    }
-
-    &.count-col,
-    &.stage-col {
-      width: 100px;
-      flex: inherit;
-    }
+  .text-left {
+    text-align: left;
+    padding-left: 12px;
+    padding-right: 4px;
   }
 
-  .pseudo-thead {
-    background-color: #fbfbfb;
-    color: #999;
-    border-bottom: 1px solid #ddd;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-    overflow: hidden;
-    .pseudo-col {
-      line-height: 30px;
-    }
+  .action-col,
+  .creator-col {
+    width: 200px;
+    flex: inherit;
   }
 
-  .pseudo-tbody {
-    .pseudo-row {
-      border-bottom: 0;
-    }
-    .pseudo-col {
-    }
+  .pa-col {
+    word-break: break-all;
+  }
+
+  .time-col {
+    width: 140px;
+    flex: inherit;
+  }
+
+  .count-col,
+  .stage-col {
+    width: 100px;
+    flex: inherit;
   }
 }
 

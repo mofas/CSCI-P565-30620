@@ -10,6 +10,8 @@ import Spinner from '../../common/Spinner/Spinner';
 
 import { validateEmail } from '../../../util';
 
+import { Table, Thead, Tbody, Row, Col } from '../../common/Table/Index';
+
 import classnames from 'classnames/bind';
 import style from './Index.css';
 const cx = classnames.bind(style);
@@ -113,7 +115,7 @@ class LeagueList extends React.PureComponent {
 
   inviteFriend = (leagueID, leagueName) => {
     // league/invitation
-    const receiver = window.prompt('please input your frined email');
+    const receiver = window.prompt("Please input your friend's email");
     if (!validateEmail(receiver)) {
       window.alert('Email is not valid');
       return;
@@ -147,23 +149,19 @@ class LeagueList extends React.PureComponent {
           <Btn type="secondary">Create New League</Btn>
         </Link>
         <div className={cx('list-wrap')}>
-          <div className={cx('pseudo-table')}>
-            <div className={cx('pseudo-thead')}>
-              <div className={cx('pseudo-row')}>
-                <div className={cx('pseudo-col', 'name-col', 'text-left')}>
-                  Name
-                </div>
-                <div className={cx('pseudo-col', 'pa-col', 'text-left')}>
-                  Particpants
-                </div>
-                <div className={cx('pseudo-col', 'creator-col')}>Creator</div>
-                <div className={cx('pseudo-col', 'time-col')}>Created at</div>
-                <div className={cx('pseudo-col', 'count-col')}>Capacity</div>
-                <div className={cx('pseudo-col', 'stage-col')}>Stage</div>
-                <div className={cx('pseudo-col', 'action-col')}>Action</div>
-              </div>
-            </div>
-            <div className={cx('pseudo-tbody')}>
+          <Table>
+            <Thead>
+              <Row>
+                <Col className={cx('name-col', 'text-left')}>Name</Col>
+                <Col className={cx('pa-col', 'text-left')}>Particpants</Col>
+                <Col className={cx('creator-col')}>Creator</Col>
+                <Col className={cx('time-col')}>Created at</Col>
+                <Col className={cx('count-col')}>Capacity</Col>
+                <Col className={cx('stage-col')}>Stage</Col>
+                <Col className={cx('action-col')}>Action</Col>
+              </Row>
+            </Thead>
+            <Tbody>
               {leagues.map(d => {
                 return (
                   <Item
@@ -176,8 +174,8 @@ class LeagueList extends React.PureComponent {
                   />
                 );
               })}
-            </div>
-          </div>
+            </Tbody>
+          </Table>
         </div>
       </div>
     );

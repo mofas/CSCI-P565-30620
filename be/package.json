@@ -4,7 +4,10 @@
   "scripts": {
     "babel-node": "babel-node",
     "dev": "nodemon --exec npm run babel-node -- ./src/index.js",
-    "start": "CONFIG=testing babel-node ./src/index.js"
+    "start": "CONFIG=testing babel-node ./src/index.js",
+    "compile": "CONFIG=production babel src -d build",
+    "start:production":
+      "pm2 kill && CONFIG=production pm2 start ./build/index.js --name 'api'"
   },
   "dependencies": {
     "@sendgrid/mail": "^6.1.3",

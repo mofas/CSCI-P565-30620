@@ -8,87 +8,32 @@
 
 .player-item-wrap {
   max-height: 400px;
-  padding: 10px;
   overflow-y: scroll;
 }
 
-.item {
-  display: flex;
-  font-size: 14px;
-  margin-bottom: 5px;
-  background-color: #eee;
-  .header {
-    background-color: transparent;
-    padding: 10px;
-  }
+.thumb {
+  width: 80px;
+  flex: inherit;
 }
 
-.thumb {
-  width: 40px;
-  height: 40px;
-  background-color: #555;
-  margin-right: 20px;
+.name {
+  text-align: left;
 }
+
+.position {
+  text-align: left;
+  width: 80px;
+  flex: inherit;
+}
+
 .thumb-placeholder {
   width: 40px;
   margin-right: 20px;
 }
 
-.info {
-  display: flex;
-  width: 300px;
-  padding: 10px;
-  border-right: 1px solid #fff;
-}
-
-.basic-info {
-  display: flex;
-  flex: 1;
-  color: #203d71;
-  font-size: 16px;
-  text-decoration: none;
-  .name {
-    width: 100%;
-    flex: 1;
-    margin-right: 20px;
-  }
-  .position {
-    width: 60px;
-  }
-}
-
-.ability-title {
-  color: #777;
-  font-size: 11px;
-  margin: 10px 0;
-  padding-bottom: 5px;
-  border-bottom: 1px solid #ddd;
-}
-
-.ability {
-  display: flex;
-}
-
-.ab-item {
-  padding: 10px;
-  color: #555;
-  width: 140px;
-  text-align: right;
-  border-right: 1px solid #fff;
-  .type {
-    font-weight: bold;
-  }
-
-  .sort-indicator {
-    position: relative;
-    top: 4px;
-    margin-left: 4px;
-    width: 10px;
-  }
-}
-
-.op {
-  flex: 1;
+.op-col {
+  width: 120px;
+  flex: inherit;
   padding: 10px;
   :global {
     .component-btn {
@@ -102,8 +47,8 @@
   padding: 8px;
   border-radius: 4px;
   cursor: pointer;
-  width:140px;
-  height:50px;
+  width: 140px;
+  height: 50px;
   text-decoration: none;
   border: solid 0.063rem #2c2c2c;
   background-color: #4256f4;
@@ -112,8 +57,8 @@
   font-size: 12px;
 }
 .thick {
-  width:160px;
-    font-weight: bold;
-    font-size: 14px;
-    background-color: #820303;
+  width: 160px;
+  font-weight: bold;
+  font-size: 14px;
+  background-color: #820303;
 }

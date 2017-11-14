@@ -24,7 +24,7 @@ export const CreateLeague = {
     data: { type: LeagueInputType }
   },
   resolve: async ({ req, db }, { data }, info) => {
-    const { name, limit, epoc_date } = data;
+    const { name, limit, epoc_date, formula } = data;
     var curr_epoc = Math.floor(new Date().getTime() / 1000.0);
     if (curr_epoc > epoc_date) {
       return {
@@ -50,7 +50,8 @@ export const CreateLeague = {
       current_pickup_accounts: null,
       draft_start_time: epoc_date,
       timeout: 2,
-      lastPickTime: epoc_date
+      lastPickTime: epoc_date,
+      formula
     };
 
     const { value } = await db.collection("leagues").insertOne(savedData);

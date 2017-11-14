@@ -74,7 +74,30 @@ export const PlayerType = new GraphQLObjectType({
     Punting_Yards: { type: GraphQLInt },
     Punting_i20: { type: GraphQLInt },
     Rank: { type: GraphQLInt },
-    URL: { type: GraphQLString }
+    URL: { type: GraphQLString },
+    //Current week Stats
+    Passing_Yards_curr: { type: GraphQLInt },
+    Rushing_Yards_curr: { type: GraphQLInt },
+    Receiving_Yards_curr: { type: GraphQLInt },
+    Passing_TDs_curr: { type: GraphQLInt },
+    Rushing_TDs_curr: { type: GraphQLInt },
+    Receiving_TD_curr: { type: GraphQLInt },
+    FG_Made_curr_curr: { type: GraphQLInt },
+    FG_Missed_curr_curr: { type: GraphQLInt },
+    Extra_Points_Made_curr: { type: GraphQLInt },
+    Interceptions_curr: { type: GraphQLInt },
+    Fumbles_Lost_curr: { type: GraphQLInt },
+    Kickoff_Return_TD_curr: { type: GraphQLInt },
+    Interceptions_Thrown_curr: { type: GraphQLInt },
+    Forced_Fumbles_curr: { type: GraphQLInt },
+    Sacks_curr: { type: GraphQLInt },
+    Blocked_Kicks_curr: { type: GraphQLInt },
+    Blocked_Punts_curr: { type: GraphQLInt },
+    Safeties_curr: { type: GraphQLInt },
+    Punt_Return_TD_curr: { type: GraphQLInt },
+    Defensive_TD_curr: { type: GraphQLInt },
+    Punting_Yards_curr: { type: GraphQLInt },
+    Punting_i20_curr: { type: GraphQLInt }
   }
 });
 
@@ -86,6 +109,35 @@ export const LeagueType = new GraphQLObjectType({
     stage: { type: GraphQLString }, //Initial, Draft, Game, Finish
     limit: { type: GraphQLInt },
     draft_run: { type: GraphQLInt },
+    formula: {
+      type: new GraphQLObjectType({
+        name: "Formula",
+        fields: {
+          tdpass: { type: GraphQLInt },
+          passyds: { type: GraphQLInt },
+          tdrush: { type: GraphQLInt },
+          rushyds: { type: GraphQLInt },
+          tdrec: { type: GraphQLInt },
+          recyds: { type: GraphQLInt },
+          fgmade: { type: GraphQLInt },
+          fgmissed: { type: GraphQLInt },
+          xpmade: { type: GraphQLInt },
+          int: { type: GraphQLInt },
+          intthrow: { type: GraphQLInt },
+          fumlost: { type: GraphQLInt },
+          sack: { type: GraphQLInt },
+          forcedfum: { type: GraphQLInt },
+          kickblock: { type: GraphQLInt },
+          puntblock: { type: GraphQLInt },
+          saf: { type: GraphQLInt },
+          tdkickret: { type: GraphQLInt },
+          tdpuntret: { type: GraphQLInt },
+          tddef: { type: GraphQLInt },
+          i20punt: { type: GraphQLInt },
+          puntyds: { type: GraphQLInt }
+        }
+      })
+    },
     creator: {
       type: AccountType,
       resolve: async ({ creator }, args, context) => {
@@ -121,7 +173,36 @@ export const LeagueInputType = new GraphQLInputObjectType({
   fields: {
     name: { type: GraphQLString },
     limit: { type: GraphQLInt },
-    epoc_date: { type: GraphQLInt }
+    epoc_date: { type: GraphQLInt },
+    formula: {
+      type: new GraphQLInputObjectType({
+        name: "Formula_input",
+        fields: {
+          tdpass: { type: GraphQLInt },
+          passyds: { type: GraphQLInt },
+          tdrush: { type: GraphQLInt },
+          rushyds: { type: GraphQLInt },
+          tdrec: { type: GraphQLInt },
+          recyds: { type: GraphQLInt },
+          fgmade: { type: GraphQLInt },
+          fgmissed: { type: GraphQLInt },
+          xpmade: { type: GraphQLInt },
+          int: { type: GraphQLInt },
+          intthrow: { type: GraphQLInt },
+          fumlost: { type: GraphQLInt },
+          sack: { type: GraphQLInt },
+          forcedfum: { type: GraphQLInt },
+          kickblock: { type: GraphQLInt },
+          puntblock: { type: GraphQLInt },
+          saf: { type: GraphQLInt },
+          tdkickret: { type: GraphQLInt },
+          tdpuntret: { type: GraphQLInt },
+          tddef: { type: GraphQLInt },
+          i20punt: { type: GraphQLInt },
+          puntyds: { type: GraphQLInt }
+        }
+      })
+    }
   }
 });
 
@@ -243,48 +324,58 @@ export const ArrangementType = new GraphQLObjectType({
 
 export const FantasyTeamType = new GraphQLObjectType({
   name: "FantasyTeamType",
-  fields: () => ({
+  fields: {
     _id: { type: GraphQLString },
     account: {
       type: AccountType,
       resolve: async ({ account_id }, args, context) => {
-        const loader = getLoader(
-          context,
-          "accountLoaderGenerator",
-          accountLoaderGenerator
-        );
-        const result = await loader.loadMany([account_id] || []);
-        return result[0];
+        if (account_id) {
+          const loader = getLoader(
+            context,
+            "accountLoaderGenerator",
+            accountLoaderGenerator
+          );
+          const result = await loader.loadMany([account_id] || []);
+          return result[0];
+        }
+        return null;
       }
     },
     league: {
       type: LeagueType,
       resolve: async ({ league_id }, args, context) => {
-        const loader = getLoader(
-          context,
-          "leagueLoaderGenerator",
-          leagueLoaderGenerator
-        );
-        const result = await loader.loadMany([league_id] || []);
-        return result[0];
+        if (league_id) {
+          const loader = getLoader(
+            context,
+            "leagueLoaderGenerator",
+            leagueLoaderGenerator
+          );
+          const result = await loader.loadMany([league_id] || []);
+          return result[0];
+        }
+        return null;
       }
     },
     arrangement: {
       type: ArrangementType,
       resolve: async ({ _id }, args, context) => {
-        const loader = getLoader(
-          context,
-          "arrangementLoaderGenerator",
-          arrangementLoaderGenerator
-        );
-        const result = await loader.loadMany([_id.toString()] || []);
-        return result[0];
+        if (_id) {
+          console.log("arrangement", _id);
+          const loader = getLoader(
+            context,
+            "arrangementLoaderGenerator",
+            arrangementLoaderGenerator
+          );
+          const result = await loader.loadMany([_id.toString()] || []);
+          return result[0];
+        }
+        return null;
       }
     },
     name: { type: GraphQLString },
     win: { type: GraphQLInt },
     lose: { type: GraphQLInt }
-  })
+  }
 });
 
 export const MessageType = new GraphQLObjectType({

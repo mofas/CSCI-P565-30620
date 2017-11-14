@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { format } from 'date-fns';
 
 import Btn from '../../common/Btn/Btn';
+import { Row, Col } from '../../common/Table/Index';
 
 import classnames from 'classnames/bind';
 import style from './Index.css';
@@ -30,25 +31,23 @@ class LeagueItem extends React.PureComponent {
     const creatorId = data.getIn(['creator', '_id']);
     const creatorEmail = data.getIn(['creator', 'email']);
     return (
-      <div className={cx('pseudo-row')}>
-        <div className={cx('pseudo-col', 'name-col', 'text-left')}>
-          {data.get('name')}
-        </div>
-        <div className={cx('pseudo-col', 'pa-col', 'text-left')}>
+      <Row>
+        <Col className={cx('name-col', 'text-left')}>{data.get('name')}</Col>
+        <Col className={cx('pa-col', 'text-left')}>
           {data
             .get('accounts')
             .map(d => d.get('email'))
             .map(d => <div>{d}</div>)}
-        </div>
-        <div className={cx('pseudo-col', 'creator-col')}>{creatorEmail}</div>
-        <div className={cx('pseudo-col', 'time-col')}>
+        </Col>
+        <Col className={cx('creator-col')}>{creatorEmail}</Col>
+        <Col className={cx('time-col')}>
           {format(new Date(data.get('create_time') * 1000), 'MM/DD HH:mm')}
-        </div>
-        <div className={cx('pseudo-col', 'count-col')}>
+        </Col>
+        <Col className={cx('count-col')}>
           {data.get('accounts').count()} / {data.get('limit')}
-        </div>
-        <div className={cx('pseudo-col', 'stage-col')}>{data.get('stage')}</div>
-        <div className={cx('pseudo-col', 'action-col')}>
+        </Col>
+        <Col className={cx('stage-col')}>{data.get('stage')}</Col>
+        <Col className={cx('action-col')}>
           <div className={cx('function-bar')}>
             {leagueStatus === 'Initial' &&
             participantEmails
@@ -85,8 +84,8 @@ class LeagueItem extends React.PureComponent {
               </Btn>
             ) : null}
           </div>
-        </div>
-      </div>
+        </Col>
+      </Row>
     );
   }
 }
