@@ -123,8 +123,13 @@ class DraftPlayer extends React.PureComponent {
       const players = fromJS(res.data.ListPlayer);
       const leagueData = fromJS(res.data.LeagueData);
       const poolPlayers = fromJS(res.data.PoolPlayers);
-      console.log("68766876", JSON.stringify(res.data.PoolPlayerWithUser));
-      console.log("manish", res.data.PoolPlayerWithUser.length);
+      // console.log("68766876", JSON.stringify(res.data.PoolPlayerWithUser));
+      // console.log("manish", res.data.PoolPlayerWithUser.length);
+
+      if ("GamePlay" === leagueData.get("stage")) {
+        console.log("Redirect to game page");
+        // redirect to game plage
+      }
 
       const accounts_darft_complete = [];
       if (res.data.PoolPlayerWithUser.length > 0) {
@@ -206,7 +211,7 @@ class DraftPlayer extends React.PureComponent {
     run = run + 1;
     if (
       this.state.selectionOrder[0]["email"] === emailId &&
-      run <= this.state.totalPlayersInTeam
+      run < this.state.totalPlayersInTeam
     ) {
       const mutation = `
           mutation{
@@ -223,11 +228,26 @@ class DraftPlayer extends React.PureComponent {
           }
       `;
       API.GraphQL(mutation).then(res => {
-        this.loadData();
+        //this.loadData();
         console.log("Successffully loaded the data");
       });
+      let max_run =
+        this.state.leagueData.get("limit") * this.state.totalPlayersInTeam;
+      if (max_run === run) {
+        const mut = `
+          mutation{
+            UpdateLeague(_id: "${leagueId}", stage: "GamePlay"){
+              _id
+            }
+          }
+        `;
+        API.GraphQL(mutation).then(res => {
+          this.loadData();
+          console.log("Successffully changed the status");
+        });
+      }
     } else {
-      window.alert("Not your chance");
+      window.alert("Not your chance / Or your 20 players capacity is over");
     }
   };
 
