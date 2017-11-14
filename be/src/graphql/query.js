@@ -1,5 +1,5 @@
-import mongodb, { ObjectId } from 'mongodb';
-import request from 'request';
+import mongodb, { ObjectId } from "mongodb";
+import request from "request";
 
 import {
   graphql,
@@ -11,8 +11,8 @@ import {
   GraphQLObjectType,
   GraphQLSchema,
   GraphQLString,
-  GraphQLBoolean,
-} from 'graphql';
+  GraphQLBoolean
+} from "graphql";
 
 import {
   AccountType,
@@ -22,7 +22,8 @@ import {
   FantasyTeamType,
   ArrangementType,
   MessageType,
-} from './model';
+  PoolPlayerWithUserType
+} from "./model";
 
 import {
   getLoader,
@@ -30,41 +31,41 @@ import {
   accountLoaderGenerator,
   leagueLoaderGenerator,
   fantasyTeamLoaderGenerator,
-  arrangementLoaderGenerator,
-} from './dataLoader';
+  arrangementLoaderGenerator
+} from "./dataLoader";
 
 export const ListPlayer = {
   type: new GraphQLList(PlayerType),
   args: {
     skip: { type: GraphQLInt },
-    limit: { type: GraphQLInt },
+    limit: { type: GraphQLInt }
   },
   resolve: async ({ db }, { skip, limit, lang }, info) => {
     let query = {};
     skip = skip || 0;
     limit = limit || 2000;
     const result = await db
-      .collection('players')
+      .collection("players")
       .find(query)
       .skip(skip)
       .limit(limit)
       .toArray();
     return result;
-  },
+  }
 };
 
 export const QueryPlayer = {
   type: PlayerType,
   args: {
-    _id: { type: GraphQLString },
+    _id: { type: GraphQLString }
   },
   resolve: async ({ db }, { _id }, info) => {
     const query = {
-      _id: ObjectId(_id),
+      _id: ObjectId(_id)
     };
-    const result = await db.collection('players').findOne(query);
+    const result = await db.collection("players").findOne(query);
     return result;
-  },
+  }
 };
 
 export const ListLeague = {
@@ -72,41 +73,41 @@ export const ListLeague = {
   args: {},
   resolve: async ({ db }, { _id }, info) => {
     const result = await db
-      .collection('leagues')
+      .collection("leagues")
       .find({})
       .sort({ create_time: -1 })
       .toArray();
     return result;
-  },
+  }
 };
 
 export const QueryLeague = {
   type: LeagueType,
   args: {
-    _id: { type: GraphQLString },
+    _id: { type: GraphQLString }
   },
   resolve: async ({ db }, { _id }, info) => {
     const query = {
-      _id: ObjectId(_id),
+      _id: ObjectId(_id)
     };
-    const result = await db.collection('leagues').findOne(query);
+    const result = await db.collection("leagues").findOne(query);
 
     return result;
-  },
+  }
 };
 
 export const QueryAccount = {
   type: AccountType,
   args: {
-    _id: { type: GraphQLString },
+    _id: { type: GraphQLString }
   },
   resolve: async ({ db }, { _id }, info) => {
     const query = {
-      _id: ObjectId(_id),
+      _id: ObjectId(_id)
     };
-    const result = await db.collection('accounts').findOne(query);
+    const result = await db.collection("accounts").findOne(query);
     return result;
-  },
+  }
 };
 
 export const ListAccount = {
@@ -115,56 +116,56 @@ export const ListAccount = {
   resolve: async ({ db }, {}, info) => {
     const query = {};
     const result = await db
-      .collection('accounts')
+      .collection("accounts")
       .find(query)
       .toArray();
     return result;
-  },
+  }
 };
 
 export const QueryFantasyTeam = {
   type: FantasyTeamType,
   args: {
-    _id: { type: GraphQLString },
+    _id: { type: GraphQLString }
   },
   resolve: async ({ db }, { _id }, context) => {
     const loader = getLoader(
       context,
-      'fantasyTeamLoaderGenerator',
+      "fantasyTeamLoaderGenerator",
       fantasyTeamLoaderGenerator
     );
     const result = await loader.loadMany([_id] || []);
     return result[0];
-  },
+  }
 };
 
 export const QueryTeamArrangement = {
   type: ArrangementType,
   args: {
-    fancy_team_id: { type: GraphQLString },
+    fancy_team_id: { type: GraphQLString }
   },
   resolve: async ({ db }, { fancy_team_id }, context) => {
     const loader = getLoader(
       context,
-      'arrangementLoaderGenerator',
+      "arrangementLoaderGenerator",
       arrangementLoaderGenerator
     );
     const result = await loader.loadMany([fancy_team_id] || []);
     return result[0];
-  },
+  }
 };
 
 export const QueryPoolPlayer = {
   type: new GraphQLList(PoolPlayerType),
   args: {
-    league_id: { type: GraphQLString }, //league id
+    league_id: { type: GraphQLString } //league id
   },
   resolve: async ({ db }, { league_id }, info) => {
     const query = {
-      league_id: league_id,
+      league_id: league_id
     };
     const result = await db
-      .collection('pool')
+      .collection("pool")
       .find(query)
       .toArray();
 
@@ -179,11 +180,45 @@ export const QueryPoolPlayer = {
         user_id: user_id,
         players: result
           .filter(dd => dd.account_id === user_id)
-          .map(dd => dd.player_id),
+          .map(dd => dd.player_id)
       };
     });
     return ret;
+  }
+};
+
+export const QueryPoolPlayerWithUser = {
+  type: new GraphQLList(PoolPlayerWithUserType),
+  args: {
+    league_id: { type: GraphQLString } //league id
   },
+  resolve: async ({ db }, { league_id }, info) => {
+    console.log("league_id: adas: ", league_id);
+    const query = {
+      league_id: league_id
+    };
+    const result = await db
+      .collection("pool")
+      .find(query)
+      .toArray();
+
+    const groupByAccount = result.reduce((acc, d) => {
+      const { account_id, player_id } = d;
+      acc[account_id] = acc[account_id] || [];
+      acc[account_id].push(player_id);
+      return acc;
+    }, {});
+    console.log(groupByAccount);
+
+    const ret = Object.keys(groupByAccount).map(account_id => {
+      return {
+        account_id,
+        players: groupByAccount[account_id]
+      };
+    });
+    // console.log(ret);
+    return ret;
+  }
 };
 
 export const GetMessages = {
@@ -191,16 +226,16 @@ export const GetMessages = {
   args: {
     room_id: { type: new GraphQLNonNull(GraphQLString) },
     skip: { type: GraphQLInt },
-    limit: { type: GraphQLInt },
+    limit: { type: GraphQLInt }
   },
   resolve: async ({ db }, { room_id, skip = 0, limit = 100 }, info) => {
     const query = { room_id };
     const result = await db
-      .collection('messages')
+      .collection("messages")
       .find(query)
       .skip(skip)
       .limit(limit)
       .toArray();
     return result;
-  },
+  }
 };

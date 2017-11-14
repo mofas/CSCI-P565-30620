@@ -1,4 +1,4 @@
-import { graphql, GraphQLObjectType, GraphQLSchema } from 'graphql';
+import { graphql, GraphQLObjectType, GraphQLSchema } from "graphql";
 
 import {
   ListPlayer,
@@ -11,7 +11,8 @@ import {
   QueryFantasyTeam,
   QueryTeamArrangement,
   GetMessages,
-} from './query';
+  QueryPoolPlayerWithUser
+} from "./query";
 
 import {
   CreateLeague,
@@ -22,12 +23,12 @@ import {
   SelectedPlayer,
   SendMessage,
   BanUser,
-  UpdateLeagueTime,
-} from './mutation';
+  UpdateLeagueTime
+} from "./mutation";
 
 export const schema = new GraphQLSchema({
   query: new GraphQLObjectType({
-    name: 'RootQueryType',
+    name: "RootQueryType",
     fields: {
       ListPlayer,
       QueryPlayer,
@@ -39,10 +40,11 @@ export const schema = new GraphQLSchema({
       QueryLeague,
       QueryFantasyTeam,
       QueryTeamArrangement,
-    },
+      QueryPoolPlayerWithUser
+    }
   }),
   mutation: new GraphQLObjectType({
-    name: 'RootMutationType',
+    name: "RootMutationType",
     fields: {
       CreateLeague,
       JoinLeague,
@@ -52,7 +54,7 @@ export const schema = new GraphQLSchema({
       SelectedPlayer,
       SendMessage,
       BanUser,
-      UpdateLeagueTime,
-    },
-  }),
+      UpdateLeagueTime
+    }
+  })
 });

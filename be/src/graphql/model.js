@@ -1,4 +1,4 @@
-import { ObjectId } from 'mongodb';
+import { ObjectId } from "mongodb";
 
 import {
   graphql,
@@ -13,8 +13,8 @@ import {
   GraphQLBoolean,
   GraphQLInputObjectType,
   GraphQLInterfaceType,
-  GraphQLUnionType,
-} from 'graphql';
+  GraphQLUnionType
+} from "graphql";
 
 import {
   getLoader,
@@ -22,29 +22,30 @@ import {
   accountLoaderGenerator,
   leagueLoaderGenerator,
   arrangementLoaderGenerator,
-} from './dataLoader';
+  fantasyTeamLoaderGenerator
+} from "./dataLoader";
 
 export const ResultType = new GraphQLObjectType({
-  name: 'ResultType',
+  name: "ResultType",
   fields: {
     success: { type: GraphQLBoolean },
-    error: { type: GraphQLString },
-  },
+    error: { type: GraphQLString }
+  }
 });
 
 export const AccountType = new GraphQLObjectType({
-  name: 'AccountType',
+  name: "AccountType",
   fields: {
     _id: { type: GraphQLString },
     email: { type: GraphQLString },
     role: { type: GraphQLString },
     status: { type: GraphQLString },
-    ban: { type: GraphQLBoolean },
-  },
+    ban: { type: GraphQLBoolean }
+  }
 });
 
 export const PlayerType = new GraphQLObjectType({
-  name: 'PlayerType',
+  name: "PlayerType",
   fields: {
     _id: { type: GraphQLString },
     Name: { type: GraphQLString },
@@ -73,12 +74,12 @@ export const PlayerType = new GraphQLObjectType({
     Punting_Yards: { type: GraphQLInt },
     Punting_i20: { type: GraphQLInt },
     Rank: { type: GraphQLInt },
-    URL: { type: GraphQLString },
-  },
+    URL: { type: GraphQLString }
+  }
 });
 
 export const LeagueType = new GraphQLObjectType({
-  name: 'LeagueType',
+  name: "LeagueType",
   fields: {
     _id: { type: GraphQLString },
     name: { type: GraphQLString },
@@ -90,12 +91,12 @@ export const LeagueType = new GraphQLObjectType({
       resolve: async ({ creator }, args, context) => {
         const loader = getLoader(
           context,
-          'accountLoaderGenerator',
+          "accountLoaderGenerator",
           accountLoaderGenerator
         );
         const result = await loader.loadMany([creator] || []);
         return result[0];
-      },
+      }
     },
     create_time: { type: GraphQLInt },
     draft_start_time: { type: GraphQLInt },
@@ -106,162 +107,192 @@ export const LeagueType = new GraphQLObjectType({
       resolve: async ({ accounts }, args, context) => {
         const loader = getLoader(
           context,
-          'accountLoaderGenerator',
+          "accountLoaderGenerator",
           accountLoaderGenerator
         );
         return await loader.loadMany(accounts || []);
-      },
-    },
-  },
+      }
+    }
+  }
 });
 
 export const LeagueInputType = new GraphQLInputObjectType({
-  name: 'LeagueInputType',
+  name: "LeagueInputType",
   fields: {
     name: { type: GraphQLString },
     limit: { type: GraphQLInt },
-    epoc_date: { type: GraphQLInt },
-  },
+    epoc_date: { type: GraphQLInt }
+  }
+});
+
+export const PoolPlayerWithUserType = new GraphQLObjectType({
+  name: "PoolPlayerWithUserType",
+  fields: () => ({
+    players: {
+      type: new GraphQLList(PlayerType),
+      resolve: async ({ players }, args, { db }) => {
+        //console.log(players, "cool");
+
+        const ret = await db
+          .collection("players")
+          .find({ _id: { $in: players.map(ObjectId) } })
+          .toArray();
+        console.log(ret);
+        return ret;
+      }
+    },
+    account: {
+      type: AccountType,
+      resolve: async ({ account_id }, args, { db }) => {
+        //console.log("acc id:", account_id);
+        const ret = await db
+          .collection("accounts")
+          .findOne({ _id: ObjectId(account_id) });
+
+        return ret;
+      }
+    }
+  })
 });
 
 export const PoolPlayerType = new GraphQLObjectType({
-  name: 'PoolPlayerType',
+  name: "PoolPlayerType",
   fields: {
     account: {
       type: AccountType,
       resolve: async ({ user_id }, args, context) => {
         const loader = getLoader(
           context,
-          'accountLoaderGenerator',
+          "accountLoaderGenerator",
           accountLoaderGenerator
         );
         const result = await loader.loadMany([user_id] || []);
         return result[0];
-      },
+      }
     },
     players: {
       type: new GraphQLList(PlayerType),
       resolve: async ({ players }, args, context) => {
         const loader = getLoader(
           context,
-          'playerLoaderGenerator',
+          "playerLoaderGenerator",
           playerLoaderGenerator
         );
         return await loader.loadMany(players || []);
-      },
-    },
-  },
+      }
+    }
+  }
 });
 
 const arrangementTypeGetPlayerHelper = async (context, ids) => {
   const loader = getLoader(
     context,
-    'playerLoaderGenerator',
+    "playerLoaderGenerator",
     playerLoaderGenerator
   );
   return await loader.loadMany(ids || []);
 };
 
 export const ArrangementType = new GraphQLObjectType({
-  name: 'ArrangementType',
+  name: "ArrangementType",
   fields: {
     position_qb: {
       type: new GraphQLList(PlayerType),
       resolve: async ({ position_qb }, args, context) => {
         return arrangementTypeGetPlayerHelper(context, position_qb);
-      },
+      }
     },
     position_rb: {
       type: new GraphQLList(PlayerType),
       resolve: async ({ position_rb }, args, context) => {
         return arrangementTypeGetPlayerHelper(context, position_rb);
-      },
+      }
     },
     position_wr: {
       type: new GraphQLList(PlayerType),
       resolve: async ({ position_wr }, args, context) => {
         return arrangementTypeGetPlayerHelper(context, position_wr);
-      },
+      }
     },
     position_te: {
       type: new GraphQLList(PlayerType),
       resolve: async ({ position_te }, args, context) => {
         return arrangementTypeGetPlayerHelper(context, position_te);
-      },
+      }
     },
     position_k: {
       type: new GraphQLList(PlayerType),
       resolve: async ({ position_k }, args, context) => {
         return arrangementTypeGetPlayerHelper(context, position_k);
-      },
+      }
     },
     position_defense: {
       type: new GraphQLList(PlayerType),
       resolve: async ({ position_defense }, args, context) => {
         return arrangementTypeGetPlayerHelper(context, position_defense);
-      },
+      }
     },
     position_p: {
       type: new GraphQLList(PlayerType),
       resolve: async ({ position_p }, args, context) => {
         return arrangementTypeGetPlayerHelper(context, position_p);
-      },
-    },
-  },
+      }
+    }
+  }
 });
 
 export const FantasyTeamType = new GraphQLObjectType({
-  name: 'FantasyTeamType',
-  fields: {
+  name: "FantasyTeamType",
+  fields: () => ({
     _id: { type: GraphQLString },
     account: {
       type: AccountType,
       resolve: async ({ account_id }, args, context) => {
         const loader = getLoader(
           context,
-          'accountLoaderGenerator',
+          "accountLoaderGenerator",
           accountLoaderGenerator
         );
         const result = await loader.loadMany([account_id] || []);
         return result[0];
-      },
+      }
     },
     league: {
       type: LeagueType,
       resolve: async ({ league_id }, args, context) => {
         const loader = getLoader(
           context,
-          'leagueLoaderGenerator',
+          "leagueLoaderGenerator",
           leagueLoaderGenerator
         );
         const result = await loader.loadMany([league_id] || []);
         return result[0];
-      },
+      }
     },
     arrangement: {
       type: ArrangementType,
       resolve: async ({ _id }, args, context) => {
         const loader = getLoader(
           context,
-          'arrangementLoaderGenerator',
+          "arrangementLoaderGenerator",
           arrangementLoaderGenerator
         );
         const result = await loader.loadMany([_id.toString()] || []);
         return result[0];
-      },
+      }
     },
     name: { type: GraphQLString },
     win: { type: GraphQLInt },
-    lose: { type: GraphQLInt },
-  },
+    lose: { type: GraphQLInt }
+  })
 });
 
 export const MessageType = new GraphQLObjectType({
-  name: 'MessageType',
+  name: "MessageType",
   fields: {
     room_id: { type: GraphQLString },
     sender: { type: GraphQLString },
     message: { type: GraphQLString },
-    date_time: { type: GraphQLInt },
-  },
+    date_time: { type: GraphQLInt }
+  }
 });
