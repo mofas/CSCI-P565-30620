@@ -88,7 +88,7 @@
 {
   _id: "xxxx",
   name: "Our First Leagues",
-  stage: "Initial", //Initial, Draft, Game, Finish
+  stage: "Initial", //Initial, Draft, SeasonStart, Finish
   limit: 4,
   accounts: ["user_id1", "user_id2"],
   draft_run: 0, //draft_run are from 0 to 79 = 20(player in each team) * 4(limit) - 1
@@ -163,6 +163,7 @@
 
 ```js
 {
+  league_id: "xxxx"
   week_no: 1, //Integer
   first_team: "xxxxx",
   second_team: "xxxxx",
