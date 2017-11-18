@@ -1,4 +1,4 @@
-const match = (league_id, week, team1, team2, formula) => {
+export const match = (league_id, week, team1, team2, formula) => {
   let first_score = 0;
   let second_score = 0;
   //Calc team 1 score

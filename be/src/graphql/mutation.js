@@ -1,4 +1,4 @@
-import mongodb, { ObjectId } from 'mongodb';
+import mongodb, { ObjectId } from "mongodb";
 
 import {
   graphql,
@@ -11,25 +11,25 @@ import {
   GraphQLInputObjectType,
   GraphQLSchema,
   GraphQLString,
-  GraphQLBoolean,
-} from 'graphql';
+  GraphQLBoolean
+} from "graphql";
 
-import { userInfo } from '../cache';
+import { userInfo } from "../cache";
 
-import { ResultType, LeagueType, LeagueInputType } from './model';
-
+import { ResultType, LeagueType, LeagueInputType } from "./model";
+import { match } from "./teamMatchAlgorithm";
 export const CreateLeague = {
   type: LeagueType,
   args: {
-    data: { type: LeagueInputType },
+    data: { type: LeagueInputType }
   },
   resolve: async ({ req, db }, { data }, info) => {
     const { name, limit, epoc_date, formula } = data;
     var curr_epoc = Math.floor(new Date().getTime() / 1000.0);
     if (curr_epoc > epoc_date) {
       return {
-        error: 'Enter future date',
-        success: false,
+        error: "Enter future date",
+        success: false
       };
     }
     let date;
@@ -42,7 +42,7 @@ export const CreateLeague = {
     const savedData = {
       name,
       limit,
-      stage: 'Initial',
+      stage: "Initial",
       accounts: [],
       draft_run: 0,
       creator: req.user._id,
@@ -51,36 +51,36 @@ export const CreateLeague = {
       draft_start_time: epoc_date,
       timeout: 2,
       lastPickTime: epoc_date,
-      formula,
+      formula
     };
 
-    const { value } = await db.collection('leagues').insertOne(savedData);
+    const { value } = await db.collection("leagues").insertOne(savedData);
     return savedData;
-  },
+  }
 };
 
 export const UpdateLeague = {
   type: LeagueType,
   args: {
     _id: { type: GraphQLString },
-    stage: { type: GraphQLString },
+    stage: { type: GraphQLString }
   },
   resolve: async ({ req, db }, { _id, stage }, info) => {
     const query = {
-      _id: ObjectId(_id),
+      _id: ObjectId(_id)
     };
 
-    const result = await db.collection('leagues').findOne(query);
+    const result = await db.collection("leagues").findOne(query);
     if (result.accounts.length === result.limit && req.user) {
-      const { value } = await db.collection('leagues').findOneAndUpdate(
+      const { value } = await db.collection("leagues").findOneAndUpdate(
         {
-          _id: ObjectId(result._id),
+          _id: ObjectId(result._id)
         },
         {
-          $set: { stage: stage },
+          $set: { stage: stage }
         },
         {
-          returnOriginal: false,
+          returnOriginal: false
         }
       );
       return value;
@@ -88,25 +88,25 @@ export const UpdateLeague = {
       //console.log("in else section");
       return result;
     }
-  },
+  }
 };
 
 export const BanUser = {
   type: ResultType,
   args: {
     _id: { type: GraphQLString },
-    isBanned: { type: GraphQLBoolean },
+    isBanned: { type: GraphQLBoolean }
   },
   resolve: async ({ db }, { _id, isBanned }, info) => {
-    const result = await db.collection('accounts').findOneAndUpdate(
+    const result = await db.collection("accounts").findOneAndUpdate(
       {
-        _id: ObjectId(_id),
+        _id: ObjectId(_id)
       },
       {
-        $set: { ban: isBanned },
+        $set: { ban: isBanned }
       },
       {
-        returnOriginal: false,
+        returnOriginal: false
       }
     );
 
@@ -115,45 +115,45 @@ export const BanUser = {
 
     if (result.ok) {
       return {
-        error: '',
-        success: true,
+        error: "",
+        success: true
       };
     } else {
       return {
         error: JSON.stringify(result),
-        success: false,
+        success: false
       };
     }
-  },
+  }
 };
 
 export const UpdateDraftNoLeague = {
   type: LeagueType,
   args: {
-    _id: { type: GraphQLString },
+    _id: { type: GraphQLString }
   },
   resolve: async ({ req, db }, { _id }, info) => {
     const query = {
-      _id: ObjectId(_id),
+      _id: ObjectId(_id)
     };
 
     //console.log("456 draft_no:" , draft_no);
     //console.log("print " , req);
     //req.user = "test";
 
-    const result = await db.collection('leagues').findOne(query);
+    const result = await db.collection("leagues").findOne(query);
     //if (result.accounts.length === result.limit && req.user) {
     let curr_epoc = Math.round(new Date().getTime() / 1000.0);
     if (result) {
-      const { value } = await db.collection('leagues').findOneAndUpdate(
+      const { value } = await db.collection("leagues").findOneAndUpdate(
         {
-          _id: ObjectId(result._id),
+          _id: ObjectId(result._id)
         },
         {
-          $set: { draft_run: result.draft_run + 1, lastPickTime: curr_epoc },
+          $set: { draft_run: result.draft_run + 1, lastPickTime: curr_epoc }
         },
         {
-          returnOriginal: false,
+          returnOriginal: false
         }
       );
       return value;
@@ -161,78 +161,78 @@ export const UpdateDraftNoLeague = {
       //console.log("in else section");
       return result;
     }
-  },
+  }
 };
 
 export const JoinLeague = {
   type: LeagueType,
   args: {
-    _id: { type: GraphQLString },
+    _id: { type: GraphQLString }
   },
   resolve: async ({ req, db }, { _id }, info) => {
     const query = {
-      _id: ObjectId(_id),
+      _id: ObjectId(_id)
     };
 
-    const result = await db.collection('leagues').findOne(query);
+    const result = await db.collection("leagues").findOne(query);
     if (
       result.accounts.length < result.limit &&
       req.user &&
       !result.accounts.includes(req.user._id)
     ) {
-      const { value } = await db.collection('leagues').findOneAndUpdate(
+      const { value } = await db.collection("leagues").findOneAndUpdate(
         {
-          _id: ObjectId(result._id),
+          _id: ObjectId(result._id)
         },
         {
           $set: {
             accounts: [req.user._id, ...result.accounts],
             stage:
-              result.accounts.length === result.limit - 1 ? 'Draft' : 'Initial',
-          },
+              result.accounts.length === result.limit - 1 ? "Draft" : "Initial"
+          }
         },
         {
-          returnOriginal: false,
+          returnOriginal: false
         }
       );
       return value;
     } else {
       return result;
     }
-  },
+  }
 };
 
 export const DeleteLeague = {
   type: ResultType,
   args: {
-    _id: { type: GraphQLString },
+    _id: { type: GraphQLString }
   },
   resolve: async ({ db }, { _id }, info) => {
     const query = {
-      _id: ObjectId(_id),
+      _id: ObjectId(_id)
     };
-    const { result } = await db.collection('leagues').remove(query);
+    const { result } = await db.collection("leagues").remove(query);
     if (result.ok) {
       return {
-        error: '',
-        success: true,
+        error: "",
+        success: true
       };
     } else {
       return {
         error: JSON.stringify(result),
-        success: false,
+        success: false
       };
     }
-  },
+  }
 };
 
 export const PoolPlayer = new GraphQLObjectType({
-  name: 'PoolPlayer',
+  name: "PoolPlayer",
   fields: {
     //league_id:{type : GraphQLString},
     //fancy_team_id: {type: GraphQLString},
-    player_id: { type: GraphQLString },
-  },
+    player_id: { type: GraphQLString }
+  }
 });
 
 export const SelectedPlayer = {
@@ -240,27 +240,27 @@ export const SelectedPlayer = {
   args: {
     league_id: { type: GraphQLString },
     player_id: { type: GraphQLString },
-    account_id: { type: GraphQLString },
+    account_id: { type: GraphQLString }
   },
   resolve: async ({ db }, { league_id, player_id, account_id }, info) => {
     const query = {
       league_id: league_id,
       player_id: player_id,
-      account_id: account_id,
+      account_id: account_id
     };
-    console.log('39847293', league_id, player_id, account_id);
-    const result = await db.collection('pool').findOne(query);
+    console.log("39847293", league_id, player_id, account_id);
+    const result = await db.collection("pool").findOne(query);
     //console.log("return data " ,JSON.stringify(result, null, 2))
     if (!result) {
-      console.log('Insert the record');
-      db.collection('pool').insertOne(query);
+      console.log("Insert the record");
+      db.collection("pool").insertOne(query);
     }
 
     return await db
-      .collection('pool')
+      .collection("pool")
       .find({ league_id: league_id }, { player_id: 1, _id: 0 })
       .toArray();
-  },
+  }
 };
 
 export const SendMessage = {
@@ -268,25 +268,25 @@ export const SendMessage = {
   args: {
     room_id: { type: new GraphQLNonNull(GraphQLString) },
     sender: { type: new GraphQLNonNull(GraphQLString) },
-    message: { type: new GraphQLNonNull(GraphQLString) },
+    message: { type: new GraphQLNonNull(GraphQLString) }
   },
   resolve: async ({ db, ws }, { room_id, sender, message }, info) => {
     const savedData = {
       room_id,
       sender,
       message,
-      date_time: Math.floor(new Date().getTime() / 1000),
+      date_time: Math.floor(new Date().getTime() / 1000)
     };
 
-    const { result } = await db.collection('messages').insertOne(savedData);
+    const { result } = await db.collection("messages").insertOne(savedData);
 
     //notify
     Object.keys(ws).forEach(connectId => {
       try {
         ws[connectId].send(
           JSON.stringify({
-            type: 'newMessage',
-            ...savedData,
+            type: "newMessage",
+            ...savedData
           })
         );
       } catch (e) {
@@ -297,73 +297,100 @@ export const SendMessage = {
 
     if (result.ok) {
       return {
-        error: '',
-        success: true,
+        error: "",
+        success: true
       };
     } else {
       return {
         error: JSON.stringify(result),
-        success: false,
+        success: false
       };
     }
-  },
+  }
 };
 
 export const UpdateLeagueTime = {
   type: ResultType,
   args: {
     league_id: { type: GraphQLString },
-    epoc: { type: GraphQLInt },
+    epoc: { type: GraphQLInt }
   },
   resolve: async ({ db }, { league_id, epoc }, info) => {
     const query = {
-      league_id: league_id,
+      league_id: league_id
     };
     //console.log('39847293', league_id, player_id, fancy_team_id);
     var curr_epoc = Math.round(new Date().getTime() / 1000.0);
     if (curr_epoc > epoc) {
       return {
-        error: 'Enter future date',
-        success: false,
+        error: "Enter future date",
+        success: false
       };
     }
     let date = new Date(epoc * 1000);
-    const result = await db.collection('leagues').findOneAndUpdate(
+    const result = await db.collection("leagues").findOneAndUpdate(
       {
-        _id: ObjectId(league_id),
+        _id: ObjectId(league_id)
       },
       {
-        $set: { draft_start_time: date },
+        $set: { draft_start_time: date }
       },
       {
-        returnOriginal: false,
+        returnOriginal: false
       }
     );
 
     if (result.ok) {
       return {
-        error: '',
-        success: true,
+        error: "",
+        success: true
       };
     } else {
       return {
         error: JSON.stringify(result),
-        success: false,
+        success: false
       };
     }
-  },
+  }
 };
 
 export const RunMatch = {
   type: ResultType,
   args: {
-    league_id: { type: GraphQLString },
+    league_id: { type: GraphQLString }
   },
   resolve: async ({ db }, { league_id }, info) => {
+    const query = {
+      league_id: league_id
+    };
+    const league = await db
+      .collection("leagues")
+      .findOne({ _id: ObjectId(league_id) });
+    const schedule = await db
+      .collection("schedule")
+      .findOne({ league_id: league_id });
+    const team1_id = schedule.first_team;
+    const team2_id = schedule.second_team;
+    const formula = league.formula;
+    const week = schedule.week_no;
+    //Have to put it in the correct format for teamMatchAlgorithm
+    const team1 = {
+      arrangement: await db
+        .collection("arrangement")
+        .findOne({ fancy_team_id: team1_id })
+    };
+    const team2 = {
+      arrangement: await db
+        .collection("arrangement")
+        .findOne({ fancy_team_id: team2_id })
+    };
+    result = match(league_id, week, team1, team2, formula);
+    console.log(result);
+    return league;
     // TODO : get league data from DB using league_id
     // TODO : get schedule from DB
     // TDOO : Get teams arrangement who will play in this week from DB
     // TODO : Call match from teamMatchAlgorithm to get game record
     // TODO:  get Result and save to DB GAME_RECORD
-  },
+  }
 };
