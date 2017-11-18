@@ -131,7 +131,7 @@
 }
 ```
 
-#### FANTASY TEAMS (fantsay_team)
+#### FANTASY TEAMS (fantasy_team)
 
 ```js
 {
