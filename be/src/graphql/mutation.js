@@ -375,18 +375,30 @@ export const RunMatch = {
     const week = schedule.week_no;
     //Have to put it in the correct format for teamMatchAlgorithm
     const team1 = {
+      _id: team1_id,
       arrangement: await db
         .collection("arrangement")
         .findOne({ fancy_team_id: team1_id })
     };
     const team2 = {
+      _id: team2_id,
       arrangement: await db
         .collection("arrangement")
         .findOne({ fancy_team_id: team2_id })
     };
-    result = match(league_id, week, team1, team2, formula);
+    const result = match(league_id, week, team1, team2, formula);
+    const data = {
+      league_id: league_id,
+      week: week,
+      first_team: team1_id,
+      second_team: team2_id,
+      winner: result.winner,
+      first_score: result.first_score,
+      second_score: result.second_score
+    };
+    db.collection("GAME_RECORD").insertOne(data);
     console.log(result);
-    return league;
+    return result;
     // TODO : get league data from DB using league_id
     // TODO : get schedule from DB
     // TDOO : Get teams arrangement who will play in this week from DB
