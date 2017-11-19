@@ -152,7 +152,7 @@ class CreateLeague extends React.PureComponent {
   };
 
   handleCreateLeague = () => {
-    const { name, limit } = this.state;
+    const { name, limit, formula } = this.state;
 
     if (!name || name === "") {
       window.alert("Please give a league name");
@@ -282,6 +282,12 @@ class CreateLeague extends React.PureComponent {
       );
       return;
     }
+
+    const tdpass = parseInt(formula.get('tdpass'), 10);
+    if (isNaN(tdpass) || tdpass < 0 || tdpass > 10) {
+      window.alert('tdpass must be a number between 0 and 10');
+      return;
+    }
     this.createLeague();
   };
 
@@ -316,7 +322,11 @@ class CreateLeague extends React.PureComponent {
             </div>
           );
         })}
+<<<<<<< HEAD
         <div className={cx("function-bar")} onClick={this.handleCreateLeague}>
+=======
+        <div className={cx('function-bar')} onClick={this.handleCreateLeague}>
+>>>>>>> 2e01be6253616484c2b4a6ae0c13c8f3683af910
           <Btn>Create</Btn>
         </div>
       </div>

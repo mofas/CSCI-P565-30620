@@ -74,7 +74,7 @@ class LeagueItem extends React.PureComponent {
               .filter(email => email === userInfo.get('email'))
               .count() > 0 ? (
               <Link to={`/app/league/draft/${data.get('_id')}`}>
-                <Btn>Go to Draft Player</Btn>
+                <Btn>Draft Player</Btn>
               </Link>
             ) : null}
             {leagueStatus === 'Draft' && userInfo.get('_id') === creatorId ? (
@@ -82,6 +82,16 @@ class LeagueItem extends React.PureComponent {
                 {' '}
                 Delete
               </Btn>
+            ) : null}
+            {leagueStatus === 'SeasonStart' ? (
+              <Link to={`/app/league/season/${data.get('_id')}`}>
+                <Btn>Season Dashboard</Btn>
+              </Link>
+            ) : null}
+            {leagueStatus === 'SeasonStart' ? (
+              <Link to={`/app/league/trade/${data.get('_id')}`}>
+                <Btn>Manage Players</Btn>
+              </Link>
             ) : null}
           </div>
         </Col>

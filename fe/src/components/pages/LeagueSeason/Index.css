@@ -1,0 +1,23 @@
+.root {
+  padding: 16px;
+}
+
+.thumb {
+  width: 80px;
+  flex: inherit;
+}
+
+.name {
+  text-align: left;
+}
+
+.position {
+  text-align: left;
+  width: 80px;
+  flex: inherit;
+}
+
+.thumb-placeholder {
+  width: 40px;
+  margin-right: 20px;
+}
