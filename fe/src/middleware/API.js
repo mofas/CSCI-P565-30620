@@ -53,12 +53,12 @@ const API = Connector(
   }
 );
 
-const GraphQL = query => {
+const GraphQL = (query, variables) => {
   return API((request, endpoint) => {
     return request
       .post(endpoint + '/graphql')
       .type('json')
-      .send(JSON.stringify({ query }));
+      .send(JSON.stringify({ query, variables }));
   });
 };
 

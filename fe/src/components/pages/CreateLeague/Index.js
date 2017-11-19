@@ -1,70 +1,116 @@
-import React from "react";
-import { fromJS, List, Set } from "immutable";
-import { connect } from "react-redux";
+import React from 'react';
+import { fromJS, List, Set, Map } from 'immutable';
+import { connect } from 'react-redux';
 
-import API from "../../../middleware/API";
+import API from '../../../middleware/API';
 
-import Btn from "../../common/Btn/Btn";
-import LabelInput from "../../common/Input/LabelInput";
-import Spinner from "../../common/Spinner/Spinner";
+import Btn from '../../common/Btn/Btn';
+import LabelInput from '../../common/Input/LabelInput';
+import Spinner from '../../common/Spinner/Spinner';
 
-import classnames from "classnames/bind";
-import style from "./Index.css";
+import classnames from 'classnames/bind';
+import style from './Index.css';
 const cx = classnames.bind(style);
+
+const formulaKey = [
+  'tdpass',
+  'passyds',
+  'tdrush',
+  'rushyds',
+  'tdrec',
+  'recyds',
+  'fgmade',
+  'fgmissed',
+  'xpmade',
+  'int',
+  'intthrow',
+  'fumlost',
+  'sack',
+  'forcedfum',
+  'kickblock',
+  'puntblock',
+  'saf',
+  'tdkickret',
+  'tdpuntret',
+  'tddef',
+  'i20punt',
+  'puntyds',
+];
+
+// we can define better name for inut field
+const formulaNameMapping = {
+  tdpass: 'TD Passing',
+};
 
 class CreateLeague extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      name: "My League",
-      limit: "2"
+      name: 'My League',
+      limit: '2',
+      formula: Map({
+        tdpass: 4,
+        passyds: 25,
+        tdrush: 6,
+        rushyds: 10,
+        recyds: 10,
+        tdrec: 6,
+        fgmade: 3,
+        fgmissed: -1,
+        xpmade: 1,
+        intthrow: -2,
+        int: 2,
+        fumlost: -2,
+        sack: 1,
+        forcedfum: 2,
+        kickblock: 2,
+        puntblock: 2,
+        tdkickret: 6,
+        saf: 2,
+        tdpuntret: 6,
+        tddef: 6,
+        i20punt: 1,
+        puntyds: 50,
+      }),
     };
   }
 
   updateLeagueTime = () => {};
-  createLeague = ({ name, limit }) => {
+
+  createLeague = () => {
+    const { name, limit, formula } = this.state;
+
     this.setState({
-      loading: true
+      loading: true,
     });
 
-    var d1 = Math.round(new Date().getTime() / 1000.0); // pass date from draft page
+    const epoc_date = Math.round(new Date().getTime() / 1000.0); // pass date from draft page
+
+    const variables = {
+      data: {
+        name,
+        limit,
+        epoc_date,
+        formula: formula.toJS(),
+      },
+    };
+
     const mutation = `
-        mutation{
-          CreateLeague(data: {name: "${name}", limit: ${limit}, epoc_date: ${d1}, formula: {tdpass : 4, 
-                                                                                            passyds: 25,
-                                                                                            tdrush: 6,
-                                                                                            rushyds: 10,
-                                                                                            recyds: 10,
-                                                                                            tdrec: 6,
-                                                                                            passyds: 5,
-                                                                                            fgmade: 3,
-                                                                                            fgmissed: -1,
-                                                                                            xpmade: 1,
-                                                                                            intthrow: -2,
-                                                                                            int: 2,
-                                                                                            fumlost: -2,
-                                                                                            sack: 1,
-                                                                                            forcedfum: 2,
-                                                                                            kickblock: 2,
-                                                                                            puntblock: 2,
-                                                                                            tdkickret: 6,
-                                                                                            saf: 2,
-                                                                                            tdpuntret: 6,
-                                                                                            tddef: 6,
-                                                                                            i20punt: 1,
-                                                                                            puntyds: 50,}}){
+        mutation($data: LeagueInputType){
+          CreateLeague(data: $data){
             _id
+
           }
         }
       `;
 
-    API.GraphQL(mutation).then(res => {
+    API.GraphQL(mutation, variables).then(res => {
       if (res.data.CreateLeague._id) {
-        window.location.href = "#/app/league/list";
+        window.location.href = '#/app/league/list';
       } else {
         window.alert(res);
         this.setState({
-          loading: false
+          loading: false,
         });
       }
     });
@@ -78,46 +124,63 @@ class CreateLeague extends React.PureComponent {
     this.setState({ limit: e.target.value });
   };
 
+  changeFormula = key => e => {
+    this.setState({
+      formula: this.state.formula.updateIn([key], () => e.target.value),
+    });
+  };
+
   handleCreateLeague = () => {
     const { name, limit } = this.state;
 
-    if (!name || name === "") {
-      window.alert("Please give a league name");
+    if (!name || name === '') {
+      window.alert('Please give a league name');
       return;
     }
 
     const limitNum = parseInt(limit, 10);
     if (isNaN(limitNum) || limitNum < 2 || limitNum > 10) {
-      window.alert("Max Players must be a number between 2 and 10");
+      window.alert('Max Players must be a number between 2 and 10');
       return;
     }
-    this.createLeague({ name, limit: limitNum });
+    this.createLeague();
   };
 
   render() {
     const { state, props } = this;
-    const { name, limit } = state;
+    const { name, limit, formula } = state;
     return (
-      <div className={cx("root")}>
-        <div className={cx("name")}>Create New League</div>
-        <div className={cx("input-wrap")}>
+      <div className={cx('root')}>
+        <div className={cx('name')}>Create New League</div>
+        <div className={cx('input-wrap')}>
           <LabelInput
             label="League Name"
             value={name}
             onChange={this.changeName}
           />
         </div>
-        <div className={cx("input-wrap")}>
+        <div className={cx('input-wrap')}>
           <LabelInput
             label="League Max Players"
             value={limit}
             onChange={this.changeLimit}
           />
         </div>
-        <div className={cx("input-wrap")}>
+        {formulaKey.map(key => {
+          return (
+            <div className={cx('input-wrap')} key={key}>
+              <LabelInput
+                label={formulaNameMapping[key] ? formulaNameMapping[key] : key}
+                value={formula.get(key)}
+                onChange={this.changeFormula(key)}
+              />
+            </div>
+          );
+        })}
+        <div className={cx('input-wrap')}>
           <LabelInput label="Formula Param 1" disabled />
         </div>
-        <div className={cx("function-bar")} onClick={this.handleCreateLeague}>
+        <div className={cx('function-bar')} onClick={this.handleCreateLeague}>
           <Btn>Create</Btn>
         </div>
       </div>
@@ -127,6 +190,6 @@ class CreateLeague extends React.PureComponent {
 
 export default connect(stores => {
   return {
-    accountStore: stores.account
+    accountStore: stores.account,
   };
 })(CreateLeague);

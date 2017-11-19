@@ -77,7 +77,7 @@ class LeagueItem extends React.PureComponent {
                 <Btn>Go to Draft Player</Btn>
               </Link>
             ) : null}
-            {userInfo.get('_id') === creatorId ? (
+            {leagueStatus === 'Draft' && userInfo.get('_id') === creatorId ? (
               <Btn type="danger" onClick={() => deleteLeague(data.get('_id'))}>
                 {' '}
                 Delete
