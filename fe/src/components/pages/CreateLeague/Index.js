@@ -143,6 +143,12 @@ class CreateLeague extends React.PureComponent {
       window.alert('Max Players must be a number between 2 and 10');
       return;
     }
+
+    const tdpass = parseInt(formula.get('tdpass'), 10);
+    if (isNaN(tdpass) || tdpass < 0 || tdpass > 10) {
+      window.alert('tdpass must be a number between 0 and 10');
+      return;
+    }
     this.createLeague();
   };
 
@@ -177,9 +183,6 @@ class CreateLeague extends React.PureComponent {
             </div>
           );
         })}
-        <div className={cx('input-wrap')}>
-          <LabelInput label="Formula Param 1" disabled />
-        </div>
         <div className={cx('function-bar')} onClick={this.handleCreateLeague}>
           <Btn>Create</Btn>
         </div>
