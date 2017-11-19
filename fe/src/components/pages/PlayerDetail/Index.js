@@ -2,12 +2,12 @@ import React from 'react';
 import { withRouter, Link } from 'react-router-dom';
 
 import { fromJS } from 'immutable';
+import BackBtn from '../../common/Btn/BackBtn';
 
 import API from '../../../middleware/API';
 
 import classnames from 'classnames/bind';
 import style from './Index.css';
-import logo from './back_button.jpg';
 const cx = classnames.bind(style);
 
 class PlayerDetail extends React.PureComponent {
@@ -59,8 +59,8 @@ class PlayerDetail extends React.PureComponent {
 
     return (
       <div className={cx('root')}>
-        <Link to="/app/player/list">
-          <img className={cx('logo')} src={logo} alt="Back to Player List" />
+        <Link to={`/app/league/list`} style={{ display: 'inline-block' }}>
+          <BackBtn type="secondary">Back to List</BackBtn>
         </Link>
 
         <div className={cx('main-title')}>Player Info</div>
@@ -80,24 +80,27 @@ class PlayerDetail extends React.PureComponent {
               {player.get('Team')}{' '}
             </div>
             <div className={cx('rank')}>
-              <div className={cx('thick')}>Fantasy Rank</div> {player.get('Rank')}{' '}
+              <div className={cx('thick')}>Fantasy Rank</div>{' '}
+              {player.get('Rank')}{' '}
             </div>
           </div>
         </div>
-        {player.get('URL') ? 
-        <div className={cx('main-title')}>Highlights</div>
-        : null}
-        {player.get('URL') ? 
-        <div className={cx('news', 'block')}>
-          <iframe
-            src = {"https://www.youtube.com/embed/".concat((player.get('URL').split('=')[1]))}
-            width="560"
-            height="315"
-            frameBorder="0"
-            allowFullScreen
-          />
-        </div>
-        : null}
+        {player.get('URL') ? (
+          <div className={cx('main-title')}>Highlights</div>
+        ) : null}
+        {player.get('URL') ? (
+          <div className={cx('news', 'block')}>
+            <iframe
+              src={'https://www.youtube.com/embed/'.concat(
+                player.get('URL').split('=')[1]
+              )}
+              width="560"
+              height="315"
+              frameBorder="0"
+              allowFullScreen
+            />
+          </div>
+        ) : null}
         <div className={cx('main-title')}>Ability Record</div>
         <div className={cx('ability', 'block')}>
           <div>Passing Yards: {player.get('Passing_Yards')} </div>

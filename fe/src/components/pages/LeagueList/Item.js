@@ -4,6 +4,13 @@ import { Link } from 'react-router-dom';
 import { format } from 'date-fns';
 
 import Btn from '../../common/Btn/Btn';
+import SeasonIcon from '../../common/Icon/Season';
+import InviteIcon from '../../common/Icon/Invite';
+import JoinIcon from '../../common/Icon/Join';
+import ManagerIcon from '../../common/Icon/Manager';
+import DraftIcon from '../../common/Icon/Draft';
+import DeleteIcon from '../../common/Icon/Delete';
+
 import { Row, Col } from '../../common/Table/Index';
 
 import classnames from 'classnames/bind';
@@ -57,6 +64,7 @@ class LeagueItem extends React.PureComponent {
                 className={cx('btn')}
                 onClick={() => joinLeague(data.get('_id'))}
               >
+                <JoinIcon className="icon" />
                 Join
               </Btn>
             ) : null}
@@ -65,7 +73,8 @@ class LeagueItem extends React.PureComponent {
               <Btn
                 onClick={() => inviteFriend(data.get('_id'), data.get('name'))}
               >
-                Invite Your Friend
+                <InviteIcon className="icon" />
+                Invite Friends
               </Btn>
             ) : null}
 
@@ -74,23 +83,32 @@ class LeagueItem extends React.PureComponent {
               .filter(email => email === userInfo.get('email'))
               .count() > 0 ? (
               <Link to={`/app/league/draft/${data.get('_id')}`}>
-                <Btn>Draft Player</Btn>
+                <Btn>
+                  <DraftIcon className="icon" />
+                  Draft Player
+                </Btn>
               </Link>
             ) : null}
             {leagueStatus === 'Draft' && userInfo.get('_id') === creatorId ? (
               <Btn type="danger" onClick={() => deleteLeague(data.get('_id'))}>
-                {' '}
+                <DeleteIcon className="icon" />
                 Delete
               </Btn>
             ) : null}
             {leagueStatus === 'SeasonStart' ? (
               <Link to={`/app/league/season/${data.get('_id')}`}>
-                <Btn>Season Dashboard</Btn>
+                <Btn>
+                  <SeasonIcon className="icon" />
+                  Season Game
+                </Btn>
               </Link>
             ) : null}
             {leagueStatus === 'SeasonStart' ? (
               <Link to={`/app/league/trade/${data.get('_id')}`}>
-                <Btn>Manage Players</Btn>
+                <Btn>
+                  <ManagerIcon className="icon" />
+                  Manage Players
+                </Btn>
               </Link>
             ) : null}
           </div>

@@ -16,10 +16,7 @@ class PlayerItem extends React.PureComponent {
       <Row>
         <Col className={cx('thumb')} />
         <Col className={cx('name')}>
-          <Link
-            className={cx('basic-info')}
-            to={`/app/player/detail/${data.get('_id')}`}
-          >
+          <Link to={`/app/player/detail/${data.get('_id')}`}>
             {data.get('Name')}
           </Link>
         </Col>

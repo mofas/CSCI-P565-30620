@@ -2,7 +2,6 @@
   margin: 0 auto;
   width: 640px;
   padding: 16px;
-  font-size: 20px;
 }
 
 .block {
@@ -14,7 +13,7 @@
 
 .logo {
   height: 40px;
-  width:  130px;
+  width: 130px;
 }
 
 .main-title {
@@ -42,7 +41,7 @@
     width: 100px;
   }
   .team {
-    width: 80px
+    width: 80px;
   }
   .rank {
     flex: 1;

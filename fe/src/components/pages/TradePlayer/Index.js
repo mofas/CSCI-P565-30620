@@ -5,7 +5,8 @@ import { Link } from 'react-router-dom';
 import API from '../../../middleware/API';
 
 import Spinner from '../../common/Spinner/Spinner';
-import Btn from '../../common/Btn/Btn';
+// import Btn from '../../common/Btn/Btn';
+import BackBtn from '../../common/Btn/BackBtn';
 
 import classnames from 'classnames/bind';
 import style from './Index.css';
@@ -72,8 +73,8 @@ class TradePlayer extends React.PureComponent {
     return (
       <div className={cx('root')}>
         <Spinner show={loading} />
-        <Link to={`/app/league/list`} style={{ width: 200, display: 'block' }}>
-          <Btn type="secondary">Back to List</Btn>
+        <Link to={`/app/league/list`} style={{ display: 'inline-block' }}>
+          <BackBtn type="secondary">Back to List</BackBtn>
         </Link>
         <div>This is Trade Player Page</div>
         <div>Trade page // CY</div>

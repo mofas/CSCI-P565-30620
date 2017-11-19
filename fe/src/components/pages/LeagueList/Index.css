@@ -12,9 +12,14 @@
     padding-right: 4px;
   }
 
-  .action-col,
   .creator-col {
-    width: 200px;
+    width: 160px;
+    flex: inherit;
+    word-break: break-all;
+  }
+
+  .action-col {
+    width: 240px;
     flex: inherit;
   }
 

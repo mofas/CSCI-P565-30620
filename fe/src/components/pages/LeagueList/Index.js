@@ -5,6 +5,8 @@ import { Link } from 'react-router-dom';
 import API from '../../../middleware/API';
 
 import Btn from '../../common/Btn/Btn';
+import CreateIcon from '../../common/Icon/Create';
+
 import Item from './Item';
 import Spinner from '../../common/Spinner/Spinner';
 
@@ -142,11 +144,11 @@ class LeagueList extends React.PureComponent {
     return (
       <div className={cx('root')}>
         <Spinner show={loading} />
-        <Link
-          to={'/app/league/create'}
-          style={{ width: 200, display: 'block' }}
-        >
-          <Btn type="secondary">Create New League</Btn>
+        <Link to={'/app/league/create'} style={{ display: 'inline-block' }}>
+          <Btn type="secondary">
+            <CreateIcon className="icon" />
+            Create New League
+          </Btn>
         </Link>
         <div className={cx('list-wrap')}>
           <Table>
