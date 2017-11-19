@@ -29,7 +29,6 @@ export class Row extends React.PureComponent {
 
 export class Col extends React.PureComponent {
   render() {
-    console.log(this.props.className);
     return (
       <div className={cx('col', [this.props.className])}>
         {this.props.children}
