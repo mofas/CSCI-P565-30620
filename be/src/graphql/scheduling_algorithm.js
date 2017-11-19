@@ -42,9 +42,9 @@ function matchingTeam() {
     for (let j = 0; j < i; j++) {
       //let x = i+1; let y = j+1;
       var hm = {};
-      hm["Team1"] = data[i];
-      hm["Team2"] = data[j];
-      hm["week"] = arr[i][j];
+      hm["first_team"] = data[i];
+      hm["second_team"] = data[j];
+      hm["week_no"] = arr[i][j];
       weeklyMatch[arr[i][j]].push(hm);
     }
   }
@@ -66,7 +66,7 @@ export default function prepareScheduleObject(weeks, team_array) {
         for (let j = 0; j < weeklyMatch[i].length; j++) {
           const match = Object.assign({}, weeklyMatch[i][j]);
 
-          match["week"] = week_number;
+          match["week_no"] = week_number;
 
           //console.log(match);
           ret.push(match);
@@ -85,7 +85,7 @@ export default function prepareScheduleObject(weeks, team_array) {
 // var s = ["T1", "T2", "T3", "T4", "T5", "T6"];
 // var ret = prepareScheduleObject(10, s);
 // console.log("Final query result ...");
-// console.log(JSON.stringify(ret, null, 2))
+// console.log(JSON.stringify(ret, null, 2));
 
 //console.log("length " + ret_object.length);
 //showWeeklyMatch();

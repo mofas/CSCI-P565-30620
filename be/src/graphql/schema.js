@@ -11,7 +11,8 @@ import {
   QueryFantasyTeam,
   QueryTeamArrangement,
   GetMessages,
-  QueryPoolPlayerWithUser
+  QueryPoolPlayerWithUser,
+  QueryScheduleByLeagueId
 } from "./query";
 
 import {
@@ -24,7 +25,8 @@ import {
   SendMessage,
   BanUser,
   UpdateLeagueTime,
-  RunMatch
+  RunMatch,
+  SetSchedule
 } from "./mutation";
 
 export const schema = new GraphQLSchema({
@@ -41,7 +43,8 @@ export const schema = new GraphQLSchema({
       QueryLeague,
       QueryFantasyTeam,
       QueryTeamArrangement,
-      QueryPoolPlayerWithUser
+      QueryPoolPlayerWithUser,
+      QueryScheduleByLeagueId
     }
   }),
   mutation: new GraphQLObjectType({
@@ -56,7 +59,8 @@ export const schema = new GraphQLSchema({
       SendMessage,
       BanUser,
       UpdateLeagueTime,
-      RunMatch
+      RunMatch,
+      SetSchedule
     }
   })
 });

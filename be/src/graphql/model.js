@@ -218,7 +218,7 @@ export const PoolPlayerWithUserType = new GraphQLObjectType({
           .collection("players")
           .find({ _id: { $in: players.map(ObjectId) } })
           .toArray();
-        console.log(ret);
+        // console.log(ret);
         return ret;
       }
     },
@@ -386,4 +386,44 @@ export const MessageType = new GraphQLObjectType({
     message: { type: GraphQLString },
     date_time: { type: GraphQLInt }
   }
+});
+
+export const ScheduleType = new GraphQLObjectType({
+  name: "ScheduleType",
+  fields: () => ({
+    first_team: {
+      type: AccountType,
+      resolve: async ({ first_team }, args, { db }) => {
+        const ret = await db
+          .collection("accounts")
+          .findOne({ _id: ObjectId(first_team) });
+        // console.log(ret);
+        return ret;
+      }
+    },
+    second_team: {
+      type: AccountType,
+      resolve: async ({ second_team }, args, { db }) => {
+        const ret = await db
+          .collection("accounts")
+          .findOne({ _id: ObjectId(second_team) });
+        // console.log(ret);
+        return ret;
+      }
+    },
+    league: {
+      type: LeagueType,
+      resolve: async ({ league_id }, args, { db }) => {
+        //console.log("acc id:", account_id);
+        const ret = await db
+          .collection("leagues")
+          .findOne({ _id: ObjectId(league_id) });
+
+        return ret;
+      }
+    },
+    week_no: {
+      type: GraphQLInt
+    }
+  })
 });

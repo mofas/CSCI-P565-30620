@@ -22,7 +22,8 @@ import {
   FantasyTeamType,
   ArrangementType,
   MessageType,
-  PoolPlayerWithUserType
+  PoolPlayerWithUserType,
+  ScheduleType
 } from "./model";
 
 import {
@@ -237,5 +238,35 @@ export const GetMessages = {
       .limit(limit)
       .toArray();
     return result;
+  }
+};
+
+export const QueryScheduleByLeagueId = {
+  type: new GraphQLList(ScheduleType),
+  args: {
+    league_id: { type: GraphQLString } //league id
+  },
+  resolve: async ({ db }, { league_id }, info) => {
+    console.log("league_id: adas: ", league_id);
+    const query = {
+      league_id: league_id
+    };
+    const result = await db
+      .collection("schedule")
+      .find(query)
+      .toArray();
+
+    // console.log("kachra:", result);
+
+    const ret = result.map(d => {
+      return {
+        first_team: d["first_team"],
+        second_team: d["second_team"],
+        league_id: d["league_id"],
+        week_no: d["week_no"]
+      };
+    });
+    // console.log(ret);
+    return ret;
   }
 };

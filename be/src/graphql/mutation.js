@@ -1,4 +1,5 @@
 import mongodb, { ObjectId } from "mongodb";
+import prepareScheduleObject from "./scheduling_algorithm";
 
 import {
   graphql,
@@ -18,6 +19,8 @@ import { userInfo } from "../cache";
 
 import { ResultType, LeagueType, LeagueInputType } from "./model";
 import { match } from "./teamMatchAlgorithm";
+import { QueryLeague } from "./query";
+
 export const CreateLeague = {
   type: LeagueType,
   args: {
@@ -404,5 +407,28 @@ export const RunMatch = {
     // TDOO : Get teams arrangement who will play in this week from DB
     // TODO : Call match from teamMatchAlgorithm to get game record
     // TODO:  get Result and save to DB GAME_RECORD
+  }
+};
+
+export const SetSchedule = {
+  type: ResultType,
+  args: {
+    league_id: { type: GraphQLString },
+    account_ids: { type: new GraphQLList(GraphQLString) },
+    weeks: { type: GraphQLInt }
+  },
+  resolve: async ({ db }, { league_id, account_ids, weeks }, info) => {
+    const r = await prepareScheduleObject(weeks, account_ids);
+
+    r.map(d => {
+      return (d.league_id = league_id);
+    });
+
+    const result = await db.collection("schedule").insertMany(r);
+
+    return {
+      error: "",
+      success: true
+    };
   }
 };
