@@ -131,7 +131,7 @@ class CreateLeague extends React.PureComponent {
   };
 
   handleCreateLeague = () => {
-    const { name, limit } = this.state;
+    const { name, limit, formula } = this.state;
 
     if (!name || name === '') {
       window.alert('Please give a league name');
