@@ -5,12 +5,15 @@ import { Link, Route } from 'react-router-dom';
 import Navbar from '../components/common/Navbar/Navbar';
 import News from '../components/pages/News/Index';
 
-import LeagueList from '../components/pages/LeagueList/Index';
-import CreateLeague from '../components/pages/CreateLeague/Index';
-
 import PlayerList from '../components/pages/PlayerList/Index';
 import PlayerDetail from '../components/pages/PlayerDetail/Index';
+
+import LeagueList from '../components/pages/LeagueList/Index';
+import CreateLeague from '../components/pages/CreateLeague/Index';
 import DraftPlayer from '../components/pages/DraftPlayer/Index';
+import LeagueSeason from '../components/pages/LeagueSeason/Index';
+import TradePlayer from '../components/pages/TradePlayer/Index';
+
 import ChatRoom from '../components/pages/ChatRoom/Index';
 import UserList from '../components/pages/UserList/Index';
 
@@ -60,6 +63,16 @@ class MainLayout extends Component {
               exact
               path="/app/league/draft/:l_id"
               component={DraftPlayer}
+            />
+            <Route
+              exact
+              path="/app/league/season/:l_id"
+              component={LeagueSeason}
+            />
+            <Route
+              exact
+              path="/app/league/trade/:l_id"
+              component={TradePlayer}
             />
             <Route exact path="/app/chatroom/:room_id" component={ChatRoom} />
             <Route exact path="/app/user/list" component={UserList} />

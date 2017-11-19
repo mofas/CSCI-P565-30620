@@ -27,9 +27,12 @@
     flex: inherit;
   }
 
-  .count-col,
+  .count-col {
+    width: 80px;
+    flex: inherit;
+  }
   .stage-col {
-    width: 100px;
+    width: 120px;
     flex: inherit;
   }
 }
