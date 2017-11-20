@@ -17,7 +17,12 @@ import {
 
 import { userInfo } from "../cache";
 
-import { ResultType, LeagueType, LeagueInputType } from "./model";
+import {
+  ResultType,
+  LeagueType,
+  LeagueInputType,
+  ScheduleInputType
+} from "./model";
 import { match } from "./teamMatchAlgorithm";
 import { QueryLeague } from "./query";
 
@@ -251,12 +256,23 @@ export const SelectedPlayer = {
       player_id: player_id,
       account_id: account_id
     };
-    console.log("39847293", league_id, player_id, account_id);
+    // console.log("39847293", league_id, player_id, account_id);
     const result = await db.collection("pool").findOne(query);
-    //console.log("return data " ,JSON.stringify(result, null, 2))
     if (!result) {
       console.log("Insert the record");
-      db.collection("pool").insertOne(query);
+      const insertRec = {
+        league_id: league_id,
+        player_id: player_id,
+        account_id: account_id
+      };
+      db.collection("pool").insertOne(insertRec);
+    } else {
+      console.log(
+        "Player already exist---------------->",
+        league_id,
+        player_id,
+        account_id
+      );
     }
 
     return await db
@@ -413,11 +429,13 @@ export const RunMatch = {
 export const SetSchedule = {
   type: ResultType,
   args: {
-    league_id: { type: GraphQLString },
-    account_ids: { type: new GraphQLList(GraphQLString) },
-    weeks: { type: GraphQLInt }
+    data: { type: ScheduleInputType }
+    // league_id: { type: GraphQLString },
+    // account_ids: { type: new GraphQLList(GraphQLString) },
+    // weeks: { type: GraphQLInt }
   },
-  resolve: async ({ db }, { league_id, account_ids, weeks }, info) => {
+  resolve: async ({ db }, { data }, info) => {
+    const { league_id, account_ids, weeks } = data;
     const r = await prepareScheduleObject(weeks, account_ids);
 
     r.map(d => {
@@ -426,6 +444,12 @@ export const SetSchedule = {
 
     const result = await db.collection("schedule").insertMany(r);
 
+    if (!result) {
+      return {
+        error: "Error while inserting in schedule collection",
+        success: false
+      };
+    }
     return {
       error: "",
       success: true
