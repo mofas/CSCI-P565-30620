@@ -388,6 +388,15 @@ export const MessageType = new GraphQLObjectType({
   }
 });
 
+export const ScheduleInputType = new GraphQLInputObjectType({
+  name: "ScheduleInputType",
+  fields: {
+    league_id: { type: GraphQLString },
+    account_ids: { type: new GraphQLList(GraphQLString) },
+    weeks: { type: GraphQLInt }
+  }
+});
+
 export const ScheduleType = new GraphQLObjectType({
   name: "ScheduleType",
   fields: () => ({

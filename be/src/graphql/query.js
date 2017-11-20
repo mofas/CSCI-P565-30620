@@ -194,7 +194,7 @@ export const QueryPoolPlayerWithUser = {
     league_id: { type: GraphQLString } //league id
   },
   resolve: async ({ db }, { league_id }, info) => {
-    console.log("league_id: adas: ", league_id);
+    // console.log("league_id: adas: ", league_id);
     const query = {
       league_id: league_id
     };
@@ -209,7 +209,7 @@ export const QueryPoolPlayerWithUser = {
       acc[account_id].push(player_id);
       return acc;
     }, {});
-    console.log(groupByAccount);
+    // console.log(groupByAccount);
 
     const ret = Object.keys(groupByAccount).map(account_id => {
       return {
@@ -247,7 +247,7 @@ export const QueryScheduleByLeagueId = {
     league_id: { type: GraphQLString } //league id
   },
   resolve: async ({ db }, { league_id }, info) => {
-    console.log("league_id: adas: ", league_id);
+    // console.log("league_id: adas: ", league_id);
     const query = {
       league_id: league_id
     };
@@ -255,8 +255,6 @@ export const QueryScheduleByLeagueId = {
       .collection("schedule")
       .find(query)
       .toArray();
-
-    // console.log("kachra:", result);
 
     const ret = result.map(d => {
       return {

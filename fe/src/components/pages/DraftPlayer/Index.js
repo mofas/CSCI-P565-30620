@@ -27,7 +27,8 @@ class DraftPlayer extends React.PureComponent {
       totalPlayersInTeam: 20,
       poolPlayers: List(),
       modalToggle: false,
-      accounts_darft_complete: []
+      accounts_darft_complete: [],
+      showMessage: ""
       //userId : this.props.accountStore.getIn(['userInfo', 'email'])
     };
   }
@@ -37,7 +38,7 @@ class DraftPlayer extends React.PureComponent {
   }
 
   arr_diff = (a1, a2) => {
-    console.log("Using this.state.accounts_darft_complete", a2, "\n===\n", a1);
+    // console.log("Using this.state.accounts_darft_complete", a2, "\n===\n", a1);
     let a = [];
     const diff = [];
     for (let i = 0; i < a1.length; i++) {
@@ -54,7 +55,7 @@ class DraftPlayer extends React.PureComponent {
         diff.push(Object.assign({}, a1[i]));
       }
     }
-    console.log("Printing diff:===>>", JSON.stringify(diff));
+    // console.log("Printing diff:===>>", JSON.stringify(diff));
     return diff;
   };
 
@@ -88,6 +89,7 @@ class DraftPlayer extends React.PureComponent {
             limit,
             timeout,
             lastPickTime,
+            stage,
             accounts{
               _id,
               email,
@@ -108,6 +110,7 @@ class DraftPlayer extends React.PureComponent {
             players {
               _id
               Name
+              Position
             }
             
           }
@@ -126,13 +129,22 @@ class DraftPlayer extends React.PureComponent {
       // console.log("68766876", JSON.stringify(res.data.PoolPlayerWithUser));
       // console.log("manish", res.data.PoolPlayerWithUser.length);
 
-      if ("GamePlay" === leagueData.get("stage")) {
+      // console.log("fdskfasd=?????>>>>>", JSON.stringify(leagueData));
+      if ("SeasonStart" === leagueData.get("stage")) {
         console.log("Redirect to game page");
-        // redirect to game plage
+        window.location.href = "#/app/league/list";
       }
 
       const accounts_darft_complete = [];
+      let showMessage =
+        "Following player position missing => 2:QB 2:RB 2:WR 1:TE 1:K 5:DEF";
       if (res.data.PoolPlayerWithUser.length > 0) {
+        let QB = 2;
+        let RB = 2;
+        let WR = 3;
+        let TE = 1;
+        let K = 1;
+        let DEF = 5;
         for (let i = 0; i < res.data.PoolPlayerWithUser.length; i++) {
           if (
             res.data.PoolPlayerWithUser[i]["players"].length >=
@@ -142,27 +154,91 @@ class DraftPlayer extends React.PureComponent {
               res.data.PoolPlayerWithUser[i]["account"]["email"]
             );
           }
+
+          // Every team needs
+          // two or more QB
+          // Two or more RB
+          // Three or more WR.
+          // One or more K.
+          // One or more TE.
+          // Five or more (sum of all defense positions)
+
+          if (
+            res.data.PoolPlayerWithUser[i]["account"]["_id"] ===
+            this.props.accountStore.getIn(["userInfo", "_id"])
+          ) {
+            if (res.data.PoolPlayerWithUser[i]["players"].length > 0) {
+              const p = res.data.PoolPlayerWithUser[i]["players"];
+              for (let j = 0; j < p.length; j++) {
+                if (p[j]["Position"] === "QB") {
+                  QB = QB - 1;
+                } else if (p[j]["Position"] === "RB") {
+                  RB = RB - 1;
+                } else if (p[j]["Position"] === "WR") {
+                  WR = WR - 1;
+                } else if (p[j]["Position"] === "TE") {
+                  TE = TE - 1;
+                } else if (p[j]["Position"] === "K") {
+                  K = K - 1;
+                } else {
+                  DEF = DEF - 1;
+                }
+              }
+            }
+          }
         }
-        console.log("Set the this.state.accounts_darft_complete");
+
+        showMessage = "";
+        if (QB > 0) {
+          let tmpMsg = QB + ":QB ";
+          showMessage = tmpMsg + showMessage;
+        }
+        if (RB > 0) {
+          let tmpMsg = RB + ":RB ";
+          showMessage = tmpMsg + showMessage;
+        }
+        if (WR > 0) {
+          let tmpMsg = WR + ":WR ";
+          showMessage = tmpMsg + showMessage;
+        }
+        if (TE > 0) {
+          let tmpMsg = TE + ":TE ";
+          showMessage = tmpMsg + showMessage;
+        }
+        if (K > 0) {
+          let tmpMsg = K + ":K ";
+          showMessage = tmpMsg + showMessage;
+        }
+        if (DEF > 0) {
+          let tmpMsg = DEF + ":DEF ";
+          showMessage = tmpMsg + showMessage;
+        }
+
         this.setState({
-          accounts_darft_complete: accounts_darft_complete
+          accounts_darft_complete: accounts_darft_complete,
+          showMessage: "Following player position missing => " + showMessage
         });
       } else {
         this.setState({
-          accounts_darft_complete: []
+          accounts_darft_complete: [],
+          showMessage: showMessage
         });
       }
-      console.log("double ramdom shits:", accounts_darft_complete);
 
       let poolData = JSON.parse(JSON.stringify(poolPlayers));
-      //console.log("da sda", poolData.length);
 
       let filterPlayers = [];
       if (poolData.length > 0) {
         let poolPlayersId = [];
-        poolPlayersId = poolData[0]["players"].map(player => {
-          return player["_id"];
-        });
+        for (let i = 0; i < poolData.length; i++) {
+          let tmpIds = [];
+          tmpIds = poolData[i]["players"].map(player => {
+            return player["_id"];
+          });
+          poolPlayersId = poolPlayersId.concat(tmpIds);
+        }
+
+        // console.log("Pool player ids:-->", poolPlayersId.length);
 
         filterPlayers = players.filter(player => {
           if (poolPlayersId.indexOf(player.get("_id")) >= 0) {
@@ -177,19 +253,17 @@ class DraftPlayer extends React.PureComponent {
 
       let acc_to_player = [];
       for (let i = 0; i < res.data.PoolPlayerWithUser.length; i++) {
-        console.log(
-          i,
-          "  : ",
-          res.data.PoolPlayerWithUser[i]["players"],
-          ":",
-          res.data.PoolPlayerWithUser[i]["account"]["_id"]
-        );
         acc_to_player[
           res.data.PoolPlayerWithUser[i]["account"]["_id"]
         ] = Object.assign({}, res.data.PoolPlayerWithUser[i]["players"]);
       }
 
-      console.log("dasdas 67887", acc_to_player);
+      // for (let das in acc_to_player) {
+      //   console.log("dasdashahahaa 67887", acc_to_player[das]);
+      //   for (let d22 in acc_to_player[das]) {
+      //     console.log("Name:", acc_to_player[das][d22]["Name"]);
+      //   }
+      // }
 
       this.setState({
         loading: false,
@@ -204,14 +278,17 @@ class DraftPlayer extends React.PureComponent {
   };
 
   selectPlayer = (id, leagueId, userId, emailId) => {
+    console.log("selected player called");
+    console.log(id, leagueId, userId, emailId);
     var run = Math.floor(
       this.state.leagueData.get("draft_run") /
         this.state.leagueData.get("limit")
     );
     run = run + 1;
+
     if (
       this.state.selectionOrder[0]["email"] === emailId &&
-      run < this.state.totalPlayersInTeam
+      run <= this.state.totalPlayersInTeam
     ) {
       const mutation = `
           mutation{
@@ -228,20 +305,39 @@ class DraftPlayer extends React.PureComponent {
           }
       `;
       API.GraphQL(mutation).then(res => {
-        //this.loadData();
+        this.loadData();
         console.log("Successffully loaded the data");
       });
+
       let max_run =
         this.state.leagueData.get("limit") * this.state.totalPlayersInTeam;
+      // console.log("Maxrun ==> run --->", max_run, run);
       if (max_run === run) {
+        let accounts = this.state.leagueData.get("accounts").toJS();
+        let account_ids = accounts.map(d => {
+          return d["_id"];
+        });
+        // console.log("====> ", JSON.stringify(accounts));
+        // let weeks = 10;
+        const variables = {
+          inputsecheduleData: {
+            league_id: leagueId,
+            account_ids: account_ids,
+            weeks: 10
+          }
+        };
+
         const mut = `
-          mutation{
-            UpdateLeague(_id: "${leagueId}", stage: "GamePlay"){
+          mutation($inputsecheduleData: ScheduleInputType){
+            UpdateLeague(_id: "${leagueId}", stage: "SeasonStart"){
               _id
+            },
+            SetSchedule(data: $inputsecheduleData){
+              success
             }
           }
         `;
-        API.GraphQL(mutation).then(res => {
+        API.GraphQL(mut, variables).then(res => {
           this.loadData();
           console.log("Successffully changed the status");
         });
@@ -341,7 +437,7 @@ class DraftPlayer extends React.PureComponent {
         }
       }
 
-      console.log(selectionOrder);
+      // console.log(selectionOrder);
       this.setState({
         selectionOrder: selectionOrder
       });
@@ -350,7 +446,7 @@ class DraftPlayer extends React.PureComponent {
 
   showPlayers = id => {
     const p_u = this.state.poolPlayerWithUser;
-    console.log("pu", p_u);
+    // console.log("pu", p_u);
     const ret = [];
     for (let i = 0; i < p_u.length; i++) {
       console.log(i, ":", p_u[i]["account"]["email"]);
@@ -416,21 +512,29 @@ class DraftPlayer extends React.PureComponent {
                       </Btn>
                       <div>Show the selected player by that user</div>
                       <b>
-                        {JSON.stringify(this.state.acc_to_players[d["_id"]])}
+                        {JSON.stringify(this.state.acc_to_players[d["_id"]][0])}
                       </b>
+                      <p> Here is table </p>
                       <table>
                         <tr>
                           {" "}
-                          <th> Players </th>{" "}
+                          <th> Players </th>
                         </tr>
-                        {Object.keys(this.state.acc_to_players).length > 0 &&
-                          Object.keys(
-                            this.state.acc_to_players[d["_id"]]
-                          ).forEach(function(key, index) {
+                        {Object.keys(
+                          this.state.acc_to_players[d["_id"]]
+                        ).forEach(idx => {
+                          return (
                             <tr>
-                              <td>{"print something"}</td>
-                            </tr>;
-                          }, this.state.acc_to_players[d["_id"]])}
+                              <td>
+                                {
+                                  this.state.acc_to_players[d["_id"]][idx][
+                                    "Name"
+                                  ]
+                                }
+                              </td>
+                            </tr>
+                          );
+                        })}
                       </table>
                     </Modal>
                   </div>
@@ -442,6 +546,7 @@ class DraftPlayer extends React.PureComponent {
               ) : null;
             })}
         </div>
+        <div>{this.state.showMessage}</div>
         <PlayerList
           players={players}
           selectPlayer={this.selectPlayer}
