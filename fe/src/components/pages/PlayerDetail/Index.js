@@ -3,6 +3,7 @@ import { withRouter, Link } from 'react-router-dom';
 
 import { fromJS } from 'immutable';
 import BackBtn from '../../common/Btn/BackBtn';
+import Attrs from './Attrs';
 
 import API from '../../../middleware/API';
 
@@ -116,21 +117,47 @@ class PlayerDetail extends React.PureComponent {
         </div>
 
         <div className={cx('ability', 'block')}>
-          <div>Passing Yards: {player.get('Passing_Yards')} </div>
-          <div>Rushing Yards: {player.get('Rushing_Yards')}</div>
-          <div>Receiving Yards: {player.get('Receiving_Yards')} </div>
-          <div>Passing TDs: {player.get('Passing_TDs')}</div>
-          <div>Rushing TDs: {player.get('Rushing_TDs')}</div>
-          <div>Receiving TD : {player.get('Receiving_TD')}</div>
-          <div>Passing TDs : {player.get('Passing_TDs')}</div>
-          <div>FG Made: {player.get('FG_Made')}</div>
-          <div>FG Missed: {player.get('FG_Missed')}</div>
+          <div
+            className={cx('bg-img')}
+            style={{
+              width: '100%',
+              height: '100%',
+              opacity: 0.1,
+              background: `url(http://i.nflcdn.com/static/site/7.5/img/logos/165x185/${player.get(
+                'Team'
+              )}.png) no-repeat 50% 50%`,
+            }}
+          >
+            <div className={cx('bg-img-cover')} />
+          </div>
 
-          <div>Extra Points Made: {player.get('Extra_Points_Made')}</div>
-          <div>Interceptions throw: {player.get('kicking_xpmade')}</div>
-
-          <div>Fumbles Lost: {player.get('Fumbles_Lost')}</div>
-          <div>Interceptions: {player.get('Interceptions')}</div>
+          <Attrs name="Passing Yds" val={player.get('Passing_Yards')} />
+          <Attrs name="Rushing Yds" val={player.get('Rushing_Yards')} />
+          <Attrs name="Receiving Yds" val={player.get('Receiving_Yards')} />
+          <Attrs name="Passing Tds" val={player.get('Passing_TDs')} />
+          <Attrs name="Rushing Tds" val={player.get('Rushing_TDs')} />
+          <Attrs name="Receiving Tds" val={player.get('Receiving_TD')} />
+          <Attrs
+            name="Interceptions Thrown"
+            val={player.get('Interceptions_Thrown')}
+          />
+          <Attrs name="Interceptions" val={player.get('Interceptions')} />
+          <Attrs name="Forced Fumbles" val={player.get('Forced_Fumbles')} />
+          <Attrs name="Sacks" val={player.get('Sacks')} />
+          <Attrs name="Blocked Kicks" val={player.get('Blocked_Kicks')} />
+          <Attrs name="Blocked Punts" val={player.get('Blocked_Punts')} />
+          <Attrs name="Safeties" val={player.get('Safeties')} />
+          <Attrs
+            name="Kickoff Return Tds"
+            val={player.get('Kickoff_Return_TD')}
+          />
+          <Attrs name="Punt Return Tds" val={player.get('Punt_Return_TD')} />
+          <Attrs name="Defensive Tds" val={player.get('Defensive_TD')} />
+          <Attrs name="Extra Points" val={player.get('Extra_Points_Made')} />
+          <Attrs name="Made Field Goals" val={player.get('FG_Made')} />
+          <Attrs name="Missed Field Goals" val={player.get('FG_Missed')} />
+          <Attrs name="Punts Inside 20" val={player.get('Punting_i20')} />
+          <Attrs name="Punting Yards" val={player.get('Punting_Yards')} />
         </div>
       </div>
     );

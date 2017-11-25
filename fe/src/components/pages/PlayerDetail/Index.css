@@ -4,6 +4,7 @@
 }
 
 .block {
+  position: relative;
   padding: 20px;
   border: 1px solid #ddd;
   border-radius: 5px;
@@ -26,7 +27,6 @@
 }
 
 .basic-info {
-  position: relative;
   display: flex;
   margin-right: 20px;
   flex: 1;
@@ -36,22 +36,6 @@
     height: 120px;
     background-color: #555;
     margin-right: 40px;
-  }
-
-  .bg-img {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-  }
-
-  .bg-img-cover {
-    width: 100%;
-    height: 100%;
   }
 
   .info {
@@ -69,11 +53,53 @@
   }
 }
 
+.bg-img {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
+.bg-img-cover {
+  width: 100%;
+  height: 100%;
+}
+
 .video {
   width: 620px;
   iframe {
     display: block;
     float: right;
     margin: 0 auto;
+  }
+}
+
+.ability {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.attr {
+  display: block;
+  width: 150px;
+  border: 1px solid #ddd;
+  background-color: #fff;
+  text-align: center;
+  margin: 10px;
+  .name {
+    font-size: 12px;
+    border-bottom: 1px solid #ddd;
+    padding: 5px;
+    background-color: #fafafa;
+    color: #555;
+  }
+  .val {
+    font-size: 20px;
+    padding: 5px;
+    font-weight: bold;
   }
 }
