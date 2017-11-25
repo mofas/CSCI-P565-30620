@@ -64,3 +64,44 @@ fragment playerMain on PlayerType {
   Punting_Yards
   Punting_i20
 }
+
+==========
+
+{
+  QueryTeamArrangement(league_id: "5a08b7d7a5f5c440d2159165", account_id: "59e988fe76539f281279d241") {
+    position_qb {
+      ...playerMain
+    }
+    position_rb {
+      ...playerMain
+    }
+    position_wr {
+      ...playerMain
+    }
+    position_te {
+      ...playerMain
+    }
+    position_k {
+      ...playerMain
+    }
+    position_defense {
+      ...playerMain
+    }
+    position_p {
+      ...playerMain
+    }
+  }
+}
+
+fragment playerMain on PlayerType {
+  _id
+  Name
+  Position
+}
+
+
+mutation{
+  UpdateTeamArrangement(fantasy_team_id:"5a18e5ed85944de8e571ac66" position: "position_te" index: 1 player_id: "5a07bc4c95da7e7cf2cd608b"){
+    success
+  }
+}
