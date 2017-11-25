@@ -1,18 +1,18 @@
-import React from "react";
-import { fromJS, toJS, List, Set } from "immutable";
-import { connect } from "react-redux";
-import { getUserInfo, logout } from "../../../reducers/account";
+import React from 'react';
+import { fromJS, toJS, List, Set } from 'immutable';
+import { connect } from 'react-redux';
+import { getUserInfo, logout } from '../../../reducers/account';
 
-import API from "../../../middleware/API";
-import Spinner from "../../common/Spinner/Spinner";
+import API from '../../../middleware/API';
+import Spinner from '../../common/Spinner/Spinner';
 
-import ChatRoom from "../../common/ChatRoom/ChatRoom";
-import PlayerList from "./PlayerList";
+import ChatRoom from '../../common/ChatRoom/ChatRoom';
+import PlayerList from './PlayerList';
 
-import classnames from "classnames/bind";
-import style from "./Index.css";
-import Modal from "react-modal";
-import Btn from "../../common/Btn/Btn";
+import classnames from 'classnames/bind';
+import style from './Index.css';
+import Modal from 'react-modal';
+import Btn from '../../common/Btn/Btn';
 const cx = classnames.bind(style);
 
 class DraftPlayer extends React.PureComponent {
@@ -28,13 +28,13 @@ class DraftPlayer extends React.PureComponent {
       poolPlayers: List(),
       modalToggle: false,
       accounts_darft_complete: [],
-      showMessage: ""
+      showMessage: '',
       //userId : this.props.accountStore.getIn(['userInfo', 'email'])
     };
   }
   componentWillMount() {
     this.props.dispatch(getUserInfo());
-    Modal.setAppElement("body");
+    Modal.setAppElement('body');
   }
 
   arr_diff = (a1, a2) => {
@@ -42,16 +42,16 @@ class DraftPlayer extends React.PureComponent {
     let a = [];
     const diff = [];
     for (let i = 0; i < a1.length; i++) {
-      a1[i]["del"] = false;
+      a1[i]['del'] = false;
       for (let j = 0; j < a2.length; j++) {
-        if (a1[i]["email"] == a2[j]) {
-          a1[i]["del"] = true;
+        if (a1[i]['email'] == a2[j]) {
+          a1[i]['del'] = true;
           break;
         }
       }
     }
     for (let i = 0; i < a1.length; i++) {
-      if (a1[i]["del"] === false) {
+      if (a1[i]['del'] === false) {
         diff.push(Object.assign({}, a1[i]));
       }
     }
@@ -112,14 +112,14 @@ class DraftPlayer extends React.PureComponent {
               Name
               Position
             }
-            
+
           }
-          
+
         }
       `;
 
     this.setState({
-      loading: true
+      loading: true,
     });
 
     API.GraphQL(query).then(res => {
@@ -130,14 +130,14 @@ class DraftPlayer extends React.PureComponent {
       // console.log("manish", res.data.PoolPlayerWithUser.length);
 
       // console.log("fdskfasd=?????>>>>>", JSON.stringify(leagueData));
-      if ("SeasonStart" === leagueData.get("stage")) {
-        console.log("Redirect to game page");
-        window.location.href = "#/app/league/list";
+      if ('SeasonStart' === leagueData.get('stage')) {
+        console.log('Redirect to game page');
+        window.location.href = '#/app/league/list';
       }
 
       const accounts_darft_complete = [];
       let showMessage =
-        "Following player position missing => 2:QB 2:RB 2:WR 1:TE 1:K 5:DEF";
+        'Following player position missing => 2:QB 2:RB 2:WR 1:TE 1:K 5:DEF';
       if (res.data.PoolPlayerWithUser.length > 0) {
         let QB = 2;
         let RB = 2;
@@ -147,11 +147,11 @@ class DraftPlayer extends React.PureComponent {
         let DEF = 5;
         for (let i = 0; i < res.data.PoolPlayerWithUser.length; i++) {
           if (
-            res.data.PoolPlayerWithUser[i]["players"].length >=
+            res.data.PoolPlayerWithUser[i]['players'].length >=
             this.state.totalPlayersInTeam
           ) {
             accounts_darft_complete.push(
-              res.data.PoolPlayerWithUser[i]["account"]["email"]
+              res.data.PoolPlayerWithUser[i]['account']['email']
             );
           }
 
@@ -164,21 +164,21 @@ class DraftPlayer extends React.PureComponent {
           // Five or more (sum of all defense positions)
 
           if (
-            res.data.PoolPlayerWithUser[i]["account"]["_id"] ===
-            this.props.accountStore.getIn(["userInfo", "_id"])
+            res.data.PoolPlayerWithUser[i]['account']['_id'] ===
+            this.props.accountStore.getIn(['userInfo', '_id'])
           ) {
-            if (res.data.PoolPlayerWithUser[i]["players"].length > 0) {
-              const p = res.data.PoolPlayerWithUser[i]["players"];
+            if (res.data.PoolPlayerWithUser[i]['players'].length > 0) {
+              const p = res.data.PoolPlayerWithUser[i]['players'];
               for (let j = 0; j < p.length; j++) {
-                if (p[j]["Position"] === "QB") {
+                if (p[j]['Position'] === 'QB') {
                   QB = QB - 1;
-                } else if (p[j]["Position"] === "RB") {
+                } else if (p[j]['Position'] === 'RB') {
                   RB = RB - 1;
-                } else if (p[j]["Position"] === "WR") {
+                } else if (p[j]['Position'] === 'WR') {
                   WR = WR - 1;
-                } else if (p[j]["Position"] === "TE") {
+                } else if (p[j]['Position'] === 'TE') {
                   TE = TE - 1;
-                } else if (p[j]["Position"] === "K") {
+                } else if (p[j]['Position'] === 'K') {
                   K = K - 1;
                 } else {
                   DEF = DEF - 1;
@@ -188,40 +188,40 @@ class DraftPlayer extends React.PureComponent {
           }
         }
 
-        showMessage = "";
+        showMessage = '';
         if (QB > 0) {
-          let tmpMsg = QB + ":QB ";
+          let tmpMsg = QB + ':QB ';
           showMessage = tmpMsg + showMessage;
         }
         if (RB > 0) {
-          let tmpMsg = RB + ":RB ";
+          let tmpMsg = RB + ':RB ';
           showMessage = tmpMsg + showMessage;
         }
         if (WR > 0) {
-          let tmpMsg = WR + ":WR ";
+          let tmpMsg = WR + ':WR ';
           showMessage = tmpMsg + showMessage;
         }
         if (TE > 0) {
-          let tmpMsg = TE + ":TE ";
+          let tmpMsg = TE + ':TE ';
           showMessage = tmpMsg + showMessage;
         }
         if (K > 0) {
-          let tmpMsg = K + ":K ";
+          let tmpMsg = K + ':K ';
           showMessage = tmpMsg + showMessage;
         }
         if (DEF > 0) {
-          let tmpMsg = DEF + ":DEF ";
+          let tmpMsg = DEF + ':DEF ';
           showMessage = tmpMsg + showMessage;
         }
 
         this.setState({
           accounts_darft_complete: accounts_darft_complete,
-          showMessage: "Following player position missing => " + showMessage
+          showMessage: 'Following player position missing => ' + showMessage,
         });
       } else {
         this.setState({
           accounts_darft_complete: [],
-          showMessage: showMessage
+          showMessage: showMessage,
         });
       }
 
@@ -232,8 +232,8 @@ class DraftPlayer extends React.PureComponent {
         let poolPlayersId = [];
         for (let i = 0; i < poolData.length; i++) {
           let tmpIds = [];
-          tmpIds = poolData[i]["players"].map(player => {
-            return player["_id"];
+          tmpIds = poolData[i]['players'].map(player => {
+            return player['_id'];
           });
           poolPlayersId = poolPlayersId.concat(tmpIds);
         }
@@ -241,7 +241,7 @@ class DraftPlayer extends React.PureComponent {
         // console.log("Pool player ids:-->", poolPlayersId.length);
 
         filterPlayers = players.filter(player => {
-          if (poolPlayersId.indexOf(player.get("_id")) >= 0) {
+          if (poolPlayersId.indexOf(player.get('_id')) >= 0) {
             return false;
           } else {
             return true;
@@ -254,8 +254,8 @@ class DraftPlayer extends React.PureComponent {
       let acc_to_player = [];
       for (let i = 0; i < res.data.PoolPlayerWithUser.length; i++) {
         acc_to_player[
-          res.data.PoolPlayerWithUser[i]["account"]["_id"]
-        ] = Object.assign({}, res.data.PoolPlayerWithUser[i]["players"]);
+          res.data.PoolPlayerWithUser[i]['account']['_id']
+        ] = Object.assign({}, res.data.PoolPlayerWithUser[i]['players']);
       }
 
       // for (let das in acc_to_player) {
@@ -271,29 +271,29 @@ class DraftPlayer extends React.PureComponent {
         leagueData: leagueData,
         poolPlayers: poolPlayers,
         poolPlayerWithUser: res.data.PoolPlayerWithUser,
-        acc_to_players: acc_to_player
+        acc_to_players: acc_to_player,
       });
       this.setPickingOrder(JSON.stringify(leagueData));
     });
   };
 
   selectPlayer = (id, leagueId, userId, emailId) => {
-    console.log("selected player called");
+    console.log('selected player called');
     console.log(id, leagueId, userId, emailId);
     var run = Math.floor(
-      this.state.leagueData.get("draft_run") /
-        this.state.leagueData.get("limit")
+      this.state.leagueData.get('draft_run') /
+        this.state.leagueData.get('limit')
     );
     run = run + 1;
 
     if (
-      this.state.selectionOrder[0]["email"] === emailId &&
+      this.state.selectionOrder[0]['email'] === emailId &&
       run <= this.state.totalPlayersInTeam
     ) {
       const mutation = `
           mutation{
-            SelectedPlayer(league_id: "${leagueId}", 
-                            player_id:"${id}", 
+            SelectedPlayer(league_id: "${leagueId}",
+                            player_id:"${id}",
                             account_id: "${userId}" ){
               player_id
             }
@@ -306,16 +306,16 @@ class DraftPlayer extends React.PureComponent {
       `;
       API.GraphQL(mutation).then(res => {
         this.loadData();
-        console.log("Successffully loaded the data");
+        console.log('Successffully loaded the data');
       });
 
       let max_run =
-        this.state.leagueData.get("limit") * this.state.totalPlayersInTeam;
+        this.state.leagueData.get('limit') * this.state.totalPlayersInTeam;
       // console.log("Maxrun ==> run --->", max_run, run);
       if (max_run === run) {
-        let accounts = this.state.leagueData.get("accounts").toJS();
+        let accounts = this.state.leagueData.get('accounts').toJS();
         let account_ids = accounts.map(d => {
-          return d["_id"];
+          return d['_id'];
         });
         // console.log("====> ", JSON.stringify(accounts));
         // let weeks = 10;
@@ -323,8 +323,8 @@ class DraftPlayer extends React.PureComponent {
           inputsecheduleData: {
             league_id: leagueId,
             account_ids: account_ids,
-            weeks: 10
-          }
+            weeks: 10,
+          },
         };
 
         const mut = `
@@ -339,11 +339,11 @@ class DraftPlayer extends React.PureComponent {
         `;
         API.GraphQL(mut, variables).then(res => {
           this.loadData();
-          console.log("Successffully changed the status");
+          console.log('Successffully changed the status');
         });
       }
     } else {
-      window.alert("Not your chance / Or your 20 players capacity is over");
+      window.alert('Not your chance / Or your 20 players capacity is over');
     }
   };
 
@@ -351,10 +351,10 @@ class DraftPlayer extends React.PureComponent {
     const data = JSON.parse(strdata);
 
     let curr_epoc = Math.round(new Date().getTime() / 1000.0);
-    if (data["name"]) {
+    if (data['name']) {
       //console.log("da sda da ",JSON.stringify( data ) );
-      let lastPickTime = data["lastPickTime"];
-      let timeout = data["timeout"];
+      let lastPickTime = data['lastPickTime'];
+      let timeout = data['timeout'];
       let jump = 0;
       if ((curr_epoc - lastPickTime) / 60 > timeout) {
         jump = Math.floor((curr_epoc - lastPickTime) / 60);
@@ -366,12 +366,12 @@ class DraftPlayer extends React.PureComponent {
       // let diff = curr_epoc - lastPickTime;
       // console.log("jump pokfds", jump, curr_epoc, lastPickTime, diff );
 
-      let draft = data["draft_run"];
-      let limit = data["limit"]; //data['limit'];
-      console.log("First argument", data["accounts"]);
-      console.log("Second argument", this.state.accounts_darft_complete);
+      let draft = data['draft_run'];
+      let limit = data['limit']; //data['limit'];
+      console.log('First argument', data['accounts']);
+      console.log('Second argument', this.state.accounts_darft_complete);
       const accounts = this.arr_diff(
-        data["accounts"],
+        data['accounts'],
         this.state.accounts_darft_complete
       );
       //console.log("this random shit ", account1s);
@@ -439,7 +439,7 @@ class DraftPlayer extends React.PureComponent {
 
       // console.log(selectionOrder);
       this.setState({
-        selectionOrder: selectionOrder
+        selectionOrder: selectionOrder,
       });
     }
   };
@@ -449,9 +449,9 @@ class DraftPlayer extends React.PureComponent {
     // console.log("pu", p_u);
     const ret = [];
     for (let i = 0; i < p_u.length; i++) {
-      console.log(i, ":", p_u[i]["account"]["email"]);
-      if (p_u[i]["account"]["email"] === id) {
-        ret.push(p_u[i]["players"]);
+      console.log(i, ':', p_u[i]['account']['email']);
+      if (p_u[i]['account']['email'] === id) {
+        ret.push(p_u[i]['players']);
       }
     }
 
@@ -460,7 +460,7 @@ class DraftPlayer extends React.PureComponent {
 
   toggleModal = () => {
     this.setState({
-      modalToggle: !this.state.modalToggle
+      modalToggle: !this.state.modalToggle,
     });
   };
 
@@ -475,15 +475,14 @@ class DraftPlayer extends React.PureComponent {
     const playerPoolData = []; //query by league_id
 
     return (
-      <div className={cx("root")}>
+      <div className={cx('root')}>
         <Spinner show={loading} />
         <h1>This is draft page!!</h1>
-        <div> Run-no {leagueData.get("draft_run")} </div>
+        <div> Run-no {leagueData.get('draft_run')} </div>
         <div>
-          {" "}
-          Round:{" "}
-          {Math.floor(leagueData.get("draft_run") / leagueData.get("limit")) +
-            1}{" "}
+          Round:
+          {Math.floor(leagueData.get('draft_run') / leagueData.get('limit')) +
+            1}
         </div>
         <div>Picking Order --></div>
 
@@ -494,41 +493,39 @@ class DraftPlayer extends React.PureComponent {
                 index === 0 ? (
                   <div
                     key={index}
-                    className={cx("component", "thick")}
+                    className={cx('component', 'thick')}
                     onClick={this.toggleModal}
                   >
-                    {index + 1}:&nbsp;{d["email"].split("@")[0]}
+                    {index + 1}:&nbsp;{d['email'].split('@')[0]}
                     <Modal isOpen={this.state.modalToggle}>
                       <Btn
                         onClick={() => {
                           this.setState({
-                            modalToggle: !this.state.modalToggle
+                            modalToggle: !this.state.modalToggle,
                           });
-                          var abc = this.showPlayers(d["email"]);
+                          var abc = this.showPlayers(d['email']);
                         }}
                       >
-                        {" "}
-                        Close{" "}
+                        Close
                       </Btn>
                       <div>Show the selected player by that user</div>
                       <b>
-                        {JSON.stringify(this.state.acc_to_players[d["_id"]][0])}
+                        {/**JSON.stringify(this.state.acc_to_players[d['_id']][0]) **/}
                       </b>
                       <p> Here is table </p>
                       <table>
                         <tr>
-                          {" "}
                           <th> Players </th>
                         </tr>
                         {Object.keys(
-                          this.state.acc_to_players[d["_id"]]
+                          this.state.acc_to_players[d['_id']] || {}
                         ).forEach(idx => {
                           return (
                             <tr>
                               <td>
                                 {
-                                  this.state.acc_to_players[d["_id"]][idx][
-                                    "Name"
+                                  this.state.acc_to_players[d['_id']][idx][
+                                    'Name'
                                   ]
                                 }
                               </td>
@@ -539,8 +536,8 @@ class DraftPlayer extends React.PureComponent {
                     </Modal>
                   </div>
                 ) : (
-                  <div key={index} className={cx("component")}>
-                    {index + 1}:&nbsp;{d["email"].split("@")[0]}
+                  <div key={index} className={cx('component')}>
+                    {index + 1}:&nbsp;{d['email'].split('@')[0]}
                   </div>
                 )
               ) : null;
@@ -551,8 +548,8 @@ class DraftPlayer extends React.PureComponent {
           players={players}
           selectPlayer={this.selectPlayer}
           leagueId={this.state.league_id}
-          userId={accountStore.getIn(["userInfo", "_id"])}
-          emailId={accountStore.getIn(["userInfo", "email"])}
+          userId={accountStore.getIn(['userInfo', '_id'])}
+          emailId={accountStore.getIn(['userInfo', 'email'])}
         />
         <div>
           playerPoolData TODO: Chooseed player for all users Team1: Player1
@@ -568,6 +565,6 @@ class DraftPlayer extends React.PureComponent {
 
 export default connect(stores => {
   return {
-    accountStore: stores.account
+    accountStore: stores.account,
   };
 })(DraftPlayer);

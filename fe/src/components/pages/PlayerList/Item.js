@@ -13,8 +13,15 @@ class PlayerItem extends React.PureComponent {
     const { props } = this;
     const { data, selectPosition } = props;
     return (
-      <Row>
-        <Col className={cx('thumb')} />
+      <Row className={cx('player-item')}>
+        <div
+          className={cx('team-bg')}
+          style={{
+            background: `url(http://i.nflcdn.com/static/site/7.5/img/subheaders/${(
+              data.get('Team') || ''
+            ).toLowerCase()}.png) no-repeat 50% 50%`,
+          }}
+        />
         <Col className={cx('name')}>
           <Link to={`/app/player/detail/${data.get('_id')}`}>
             {data.get('Name')}
@@ -67,17 +74,17 @@ class PlayerItem extends React.PureComponent {
         {selectPosition === 'Defense' ? (
           <Col>{data.get('Defensive_TD')}</Col>
         ) : null}
-        {selectPosition === 'Kicking' ? (
+        {selectPosition === 'Special' ? (
           <Col>{data.get('Extra_Points_Made')}</Col>
         ) : null}
-        {selectPosition === 'Kicking' ? <Col>{data.get('FG_Made')}</Col> : null}
-        {selectPosition === 'Kicking' ? (
+        {selectPosition === 'Special' ? <Col>{data.get('FG_Made')}</Col> : null}
+        {selectPosition === 'Special' ? (
           <Col>{data.get('FG_Missed')}</Col>
         ) : null}
-        {selectPosition === 'Kicking' ? (
+        {selectPosition === 'Special' ? (
           <Col>{data.get('Punting_i20')}</Col>
         ) : null}
-        {selectPosition === 'Kicking' ? (
+        {selectPosition === 'Special' ? (
           <Col>{data.get('Punting_Yards')}</Col>
         ) : null}
       </Row>

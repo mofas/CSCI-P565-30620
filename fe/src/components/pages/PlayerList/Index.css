@@ -2,14 +2,11 @@
   padding: 16px;
 }
 
-.thumb {
-  width: 80px;
-  flex: inherit;
-}
-
 .name {
   text-align: left;
   color: #41a9ff;
+  width: 140px;
+  flex: inherit;
 }
 
 .position {
@@ -18,7 +15,19 @@
   flex: inherit;
 }
 
-.thumb-placeholder {
-  width: 40px;
-  margin-right: 20px;
+.player-item {
+  height: 65px;
+  overflow: hidden;
+}
+
+.team-bg {
+  position: absolute;
+  left: 40px;
+  right: 0;
+  top: 20px;
+  bottom: 10px;
+  height: 35px;
+  z-index: 0;
+  opacity: 0.05;
+  background-size: cover;
 }

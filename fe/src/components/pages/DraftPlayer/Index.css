@@ -11,13 +11,11 @@
   overflow-y: scroll;
 }
 
-.thumb {
-  width: 80px;
-  flex: inherit;
-}
-
 .name {
   text-align: left;
+  color: #41a9ff;
+  width: 140px;
+  flex: inherit;
 }
 
 .position {

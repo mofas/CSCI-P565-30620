@@ -29,7 +29,7 @@ const PositionMapping = fromJS({
     'SAF',
     'DL',
   ],
-  Kicking: ['K', 'P'],
+  Special: ['K', 'P'],
 });
 
 class PlayerList extends React.PureComponent {
@@ -147,18 +147,17 @@ class PlayerList extends React.PureComponent {
               Defense
             </Btn>
             <Btn
-              type={selectPosition === 'Kicking' ? 'secondary' : 'primary'}
+              type={selectPosition === 'Special' ? 'secondary' : 'primary'}
               className={cx('position-btn')}
-              onClick={() => this.toggleSelectPosition('Kicking')}
+              onClick={() => this.toggleSelectPosition('Special')}
             >
-              Kicking
+              Special
             </Btn>
           </div>
         </div>
         <Table>
           <Thead>
             <Row>
-              <Col className={cx('thumb')} />
               <Col className={cx('name')}>Name</Col>
               <Col className={cx('position')}>Position</Col>
               {selectPosition === 'Offense' ? (
@@ -305,7 +304,7 @@ class PlayerList extends React.PureComponent {
                   onClick={() => this.setSortKey('Defensive_TD')}
                 />
               ) : null}
-              {selectPosition === 'Kicking' ? (
+              {selectPosition === 'Special' ? (
                 <TableHeader
                   headerKey="Extra_Points_Made"
                   name="Extra Points"
@@ -314,7 +313,7 @@ class PlayerList extends React.PureComponent {
                   onClick={() => this.setSortKey('Extra_Points_Made')}
                 />
               ) : null}
-              {selectPosition === 'Kicking' ? (
+              {selectPosition === 'Special' ? (
                 <TableHeader
                   headerKey="FG_Made"
                   name="Made Field Goals"
@@ -323,7 +322,7 @@ class PlayerList extends React.PureComponent {
                   onClick={() => this.setSortKey('FG_Made')}
                 />
               ) : null}
-              {selectPosition === 'Kicking' ? (
+              {selectPosition === 'Special' ? (
                 <TableHeader
                   headerKey="FG_Missed"
                   name="Missed Field Goals"
@@ -332,7 +331,7 @@ class PlayerList extends React.PureComponent {
                   onClick={() => this.setSortKey('FG_Missed')}
                 />
               ) : null}
-              {selectPosition === 'Kicking' ? (
+              {selectPosition === 'Special' ? (
                 <TableHeader
                   headerKey="Punting_i20"
                   name="Punts Inside 20"
@@ -341,7 +340,7 @@ class PlayerList extends React.PureComponent {
                   onClick={() => this.setSortKey('Punting_i20')}
                 />
               ) : null}
-              {selectPosition === 'Kicking' ? (
+              {selectPosition === 'Special' ? (
                 <TableHeader
                   headerKey="Punting_Yards"
                   name="Punting Yards"

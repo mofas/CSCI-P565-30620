@@ -7,6 +7,7 @@
 }
 
 .row {
+  position: relative;
   display: flex;
   border-bottom: 1px solid #ddd;
   font-weight: normal;
@@ -22,6 +23,7 @@
 }
 
 .col {
+  position: relative;
   flex: 1;
   border-left: 1px solid #ddd;
   padding: 5px 10px;

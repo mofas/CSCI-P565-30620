@@ -23,7 +23,11 @@ export class Tbody extends React.PureComponent {
 
 export class Row extends React.PureComponent {
   render() {
-    return <div className={cx('row')}>{this.props.children}</div>;
+    return (
+      <div className={cx('row', [this.props.className])}>
+        {this.props.children}
+      </div>
+    );
   }
 }
 

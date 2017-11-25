@@ -1,26 +1,32 @@
-import React from "react";
-import { fromJS, List } from "immutable";
-import { Link } from "react-router-dom";
+import React from 'react';
+import { fromJS, List } from 'immutable';
+import { Link } from 'react-router-dom';
 
 import Btn from '../../common/Btn/Btn';
 import { Row, Col } from '../../common/Table/Index';
 
-import classnames from "classnames/bind";
-import style from "./Index.css";
+import classnames from 'classnames/bind';
+import style from './Index.css';
 const cx = classnames.bind(style);
 
 class PlayerItem extends React.PureComponent {
   static defaultProps = {
     data: List(),
-    selectPlayer: () => {}
+    selectPlayer: () => {},
   };
 
   render() {
     const { props } = this;
-    const { data, selectPlayer, leagueId, userId, selectPosition, emailId } = props;
+    const {
+      data,
+      selectPlayer,
+      leagueId,
+      userId,
+      selectPosition,
+      emailId,
+    } = props;
     return (
       <Row>
-        <Col className={cx('thumb')} />
         <Col className={cx('name')}>
           <Link to={`/app/player/detail/${data.get('_id')}`}>
             {data.get('Name')}
@@ -73,21 +79,25 @@ class PlayerItem extends React.PureComponent {
         {selectPosition === 'Defense' ? (
           <Col>{data.get('Defensive_TD')}</Col>
         ) : null}
-        {selectPosition === 'Kicking' ? (
+        {selectPosition === 'Special' ? (
           <Col>{data.get('Extra_Points_Made')}</Col>
         ) : null}
-        {selectPosition === 'Kicking' ? <Col>{data.get('FG_Made')}</Col> : null}
-        {selectPosition === 'Kicking' ? (
+        {selectPosition === 'Special' ? <Col>{data.get('FG_Made')}</Col> : null}
+        {selectPosition === 'Special' ? (
           <Col>{data.get('FG_Missed')}</Col>
         ) : null}
-        {selectPosition === 'Kicking' ? (
+        {selectPosition === 'Special' ? (
           <Col>{data.get('Punting_i20')}</Col>
         ) : null}
-        {selectPosition === 'Kicking' ? (
+        {selectPosition === 'Special' ? (
           <Col>{data.get('Punting_Yards')}</Col>
         ) : null}
         <Col className={cx('op-col')}>
-          <Btn onClick={() => selectPlayer(data.get('_id'), leagueId, userId, emailId)}>
+          <Btn
+            onClick={() =>
+              selectPlayer(data.get('_id'), leagueId, userId, emailId)
+            }
+          >
             Select
           </Btn>
         </Col>
