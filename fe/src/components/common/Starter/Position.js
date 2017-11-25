@@ -11,30 +11,45 @@ class Position extends React.PureComponent {
     positionKey: 'position_qb',
     positionIndex: 0,
     player: Map(),
-    handleChangePlayer: () => {},
+    handleChangePlayer: () => () => {},
     options: List(),
     style: {},
   };
   render() {
     const { props } = this;
-    const { position, style, player, handleChangePlayer, options } = props;
+    const {
+      position,
+      style,
+      player,
+      handleChangePlayer,
+      options,
+      positionKey,
+      positionIndex,
+    } = props;
 
-    console.log(player.toJS());
     return (
       <div className={cx('position-wrap')} style={style}>
         <div className={cx('position')}>{position}</div>
         <div className={cx('thumb')} />
-        <select onChange={handleChangePlayer}>
+        <select
+          className={cx('player-selector')}
+          onChange={handleChangePlayer({
+            positionKey,
+            positionIndex,
+          })}
+          value={player.get('_id') || ''}
+        >
+          {player.get('_id') ? (
+            <option value={player.get('_id')}>{player.get('Name')}</option>
+          ) : null}
           {options.map(d => {
             return (
-              <option
-                value={d.get('_id')}
-                selected={player.get('_id') === d.get('_id')}
-              >
+              <option key={d.get('_id')} value={d.get('_id')}>
                 {d.get('Name')}
               </option>
             );
           })}
+          <option value="">-- Empty --</option>
         </select>
       </div>
     );

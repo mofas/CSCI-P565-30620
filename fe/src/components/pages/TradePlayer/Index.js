@@ -17,6 +17,8 @@ class TradePlayer extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
+      fantasyTeamId: '',
+      fantasyTeamName: '',
       loading: false,
       arrangement: Map(),
       poolPlayer: List(),
@@ -26,10 +28,12 @@ class TradePlayer extends React.PureComponent {
   componentDidMount() {
     const { l_id, account_id } = this.props.match.params;
     const query = `
+
       {
-        QueryTeamArrangement(league_id: "${l_id}", account_id: "${
-      account_id
-    }") {
+        QueryFantasyTeam(league_id: "${l_id}", account_id: "${account_id}") {
+        _id
+        name
+        arrangement {
           position_qb {
             ...playerMain
           }
@@ -51,6 +55,7 @@ class TradePlayer extends React.PureComponent {
           position_p {
             ...playerMain
           }
+        }
         }
         QueryPoolPlayer(league_id:"${l_id}"){
             account{
@@ -75,7 +80,7 @@ class TradePlayer extends React.PureComponent {
     });
 
     API.GraphQL(query).then(res => {
-      const arrangement = fromJS(res.data.QueryTeamArrangement);
+      const arrangement = fromJS(res.data.QueryFantasyTeam.arrangement);
       const rawPoolPlayer =
         (res.data.QueryPoolPlayer || []).filter(d => {
           if (d.account) {
@@ -85,12 +90,54 @@ class TradePlayer extends React.PureComponent {
         })[0] || {};
 
       this.setState({
+        fantasyTeamId: res.data.QueryFantasyTeam._id,
+        fantasyTeamName: res.data.QueryFantasyTeam.name,
         loading: false,
         arrangement,
         poolPlayer: fromJS(rawPoolPlayer.players || []),
       });
     });
   }
+
+  handleChangePlayer = ({ positionKey, positionIndex }) => e => {
+    this.setState({
+      loading: true,
+    });
+    const { poolPlayer } = this.state;
+    const player_id = e.target.value;
+
+    const mutation = `
+        mutation{
+          UpdateTeamArrangement(fantasy_team_id:"${this.state.fantasyTeamId}"
+          position: "${positionKey}"
+          index: ${positionIndex}
+          player_id: "${player_id}"){
+            success
+          }
+        }
+    `;
+
+    API.GraphQL(mutation).then(res => {
+      console.log(res);
+      if (res.data.UpdateTeamArrangement.success) {
+        let value = null;
+        if (player_id !== '') {
+          value = poolPlayer.filter(d => d.get('_id') === player_id).first();
+        }
+        //update local state.
+        this.setState({
+          arrangement: this.state.arrangement.updateIn(
+            [positionKey, positionIndex],
+            () => value
+          ),
+        });
+      }
+
+      this.setState({
+        loading: false,
+      });
+    });
+  };
 
   render() {
     const { state, props } = this;
@@ -105,7 +152,11 @@ class TradePlayer extends React.PureComponent {
           <BackBtn type="secondary">Back to List</BackBtn>
         </Link>
 
-        <Starter arrangement={arrangement} players={poolPlayer} />
+        <Starter
+          arrangement={arrangement}
+          players={poolPlayer}
+          handleChangePlayer={this.handleChangePlayer}
+        />
         <div>league ID: {l_id}</div>
         <div>account ID: {account_id}</div>
         <div>This is Trade Player Page</div>

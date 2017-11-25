@@ -25,18 +25,30 @@ const defensePosition = Set([
   'DL',
 ]);
 
-const defensePositionFilter = d => defensePosition.has(d.get('Position'));
+const defensePositionFilter = arrangement => d => {
+  const inPosition = arrangement
+    .getIn(['position_defense'])
+    .filter(d => d)
+    .map(d => d.get('_id'));
+
+  return (
+    defensePosition.has(d.get('Position')) &&
+    inPosition.indexOf(d.get('_id')) < 0
+  );
+};
 
 class Starter extends React.PureComponent {
   static defaultProps = {
     arrangement: Map(),
     players: List(),
-    handleChangePlayer: () => {},
+    handleChangePlayer: () => () => {},
   };
 
   render() {
     const { props } = this;
     const { arrangement, players, handleChangePlayer } = props;
+
+    const defensePosFilter = defensePositionFilter(arrangement);
     return (
       <div className={cx('root')}>
         <img className={cx('bg')} src={bg} />
@@ -48,8 +60,16 @@ class Starter extends React.PureComponent {
           position="QB"
           positionKey="position_qb"
           positionIndex={0}
-          player={arrangement.getIn(['position_qb', 0])}
-          options={players.filter(d => d.get('Position') === 'QB')}
+          player={arrangement.getIn(['position_qb', 0]) || Map()}
+          options={players.filter(
+            d =>
+              d.get('Position') === 'QB' &&
+              arrangement
+                .getIn(['position_qb'])
+                .filter(d => d)
+                .map(d => d.get('_id'))
+                .indexOf(d.get('_id')) < 0
+          )}
           handleChangePlayer={handleChangePlayer}
         />
         <Position
@@ -60,8 +80,16 @@ class Starter extends React.PureComponent {
           position="K"
           positionKey="position_k"
           positionIndex={0}
-          player={arrangement.getIn(['position_k', 0])}
-          options={players.filter(d => d.get('Position') === 'K')}
+          player={arrangement.getIn(['position_k', 0]) || Map()}
+          options={players.filter(
+            d =>
+              d.get('Position') === 'K' &&
+              arrangement
+                .getIn(['position_k'])
+                .filter(d => d)
+                .map(d => d.get('_id'))
+                .indexOf(d.get('_id')) < 0
+          )}
           handleChangePlayer={handleChangePlayer}
         />
         <Position
@@ -72,8 +100,16 @@ class Starter extends React.PureComponent {
           position="TE"
           positionKey="position_te"
           positionIndex={0}
-          player={arrangement.getIn(['position_te', 0])}
-          options={players.filter(d => d.get('Position') === 'TE')}
+          player={arrangement.getIn(['position_te', 0]) || Map()}
+          options={players.filter(
+            d =>
+              d.get('Position') === 'TE' &&
+              arrangement
+                .getIn(['position_te'])
+                .filter(d => d)
+                .map(d => d.get('_id'))
+                .indexOf(d.get('_id')) < 0
+          )}
           handleChangePlayer={handleChangePlayer}
         />
         <Position
@@ -84,8 +120,16 @@ class Starter extends React.PureComponent {
           position="P"
           positionKey="position_p"
           positionIndex={0}
-          player={arrangement.getIn(['position_p', 0])}
-          options={players.filter(d => d.get('Position') === 'P')}
+          player={arrangement.getIn(['position_p', 0]) || Map()}
+          options={players.filter(
+            d =>
+              d.get('Position') === 'P' &&
+              arrangement
+                .getIn(['position_p'])
+                .filter(d => d)
+                .map(d => d.get('_id'))
+                .indexOf(d.get('_id')) < 0
+          )}
           handleChangePlayer={handleChangePlayer}
         />
 
@@ -97,8 +141,16 @@ class Starter extends React.PureComponent {
           position="RB"
           positionKey="position_rb"
           positionIndex={0}
-          player={arrangement.getIn(['position_rb', 0])}
-          options={players.filter(d => d.get('Position') === 'RB')}
+          player={arrangement.getIn(['position_rb', 0]) || Map()}
+          options={players.filter(
+            d =>
+              d.get('Position') === 'RB' &&
+              arrangement
+                .getIn(['position_rb'])
+                .filter(d => d)
+                .map(d => d.get('_id'))
+                .indexOf(d.get('_id')) < 0
+          )}
           handleChangePlayer={handleChangePlayer}
         />
 
@@ -108,10 +160,18 @@ class Starter extends React.PureComponent {
             top: 40,
           }}
           position="WR"
-          positionKey="position_rb"
+          positionKey="position_wr"
           positionIndex={0}
-          player={arrangement.getIn(['position_wr', 0])}
-          options={players.filter(d => d.get('Position') === 'WR')}
+          player={arrangement.getIn(['position_wr', 0]) || Map()}
+          options={players.filter(
+            d =>
+              d.get('Position') === 'WR' &&
+              arrangement
+                .getIn(['position_wr'])
+                .filter(d => d)
+                .map(d => d.get('_id'))
+                .indexOf(d.get('_id')) < 0
+          )}
           handleChangePlayer={handleChangePlayer}
         />
 
@@ -123,8 +183,16 @@ class Starter extends React.PureComponent {
           position="WR"
           positionKey="position_wr"
           positionIndex={1}
-          player={arrangement.getIn(['position_wr', 1])}
-          options={players.filter(d => d.get('Position') === 'WR')}
+          player={arrangement.getIn(['position_wr', 1]) || Map()}
+          options={players.filter(
+            d =>
+              d.get('Position') === 'WR' &&
+              arrangement
+                .getIn(['position_wr'])
+                .filter(d => d)
+                .map(d => d.get('_id'))
+                .indexOf(d.get('_id')) < 0
+          )}
           handleChangePlayer={handleChangePlayer}
         />
 
@@ -138,8 +206,8 @@ class Starter extends React.PureComponent {
           position="DEF"
           positionKey="position_defense"
           positionIndex={0}
-          player={arrangement.getIn(['position_defense', 0])}
-          options={players.filter(defensePositionFilter)}
+          player={arrangement.getIn(['position_defense', 0]) || Map()}
+          options={players.filter(defensePosFilter)}
           handleChangePlayer={handleChangePlayer}
         />
         <Position
@@ -150,8 +218,8 @@ class Starter extends React.PureComponent {
           position="DEF"
           positionKey="position_defense"
           positionIndex={1}
-          player={arrangement.getIn(['position_defense', 1])}
-          options={players.filter(defensePositionFilter)}
+          player={arrangement.getIn(['position_defense', 1]) || Map()}
+          options={players.filter(defensePosFilter)}
           handleChangePlayer={handleChangePlayer}
         />
         <Position
@@ -162,8 +230,8 @@ class Starter extends React.PureComponent {
           position="DEF"
           positionKey="position_defense"
           positionIndex={2}
-          player={arrangement.getIn(['position_defense', 2])}
-          options={players.filter(defensePositionFilter)}
+          player={arrangement.getIn(['position_defense', 2]) || Map()}
+          options={players.filter(defensePosFilter)}
           handleChangePlayer={handleChangePlayer}
         />
         <Position
@@ -174,8 +242,8 @@ class Starter extends React.PureComponent {
           position="DEF"
           positionKey="position_defense"
           positionIndex={3}
-          player={arrangement.getIn(['position_defense', 3])}
-          options={players.filter(defensePositionFilter)}
+          player={arrangement.getIn(['position_defense', 3]) || Map()}
+          options={players.filter(defensePosFilter)}
           handleChangePlayer={handleChangePlayer}
         />
         <Position
@@ -186,8 +254,8 @@ class Starter extends React.PureComponent {
           position="DEF"
           positionKey="position_defense"
           positionIndex={4}
-          player={arrangement.getIn(['position_defense', 4])}
-          options={players.filter(defensePositionFilter)}
+          player={arrangement.getIn(['position_defense', 4]) || Map()}
+          options={players.filter(defensePosFilter)}
           handleChangePlayer={handleChangePlayer}
         />
       </div>

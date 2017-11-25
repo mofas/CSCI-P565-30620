@@ -128,28 +128,41 @@ export const QueryFantasyTeam = {
   type: FantasyTeamType,
   args: {
     _id: { type: GraphQLString },
+    league_id: { type: GraphQLString },
+    account_id: { type: GraphQLString },
   },
-  resolve: async ({ db }, { _id }, context) => {
+  resolve: async ({ db }, { _id, league_id, account_id }, context) => {
     const loader = getLoader(
       context,
       'fantasyTeamLoaderGenerator',
       fantasyTeamLoaderGenerator
     );
-    const result = await loader.loadMany([_id] || []);
-    return result[0];
+    if (league_id && account_id) {
+      const ret = await db
+        .collection('fantasy_team')
+        .findOne({ account_id, league_id });
+      if (ret) {
+        const result = await loader.loadMany([ret._id.toString()]);
+        return result[0];
+      }
+    } else if (_id) {
+      const result = await loader.loadMany([_id] || []);
+      return result[0];
+    }
+    return null;
   },
 };
 
 export const QueryTeamArrangement = {
   type: ArrangementType,
   args: {
-    fancy_team_id: { type: GraphQLString },
+    fantasy_team_id: { type: GraphQLString },
     league_id: { type: GraphQLString },
     account_id: { type: GraphQLString },
   },
   resolve: async (
     { db },
-    { fancy_team_id, league_id, account_id },
+    { fantasy_team_id, league_id, account_id },
     context
   ) => {
     const loader = getLoader(
@@ -164,12 +177,12 @@ export const QueryTeamArrangement = {
         .findOne({ account_id, league_id });
 
       if (ret) {
-        const fancy_team_id = ret._id.toString();
-        const result = await loader.loadMany([fancy_team_id]);
+        const fantasy_team_id = ret._id.toString();
+        const result = await loader.loadMany([fantasy_team_id]);
         return result[0];
       }
-    } else if (fancy_team_id) {
-      const result = await loader.loadMany([fancy_team_id]);
+    } else if (fantasy_team_id) {
+      const result = await loader.loadMany([fantasy_team_id]);
       return result[0];
     }
     return null;

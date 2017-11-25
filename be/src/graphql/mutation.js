@@ -476,7 +476,7 @@ export const UpdateTeamArrangement = {
       },
       {
         $set: {
-          [`${position}.${index}`]: player_id,
+          [`${position}.${index}`]: player_id === '' ? null : player_id,
         },
       }
     );

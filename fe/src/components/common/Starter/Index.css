@@ -36,4 +36,7 @@
     background-color: #555;
     border-radius: 10px;
   }
+  .player-selector {
+    width: 100%;
+  }
 }
