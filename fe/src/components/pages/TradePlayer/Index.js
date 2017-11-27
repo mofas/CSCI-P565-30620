@@ -28,6 +28,10 @@ class TradePlayer extends React.PureComponent {
   }
 
   componentDidMount() {
+    this.loadData();
+  }
+
+  loadData = () => {
     const { l_id, account_id } = this.props.match.params;
     const query = `
       {
@@ -121,7 +125,7 @@ class TradePlayer extends React.PureComponent {
         playerInTeam: fromJS(playerInTeam.players),
       });
     });
-  }
+  };
 
   handleChangePlayer = ({ positionKey }) => e => {
     this.setState({
@@ -151,6 +155,38 @@ class TradePlayer extends React.PureComponent {
           arrangement: this.state.arrangement.updateIn(
             [positionKey],
             () => value
+          ),
+        });
+      }
+
+      this.setState({
+        loading: false,
+      });
+    });
+  };
+
+  handleReleasePlayer = player_id => {
+    const { l_id } = this.props.match.params;
+    const mutation = `
+      mutation{
+        ReleasePlayer(league_id:"${l_id}" player_id: "${player_id}"){
+          success
+        }
+      }
+    `;
+
+    this.setState({
+      loading: true,
+    });
+
+    API.GraphQL(mutation).then(res => {
+      if (res.data.ReleasePlayer.success) {
+        this.setState({
+          poolPlayer: this.state.poolPlayer.filter(
+            d => d.get('_id') !== player_id
+          ),
+          playerInTeam: this.state.playerInTeam.filter(
+            d => d.get('_id') !== player_id
           ),
         });
       }

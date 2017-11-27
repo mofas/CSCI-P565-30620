@@ -282,6 +282,34 @@ export const SelectedPlayer = {
   },
 };
 
+export const ReleasePlayer = {
+  type: ResultType,
+  args: {
+    league_id: { type: GraphQLString },
+    player_id: { type: GraphQLString },
+  },
+  resolve: async ({ db }, { league_id, player_id }, info) => {
+    const update = {
+      league_id: league_id,
+      player_id: player_id,
+    };
+
+    const { result } = await db.collection('pool').remove(update);
+
+    if (result.ok) {
+      return {
+        error: '',
+        success: true,
+      };
+    } else {
+      return {
+        error: JSON.stringify(result),
+        success: false,
+      };
+    }
+  },
+};
+
 export const SendMessage = {
   type: ResultType,
   args: {
