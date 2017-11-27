@@ -222,7 +222,8 @@ class TradePlayer extends React.PureComponent {
         player_id:"${player_id}",
         account_id: "${userId}"
       ){
-          player_id
+          success
+          error
         }
       }
     `;
@@ -233,15 +234,16 @@ class TradePlayer extends React.PureComponent {
 
     API.GraphQL(mutation).then(res => {
       const { players, poolPlayer, playerInTeam } = this.state;
-      if (res) {
+      if (res.data.SelectedPlayer.success) {
         const targetPlayer = this.state.players
           .filter(d => d.get('_id') === player_id)
           .first();
-
         this.setState({
           poolPlayer: poolPlayer.push(targetPlayer),
           playerInTeam: playerInTeam.push(targetPlayer),
         });
+      } else {
+        window.alert(res.data.SelectedPlayer.error);
       }
       this.setState({
         loading: false,

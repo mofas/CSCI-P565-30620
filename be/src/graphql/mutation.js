@@ -234,6 +234,7 @@ export const DeleteLeague = {
   },
 };
 
+/**
 export const PoolPlayer = new GraphQLObjectType({
   name: 'PoolPlayer',
   fields: {
@@ -242,9 +243,10 @@ export const PoolPlayer = new GraphQLObjectType({
     player_id: { type: GraphQLString },
   },
 });
+**/
 
 export const SelectedPlayer = {
-  type: new GraphQLList(PoolPlayer),
+  type: ResultType,
   args: {
     league_id: { type: GraphQLString },
     player_id: { type: GraphQLString },
@@ -265,7 +267,20 @@ export const SelectedPlayer = {
         player_id: player_id,
         account_id: account_id,
       };
-      db.collection('pool').insertOne(insertRec);
+      const { result } = await db.collection('pool').insertOne(insertRec);
+      console.log(result);
+      console.log(result.ok);
+      if (result.ok) {
+        return {
+          error: '',
+          success: true,
+        };
+      } else {
+        return {
+          error: JSON.stringify(result),
+          success: false,
+        };
+      }
     } else {
       console.log(
         'Player already exist---------------->',
@@ -273,12 +288,16 @@ export const SelectedPlayer = {
         player_id,
         account_id
       );
+      return {
+        error: 'Player already exist',
+        success: false,
+      };
     }
 
-    return await db
-      .collection('pool')
-      .find({ league_id: league_id }, { player_id: 1, _id: 0 })
-      .toArray();
+    // return await db
+    //   .collection('pool')
+    //   .find({ league_id: league_id }, { player_id: 1, _id: 0 })
+    //   .toArray();
   },
 };
 

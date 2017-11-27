@@ -291,10 +291,12 @@ class DraftPlayer extends React.PureComponent {
     ) {
       const mutation = `
           mutation{
-            SelectedPlayer(league_id: "${leagueId}",
-                            player_id:"${id}",
-                            account_id: "${userId}" ){
-              player_id
+            SelectedPlayer(
+              league_id: "${leagueId}",
+              player_id:"${id}",
+              account_id: "${userId}"
+            ){
+              success
             }
             UpdateDraftNoLeague(_id: "${leagueId}"){
               _id,
