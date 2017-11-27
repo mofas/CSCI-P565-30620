@@ -1,6 +1,8 @@
 import React from 'react';
-import { fromJS, List, Map } from 'immutable';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+
+import { fromJS, List, Map } from 'immutable';
 
 import API from '../../../middleware/API';
 
@@ -9,6 +11,7 @@ import Spinner from '../../common/Spinner/Spinner';
 import BackBtn from '../../common/Btn/BackBtn';
 import Starter from '../../common/Starter/Index';
 import InTeamPlayerList from './InTeamPlayerList';
+import PlayerList from '../../common/SelectPlayerList/PlayerList';
 
 import classnames from 'classnames/bind';
 import style from './Index.css';
@@ -22,6 +25,7 @@ class TradePlayer extends React.PureComponent {
       fantasyTeamName: '',
       loading: false,
       arrangement: Map(),
+      players: List(),
       poolPlayer: List(),
       playerInTeam: List(),
     };
@@ -35,6 +39,21 @@ class TradePlayer extends React.PureComponent {
     const { l_id, account_id } = this.props.match.params;
     const query = `
       {
+        ListPlayer{
+          ...playerMain
+          Team
+          Passing_Yards
+          Rushing_Yards
+          Receiving_Yards
+          Passing_TDs
+          Rushing_TDs
+          Receiving_TD
+          FG_Made
+          FG_Missed
+          Extra_Points_Made
+          Interceptions
+          Fumbles_Lost
+        }
         QueryFantasyTeam(league_id: "${l_id}", account_id: "${account_id}") {
           _id
           name
@@ -102,10 +121,7 @@ class TradePlayer extends React.PureComponent {
       const arrangement = fromJS(res.data.QueryFantasyTeam.arrangement);
 
       const rawPoolPlayer = (res.data.QueryPoolPlayer || []).reduce(
-        (acc, d) => {
-          acc.push(d.players);
-          return acc;
-        },
+        (acc, d) => acc.concat(d.players),
         []
       );
       const playerInTeam =
@@ -117,6 +133,7 @@ class TradePlayer extends React.PureComponent {
         })[0] || {};
 
       this.setState({
+        players: fromJS(res.data.ListPlayer),
         fantasyTeamId: res.data.QueryFantasyTeam._id,
         fantasyTeamName: res.data.QueryFantasyTeam.name,
         loading: false,
@@ -197,10 +214,45 @@ class TradePlayer extends React.PureComponent {
     });
   };
 
+  selectPlayer = (player_id, leagueId, userId) => {
+    const mutation = `
+      mutation{
+        SelectedPlayer(
+        league_id: "${leagueId}",
+        player_id:"${player_id}",
+        account_id: "${userId}"
+      ){
+          player_id
+        }
+      }
+    `;
+
+    this.setState({
+      loading: true,
+    });
+
+    API.GraphQL(mutation).then(res => {
+      const { players, poolPlayer, playerInTeam } = this.state;
+      if (res) {
+        const targetPlayer = this.state.players
+          .filter(d => d.get('_id') === player_id)
+          .first();
+
+        this.setState({
+          poolPlayer: poolPlayer.push(targetPlayer),
+          playerInTeam: playerInTeam.push(targetPlayer),
+        });
+      }
+      this.setState({
+        loading: false,
+      });
+    });
+  };
+
   render() {
     const { state, props } = this;
-    const { loading, arrangement, poolPlayer, playerInTeam } = state;
-
+    const { accountStore } = props;
+    const { loading, players, arrangement, poolPlayer, playerInTeam } = state;
     const { l_id, account_id } = props.match.params;
 
     return (
@@ -225,12 +277,15 @@ class TradePlayer extends React.PureComponent {
           handleReleasePlayer={this.handleReleasePlayer}
         />
 
-        <div>league ID: {l_id}</div>
-        <div>account ID: {account_id}</div>
-        <div>1. player list // CY</div>
-        <div>2. team players list // CY</div>
-        <div>You can only fire the players in bench.</div>
-        <div>And you can pick new player from free market</div>
+        <h3>Select Player from Free Market</h3>
+        <PlayerList
+          players={players}
+          selectPlayer={this.selectPlayer}
+          leagueId={this.props.match.params.l_id}
+          userId={accountStore.getIn(['userInfo', '_id'])}
+          emailId={accountStore.getIn(['userInfo', 'email'])}
+          selectedPlayers={poolPlayer}
+        />
 
         <div>3. trade UI</div>
         <div>Dropdrown form for making trade request</div>
@@ -243,4 +298,8 @@ class TradePlayer extends React.PureComponent {
   }
 }
 
-export default TradePlayer;
+export default connect(stores => {
+  return {
+    accountStore: stores.account,
+  };
+})(TradePlayer);

@@ -1,13 +1,12 @@
 import React from 'react';
 import { fromJS, toJS, List, Set } from 'immutable';
 import { connect } from 'react-redux';
-import { getUserInfo, logout } from '../../../reducers/account';
 
 import API from '../../../middleware/API';
 import Spinner from '../../common/Spinner/Spinner';
 
 import ChatRoom from '../../common/ChatRoom/ChatRoom';
-import PlayerList from './PlayerList';
+import PlayerList from '../../common/SelectPlayerList/PlayerList';
 
 import classnames from 'classnames/bind';
 import style from './Index.css';
@@ -33,7 +32,7 @@ class DraftPlayer extends React.PureComponent {
     };
   }
   componentWillMount() {
-    this.props.dispatch(getUserInfo());
+    // this.props.dispatch(getUserInfo());
     Modal.setAppElement('body');
   }
 
@@ -466,7 +465,7 @@ class DraftPlayer extends React.PureComponent {
 
   render() {
     const { state, props } = this;
-    const { loading, players } = state;
+    const { loading, players, poolPlayers } = state;
     const { accountStore } = props;
 
     const MessageData = []; //query by league_id
@@ -546,6 +545,7 @@ class DraftPlayer extends React.PureComponent {
         <div>{this.state.showMessage}</div>
         <PlayerList
           players={players}
+          selectedPlayer={poolPlayers}
           selectPlayer={this.selectPlayer}
           leagueId={this.state.league_id}
           userId={accountStore.getIn(['userInfo', '_id'])}

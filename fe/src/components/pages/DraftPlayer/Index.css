@@ -2,45 +2,6 @@
   padding: 16px;
 }
 
-.player-list {
-  padding: 20px;
-}
-
-.player-item-wrap {
-  max-height: 400px;
-  overflow-y: scroll;
-}
-
-.name {
-  text-align: left;
-  color: #41a9ff;
-  width: 140px;
-  flex: inherit;
-}
-
-.position {
-  text-align: left;
-  width: 80px;
-  flex: inherit;
-}
-
-.thumb-placeholder {
-  width: 40px;
-  margin-right: 20px;
-}
-
-.op-col {
-  width: 120px;
-  flex: inherit;
-  padding: 10px;
-  :global {
-    .component-btn {
-      width: 200px;
-      margin: 0 auto;
-    }
-  }
-}
-
 .component {
   padding: 8px;
   border-radius: 4px;
@@ -54,6 +15,7 @@
   display: inline-block;
   font-size: 12px;
 }
+
 .thick {
   width: 160px;
   font-weight: bold;

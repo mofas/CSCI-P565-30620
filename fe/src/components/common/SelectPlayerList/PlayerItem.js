@@ -13,18 +13,25 @@ class PlayerItem extends React.PureComponent {
   static defaultProps = {
     data: List(),
     selectPlayer: () => {},
+    selectedPlayers: List(),
   };
 
   render() {
     const { props } = this;
     const {
       data,
+      selectedPlayers,
       selectPlayer,
       leagueId,
       userId,
       selectPosition,
-      emailId,
+      isDisabled,
     } = props;
+
+    const disabled =
+      selectedPlayers.count() >= 20 ||
+      selectedPlayers.filter(d => d.get('_id') === data.get('_id')).count() > 0;
+
     return (
       <Row>
         <Col className={cx('name')}>
@@ -94,8 +101,9 @@ class PlayerItem extends React.PureComponent {
         ) : null}
         <Col className={cx('op-col')}>
           <Btn
+            disabled={disabled}
             onClick={() =>
-              selectPlayer(data.get('_id'), leagueId, userId, emailId)
+              !disabled ? selectPlayer(data.get('_id'), leagueId, userId) : null
             }
           >
             Select

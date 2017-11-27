@@ -1,0 +1,32 @@
+.player-list {
+  padding: 20px;
+}
+
+.player-item-wrap {
+  max-height: 400px;
+  overflow-y: scroll;
+}
+
+.name {
+  text-align: left;
+  color: #41a9ff;
+  width: 140px;
+  flex: inherit;
+}
+
+.position {
+  text-align: left;
+  width: 80px;
+  flex: inherit;
+}
+.op-col {
+  width: 120px;
+  flex: inherit;
+  padding: 10px;
+  :global {
+    .component-btn {
+      width: 200px;
+      margin: 0 auto;
+    }
+  }
+}

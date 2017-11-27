@@ -34,7 +34,7 @@ class InTeamPlaterList extends React.PureComponent {
         <Tbody>
           {players.map((d, i) => {
             return (
-              <Row>
+              <Row key={d.get('_id')}>
                 <Col>{d.get('Name')}</Col>
                 <Col>{d.get('Position')}</Col>
                 <Col>
