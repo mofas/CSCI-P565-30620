@@ -8,6 +8,7 @@ import Spinner from '../../common/Spinner/Spinner';
 
 import BackBtn from '../../common/Btn/BackBtn';
 import Starter from '../../common/Starter/Index';
+import InTeamPlayerList from './InTeamPlayerList';
 
 import classnames from 'classnames/bind';
 import style from './Index.css';
@@ -22,13 +23,13 @@ class TradePlayer extends React.PureComponent {
       loading: false,
       arrangement: Map(),
       poolPlayer: List(),
+      playerInTeam: List(),
     };
   }
 
   componentDidMount() {
     const { l_id, account_id } = this.props.match.params;
     const query = `
-
       {
         QueryFantasyTeam(league_id: "${l_id}", account_id: "${account_id}") {
           _id
@@ -95,7 +96,15 @@ class TradePlayer extends React.PureComponent {
 
     API.GraphQL(query).then(res => {
       const arrangement = fromJS(res.data.QueryFantasyTeam.arrangement);
-      const rawPoolPlayer =
+
+      const rawPoolPlayer = (res.data.QueryPoolPlayer || []).reduce(
+        (acc, d) => {
+          acc.push(d.players);
+          return acc;
+        },
+        []
+      );
+      const playerInTeam =
         (res.data.QueryPoolPlayer || []).filter(d => {
           if (d.account) {
             return d.account._id === account_id;
@@ -108,7 +117,8 @@ class TradePlayer extends React.PureComponent {
         fantasyTeamName: res.data.QueryFantasyTeam.name,
         loading: false,
         arrangement,
-        poolPlayer: fromJS(rawPoolPlayer.players || []),
+        poolPlayer: fromJS(rawPoolPlayer || []),
+        playerInTeam: fromJS(playerInTeam.players),
       });
     });
   }
@@ -131,7 +141,6 @@ class TradePlayer extends React.PureComponent {
     `;
 
     API.GraphQL(mutation).then(res => {
-      console.log(res);
       if (res.data.UpdateTeamArrangement.success) {
         let value = null;
         if (player_id !== '') {
@@ -154,7 +163,7 @@ class TradePlayer extends React.PureComponent {
 
   render() {
     const { state, props } = this;
-    const { loading, arrangement, poolPlayer } = state;
+    const { loading, arrangement, poolPlayer, playerInTeam } = state;
 
     const { l_id, account_id } = props.match.params;
 
@@ -165,19 +174,28 @@ class TradePlayer extends React.PureComponent {
           <BackBtn type="secondary">Back to List</BackBtn>
         </Link>
 
+        <h3>Player Starter</h3>
+
         <Starter
           arrangement={arrangement}
           players={poolPlayer}
           handleChangePlayer={this.handleChangePlayer}
         />
+
+        <h3>Player In your Team</h3>
+        <InTeamPlayerList
+          arrangement={arrangement}
+          players={playerInTeam}
+          handleReleasePlayer={this.handleReleasePlayer}
+        />
+
         <div>league ID: {l_id}</div>
         <div>account ID: {account_id}</div>
-        <div>This is Trade Player Page</div>
-        <div>Trade page // CY</div>
         <div>1. player list // CY</div>
         <div>2. team players list // CY</div>
         <div>You can only fire the players in bench.</div>
         <div>And you can pick new player from free market</div>
+
         <div>3. trade UI</div>
         <div>Dropdrown form for making trade request</div>
         <div>3.1 The need to select the team in league</div>
