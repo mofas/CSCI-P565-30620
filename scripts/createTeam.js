@@ -11,9 +11,9 @@ const PLAYER_NAME_LIST = [
   'K. Hunt', //RB
   'A. Brown', //WR
   'D. Hopkins', //WR
-  // '', // we don't have TE yet
+  'T. Kelce', // TE
   'G. Zuerlein', // K
-
+  "P. O'Donnell", //P
   //Defense
   'D. Lawrence',
   'J. Agnew',
@@ -77,49 +77,73 @@ const createFantasyTeam = db => async ({ league_id, account_id, name }) => {
 //TODO: INSERT
 // {
 //   fantasy_team_id: "xxxx",
-//   position_qb: [], // 1
-//   position_rb: [], // 1
-//   position_wr: [], // 2
-//   position_te: [], // 1
-//   position_k: [], // 1
-//   position_defense: [], // 5
-//   position_p: [], // 1
+//   position_qb_0
+//   position_rb_0
+//   position_wr_0
+//   position_wr_1
+//   position_te_0
+//   position_k_0
+//   position_p_0
+//   position_defense_0
+//   position_defense_1
+//   position_defense_2
+//   position_defense_3
+//   position_defense_4
 // }
 const insertToArrangement = db => async ({ fantasy_team_id, players }) => {
   const data = players.reduce(
     (acc, d) => {
       const position = d.Position;
-      console.log(d.Name, d.Position);
       if (position === 'QB') {
-        acc.position_qb.push(d._id.toString());
+        acc.position_qb_0 = d._id.toString();
       } else if (position === 'RB') {
-        acc.position_rb.push(d._id.toString());
+        acc.position_rb_0 = d._id.toString();
       } else if (position === 'WR') {
-        acc.position_wr.push(d._id.toString());
+        if (!acc.position_wr_0) {
+          acc.position_wr_0 = d._id.toString();
+        } else {
+          acc.position_wr_1 = d._id.toString();
+        }
       } else if (position === 'TE') {
-        acc.position_te.push(d._id.toString());
+        acc.position_te_0 = d._id.toString();
       } else if (position === 'K') {
-        acc.position_k.push(d._id.toString());
+        acc.position_k_0 = d._id.toString();
       } else if (position === 'P') {
-        acc.position_p.push(d._id.toString());
+        acc.position_p_0 = d._id.toString();
       } else {
-        // CB, DB, DT, NT, DE, LB, OLB, ILB, MLB, FS, SS, DEF, SAF, DL
-        acc.position_defense.push(d._id.toString());
+        if (!acc.position_defense_0) {
+          acc.position_defense_0 = d._id.toString();
+        } else if (!acc.position_defense_1) {
+          acc.position_defense_1 = d._id.toString();
+        } else if (!acc.position_defense_2) {
+          acc.position_defense_2 = d._id.toString();
+        } else if (!acc.position_defense_3) {
+          acc.position_defense_3 = d._id.toString();
+        } else if (!acc.position_defense_4) {
+          acc.position_defense_4 = d._id.toString();
+        }
       }
 
       return acc;
     },
     {
       fantasy_team_id,
-      position_qb: [], // 1
-      position_rb: [], // 1
-      position_wr: [], // 2
-      position_te: [], // 1
-      position_k: [], // 1
-      position_defense: [], // 5
-      position_p: [], // 1
+      position_qb_0: null,
+      position_rb_0: null,
+      position_wr_0: null,
+      position_wr_1: null,
+      position_te_0: null,
+      position_k_0: null,
+      position_p_0: null,
+      position_defense_0: null,
+      position_defense_1: null,
+      position_defense_2: null,
+      position_defense_3: null,
+      position_defense_4: null,
     }
   );
+
+  console.log(data);
 
   await db.collection('arrangement').remove({
     fantasy_team_id,

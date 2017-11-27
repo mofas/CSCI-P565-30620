@@ -121,13 +121,18 @@
 {
   _id: "....",
   fancy_team_id: "xxxx",
-  position_qb: [], // 1
-  position_rb: [], // 1
-  position_wr: [], // 2
-  position_te: [], // 1
-  position_k: [], // 1
-  position_defense: [], // 5
-  position_p: [], // 1
+  position_qb_0: "player_id_xxx",
+  position_rb_0: "player_id_xxx",
+  position_wr_0: "player_id_xxx",
+  position_wr_1: "player_id_xxx",
+  position_te_0: "player_id_xxx",
+  position_k_0: "player_id_xxx",
+  position_p_0: "player_id_xxx",
+  position_defense_0: "player_id_xxx",
+  position_defense_1: "player_id_xxx",
+  position_defense_2: "player_id_xxx",
+  position_defense_3: "player_id_xxx",
+  position_defense_4: "player_id_xxx",
 }
 ```
 

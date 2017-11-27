@@ -31,40 +31,55 @@ class TradePlayer extends React.PureComponent {
 
       {
         QueryFantasyTeam(league_id: "${l_id}", account_id: "${account_id}") {
-        _id
-        name
-        arrangement {
-          position_qb {
-            ...playerMain
-          }
-          position_rb {
-            ...playerMain
-          }
-          position_wr {
-            ...playerMain
-          }
-          position_te {
-            ...playerMain
-          }
-          position_k {
-            ...playerMain
-          }
-          position_defense {
-            ...playerMain
-          }
-          position_p {
-            ...playerMain
-          }
-        }
-        }
-        QueryPoolPlayer(league_id:"${l_id}"){
-            account{
-              _id
+          _id
+          name
+          arrangement {
+            position_qb_0 {
+              ...playerMain
             }
-            players{
+            position_rb_0 {
+              ...playerMain
+            }
+            position_wr_0 {
+              ...playerMain
+            }
+            position_wr_1 {
+              ...playerMain
+            }
+            position_te_0 {
+              ...playerMain
+            }
+            position_k_0 {
+              ...playerMain
+            }
+            position_p_0 {
+              ...playerMain
+            }
+            position_defense_0 {
+              ...playerMain
+            }
+            position_defense_1 {
+              ...playerMain
+            }
+            position_defense_2 {
+              ...playerMain
+            }
+            position_defense_3 {
+              ...playerMain
+            }
+            position_defense_4 {
               ...playerMain
             }
           }
+        }
+        QueryPoolPlayer(league_id:"${l_id}"){
+          account{
+            _id
+          }
+          players{
+            ...playerMain
+          }
+        }
       }
 
       fragment playerMain on PlayerType {
@@ -72,7 +87,6 @@ class TradePlayer extends React.PureComponent {
         Name
         Position
       }
-
     `;
 
     this.setState({
@@ -99,7 +113,7 @@ class TradePlayer extends React.PureComponent {
     });
   }
 
-  handleChangePlayer = ({ positionKey, positionIndex }) => e => {
+  handleChangePlayer = ({ positionKey }) => e => {
     this.setState({
       loading: true,
     });
@@ -110,7 +124,6 @@ class TradePlayer extends React.PureComponent {
         mutation{
           UpdateTeamArrangement(fantasy_team_id:"${this.state.fantasyTeamId}"
           position: "${positionKey}"
-          index: ${positionIndex}
           player_id: "${player_id}"){
             success
           }
@@ -127,7 +140,7 @@ class TradePlayer extends React.PureComponent {
         //update local state.
         this.setState({
           arrangement: this.state.arrangement.updateIn(
-            [positionKey, positionIndex],
+            [positionKey],
             () => value
           ),
         });

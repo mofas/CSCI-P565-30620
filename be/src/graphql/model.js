@@ -265,66 +265,46 @@ export const PoolPlayerType = new GraphQLObjectType({
   },
 });
 
-const arrangementTypeGetPlayerHelper = async (context, ids) => {
+const arrangementTypeGetPlayerHelper = async (context, id) => {
   const loader = getLoader(
     context,
     'playerLoaderGenerator',
     playerLoaderGenerator
   );
-
-  // in some case, there will be a null in list
-  const ret = await loader.loadMany((ids || []).filter(d => d));
-  return ids.map(id => {
-    return ret.filter(d => d._id.toString() === id)[0];
-  });
+  if (id) {
+    const ret = await loader.loadMany([id]);
+    return ret[0];
+  }
+  return null;
 };
+
+const ARRANGEMENT_POSITION = [
+  'position_qb_0',
+  'position_rb_0',
+  'position_wr_0',
+  'position_wr_1',
+  'position_te_0',
+  'position_k_0',
+  'position_p_0',
+  'position_defense_0',
+  'position_defense_1',
+  'position_defense_2',
+  'position_defense_3',
+  'position_defense_4',
+];
 
 export const ArrangementType = new GraphQLObjectType({
   name: 'ArrangementType',
-  fields: {
-    position_qb: {
-      type: new GraphQLList(PlayerType),
-      resolve: async ({ position_qb }, args, context) => {
-        return arrangementTypeGetPlayerHelper(context, position_qb);
+
+  fields: ARRANGEMENT_POSITION.reduce((acc, key) => {
+    acc[key] = {
+      type: PlayerType,
+      resolve: async (field, args, context) => {
+        return arrangementTypeGetPlayerHelper(context, field[key]);
       },
-    },
-    position_rb: {
-      type: new GraphQLList(PlayerType),
-      resolve: async ({ position_rb }, args, context) => {
-        return arrangementTypeGetPlayerHelper(context, position_rb);
-      },
-    },
-    position_wr: {
-      type: new GraphQLList(PlayerType),
-      resolve: async ({ position_wr }, args, context) => {
-        return arrangementTypeGetPlayerHelper(context, position_wr);
-      },
-    },
-    position_te: {
-      type: new GraphQLList(PlayerType),
-      resolve: async ({ position_te }, args, context) => {
-        return arrangementTypeGetPlayerHelper(context, position_te);
-      },
-    },
-    position_k: {
-      type: new GraphQLList(PlayerType),
-      resolve: async ({ position_k }, args, context) => {
-        return arrangementTypeGetPlayerHelper(context, position_k);
-      },
-    },
-    position_defense: {
-      type: new GraphQLList(PlayerType),
-      resolve: async ({ position_defense }, args, context) => {
-        return arrangementTypeGetPlayerHelper(context, position_defense);
-      },
-    },
-    position_p: {
-      type: new GraphQLList(PlayerType),
-      resolve: async ({ position_p }, args, context) => {
-        return arrangementTypeGetPlayerHelper(context, position_p);
-      },
-    },
-  },
+    };
+    return acc;
+  }, {}),
 });
 
 export const FantasyTeamType = new GraphQLObjectType({

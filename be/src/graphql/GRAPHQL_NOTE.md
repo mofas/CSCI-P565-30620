@@ -13,27 +13,43 @@
       name
     }
     arrangement {
-      position_qb {
+      position_qb_0 {
         ...playerMain
       }
-      position_rb {
+      position_rb_0 {
         ...playerMain
       }
-      position_wr {
+      position_wr_0 {
         ...playerMain
       }
-      position_te {
+      position_wr_1 {
         ...playerMain
       }
-      position_k {
+      position_te_0 {
         ...playerMain
       }
-      position_defense {
+      position_k_0 {
         ...playerMain
       }
       position_p {
         ...playerMain
       }
+      position_defense_0 {
+        ...playerMain
+      }
+      position_defense_1 {
+        ...playerMain
+      }
+      position_defense_2 {
+        ...playerMain
+      }
+      position_defense_3 {
+        ...playerMain
+      }
+      position_defense_4 {
+        ...playerMain
+      }
+
     }
   }
 }
@@ -69,25 +85,40 @@ fragment playerMain on PlayerType {
 
 {
   QueryTeamArrangement(league_id: "5a08b7d7a5f5c440d2159165", account_id: "59e988fe76539f281279d241") {
-    position_qb {
+    position_qb_0 {
       ...playerMain
     }
-    position_rb {
+    position_rb_0 {
       ...playerMain
     }
-    position_wr {
+    position_wr_0 {
       ...playerMain
     }
-    position_te {
+    position_wr_1 {
       ...playerMain
     }
-    position_k {
+    position_te_0 {
       ...playerMain
     }
-    position_defense {
+    position_k_0 {
       ...playerMain
     }
     position_p {
+      ...playerMain
+    }
+    position_defense_0 {
+      ...playerMain
+    }
+    position_defense_1 {
+      ...playerMain
+    }
+    position_defense_2 {
+      ...playerMain
+    }
+    position_defense_3 {
+      ...playerMain
+    }
+    position_defense_4 {
       ...playerMain
     }
   }

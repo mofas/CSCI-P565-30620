@@ -462,7 +462,6 @@ export const UpdateTeamArrangement = {
   args: {
     fantasy_team_id: { type: new GraphQLNonNull(GraphQLString) },
     position: { type: new GraphQLNonNull(GraphQLString) },
-    index: { type: new GraphQLNonNull(GraphQLInt) },
     player_id: { type: GraphQLString },
   },
   resolve: async (
@@ -476,7 +475,7 @@ export const UpdateTeamArrangement = {
       },
       {
         $set: {
-          [`${position}.${index}`]: player_id === '' ? null : player_id,
+          [`${position}`]: player_id === '' ? null : player_id,
         },
       }
     );

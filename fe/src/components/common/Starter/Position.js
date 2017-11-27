@@ -8,8 +8,7 @@ const cx = classnames.bind(style);
 class Position extends React.PureComponent {
   static defaultProps = {
     position: 'QB',
-    positionKey: 'position_qb',
-    positionIndex: 0,
+    positionKey: 'position_qb_0',
     player: Map(),
     handleChangePlayer: () => () => {},
     options: List(),
@@ -24,7 +23,6 @@ class Position extends React.PureComponent {
       handleChangePlayer,
       options,
       positionKey,
-      positionIndex,
     } = props;
 
     return (
@@ -35,7 +33,6 @@ class Position extends React.PureComponent {
           className={cx('player-selector')}
           onChange={handleChangePlayer({
             positionKey,
-            positionIndex,
           })}
           value={player.get('_id') || ''}
         >

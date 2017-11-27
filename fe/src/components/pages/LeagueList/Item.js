@@ -44,7 +44,7 @@ class LeagueItem extends React.PureComponent {
           {data
             .get('accounts')
             .map(d => d.get('email'))
-            .map(d => <div>{d}</div>)}
+            .map(d => <div key={d}>{d}</div>)}
         </Col>
         <Col className={cx('creator-col')}>{creatorEmail}</Col>
         <Col className={cx('time-col')}>
