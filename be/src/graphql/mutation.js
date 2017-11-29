@@ -504,6 +504,57 @@ export const SetSchedule = {
   },
 };
 
+export const CreateFantasyTeam = {
+  type: ResultType,
+  args: {
+    account_id: { type: new GraphQLNonNull(GraphQLString) },
+    league_id: { type: new GraphQLNonNull(GraphQLString) },
+  },
+  resolve: async ({ db, ws }, { account_id, league_id }, info) => {
+    await db.collection('fantasy_team').remove({
+      account_id,
+      league_id,
+    });
+
+    const res = await db.collection('fantasy_team').insert({
+      account_id,
+      league_id,
+      name: '',
+      wins: 0,
+      lose: 0,
+    });
+
+    if (res.result.ok) {
+      const fantasy_team_id = res.insertedIds[0];
+      const data = {
+        fantasy_team_id,
+        position_qb_0: null,
+        position_rb_0: null,
+        position_wr_0: null,
+        position_wr_1: null,
+        position_te_0: null,
+        position_k_0: null,
+        position_p_0: null,
+        position_defense_0: null,
+        position_defense_1: null,
+        position_defense_2: null,
+        position_defense_3: null,
+        position_defense_4: null,
+      };
+      await db.collection('arrangement').insertOne(data);
+      return {
+        error: '',
+        success: true,
+      };
+    } else {
+      return {
+        error: JSON.stringify(result),
+        success: false,
+      };
+    }
+  },
+};
+
 export const UpdateTeamArrangement = {
   type: ResultType,
   args: {

@@ -104,11 +104,7 @@ class LeagueItem extends React.PureComponent {
               </Link>
             ) : null}
             {leagueStatus === 'SeasonStart' ? (
-              <Link
-                to={`/app/league/trade/${data.get('_id')}/${userInfo.get(
-                  '_id'
-                )}`}
-              >
+              <Link to={`/app/league/trade/${data.get('_id')}`}>
                 <Btn>
                   <ManagerIcon className="icon" />
                   Manage Players

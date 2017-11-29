@@ -24,6 +24,7 @@ class TradePlayer extends React.PureComponent {
     this.state = {
       fantasyTeamId: '',
       fantasyTeamName: '',
+      initial: false,
       loading: false,
       arrangement: Map(),
       players: List(),
@@ -33,11 +34,21 @@ class TradePlayer extends React.PureComponent {
   }
 
   componentDidMount() {
-    this.loadData();
+    const account_id = this.props.accountStore.getIn(['userInfo', '_id']);
+    if (account_id && !this.state.initial) {
+      this.loadData(account_id);
+    }
   }
 
-  loadData = () => {
-    const { l_id, account_id } = this.props.match.params;
+  componentWillReceiveProps(nextProps) {
+    const account_id = nextProps.accountStore.getIn(['userInfo', '_id']);
+    if (account_id && !this.state.initial) {
+      this.loadData(account_id);
+    }
+  }
+
+  loadData = account_id => {
+    const { l_id } = this.props.match.params;
     const query = `
       {
         ListPlayer{
@@ -127,6 +138,7 @@ class TradePlayer extends React.PureComponent {
 
     this.setState({
       loading: true,
+      initial: true,
     });
 
     API.GraphQL(query).then(res => {
@@ -154,6 +166,26 @@ class TradePlayer extends React.PureComponent {
         poolPlayer: fromJS(rawPoolPlayer || []),
         playerInTeam: fromJS(playerInTeam.players),
       });
+    });
+  };
+
+  createTeam = () => {
+    const leagueId = this.props.match.params.l_id;
+    const account_id = this.props.accountStore.getIn(['userInfo', '_id']);
+    const mutation = `
+      mutation{
+        CreateFantasyTeam(
+        league_id: "${leagueId}",
+        account_id: "${account_id}"
+      ){
+          success
+          error
+        }
+      }
+    `;
+
+    API.GraphQL(mutation).then(res => {
+      window.location.reload();
     });
   };
 
@@ -276,7 +308,8 @@ class TradePlayer extends React.PureComponent {
       fantasyTeamId,
     } = state;
 
-    const { l_id, account_id } = props.match.params;
+    const { l_id } = props.match.params;
+    const account_id = this.props.accountStore.getIn(['userInfo', '_id']);
 
     if (!loading && !fantasyTeamId) {
       return (
@@ -286,7 +319,7 @@ class TradePlayer extends React.PureComponent {
             <BackBtn type="secondary">Back to List</BackBtn>
           </Link>
           <h3>Look like you don't create your team successfully.</h3>
-          <Btn>Click here to create team</Btn>
+          <Btn onClick={this.createTeam}>Click to create team</Btn>
         </div>
       );
     }
@@ -302,7 +335,7 @@ class TradePlayer extends React.PureComponent {
 
         <Starter
           arrangement={arrangement}
-          players={poolPlayer}
+          players={playerInTeam}
           handleChangePlayer={this.handleChangePlayer}
         />
 

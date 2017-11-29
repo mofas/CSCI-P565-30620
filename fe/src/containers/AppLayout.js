@@ -71,7 +71,7 @@ class MainLayout extends Component {
             />
             <Route
               exact
-              path="/app/league/trade/:l_id/:account_id"
+              path="/app/league/trade/:l_id"
               component={TradePlayer}
             />
             <Route exact path="/app/chatroom/:room_id" component={ChatRoom} />
