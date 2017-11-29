@@ -54,6 +54,17 @@ class TradePlayer extends React.PureComponent {
           Extra_Points_Made
           Interceptions
           Fumbles_Lost
+          Interceptions_Thrown
+          Forced_Fumbles
+          Sacks
+          Blocked_Kicks
+          Blocked_Punts
+          Safeties
+          Kickoff_Return_TD
+          Punt_Return_TD
+          Defensive_TD
+          Punting_i20
+          Punting_Yards
         }
         QueryFantasyTeam(league_id: "${l_id}", account_id: "${account_id}") {
           _id
@@ -267,8 +278,7 @@ class TradePlayer extends React.PureComponent {
 
     const { l_id, account_id } = props.match.params;
 
-    console.log(fantasyTeamId);
-    if (!fantasyTeamId) {
+    if (!loading && !fantasyTeamId) {
       return (
         <div className={cx('root')}>
           <Spinner show={loading} />

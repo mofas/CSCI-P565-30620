@@ -91,6 +91,7 @@ class LeagueSeason extends React.PureComponent {
                     2. Standing // Manish Read GameRecord from database, display
                     on the UI
                 </div>
+                <div>2. Formula for League // Joel & Tyler</div>
                 <div>
                     3. UI for Starters // CY Read arrangement data from server
                     Store data when finishing.

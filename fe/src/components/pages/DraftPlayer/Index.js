@@ -81,6 +81,17 @@ class DraftPlayer extends React.PureComponent {
             Extra_Points_Made
             Interceptions
             Fumbles_Lost
+            Interceptions_Thrown
+            Forced_Fumbles
+            Sacks
+            Blocked_Kicks
+            Blocked_Punts
+            Safeties
+            Kickoff_Return_TD
+            Punt_Return_TD
+            Defensive_TD
+            Punting_i20
+            Punting_Yards
           }
           LeagueData: QueryLeague(_id: "${this.state.league_id}"){
             name,
