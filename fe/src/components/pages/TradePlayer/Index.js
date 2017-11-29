@@ -9,6 +9,7 @@ import API from '../../../middleware/API';
 import Spinner from '../../common/Spinner/Spinner';
 
 import BackBtn from '../../common/Btn/BackBtn';
+import Btn from '../../common/Btn/Btn';
 import Starter from '../../common/Starter/Index';
 import InTeamPlayerList from './InTeamPlayerList';
 import PlayerList from '../../common/SelectPlayerList/PlayerList';
@@ -255,8 +256,30 @@ class TradePlayer extends React.PureComponent {
   render() {
     const { state, props } = this;
     const { accountStore } = props;
-    const { loading, players, arrangement, poolPlayer, playerInTeam } = state;
+    const {
+      loading,
+      players,
+      arrangement,
+      poolPlayer,
+      playerInTeam,
+      fantasyTeamId,
+    } = state;
+
     const { l_id, account_id } = props.match.params;
+
+    console.log(fantasyTeamId);
+    if (!fantasyTeamId) {
+      return (
+        <div className={cx('root')}>
+          <Spinner show={loading} />
+          <Link to={`/app/league/list`} style={{ display: 'inline-block' }}>
+            <BackBtn type="secondary">Back to List</BackBtn>
+          </Link>
+          <h3>Look like you don't create your team successfully.</h3>
+          <Btn>Click here to create team</Btn>
+        </div>
+      );
+    }
 
     return (
       <div className={cx('root')}>
