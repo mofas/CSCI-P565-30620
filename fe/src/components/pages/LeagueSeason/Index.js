@@ -16,53 +16,35 @@ class LeagueSeason extends React.PureComponent {
         super(props);
         this.state = {
             loading: false,
+            lid: this.props.match.params.l_id
         };
     }
 
     componentDidMount() {
-        // const query = `
-        //   {
-        //     ListPlayer{
-        //       _id
-        //       Name
-        //       Position
-        //       Team
-        //       Passing_Yards
-        //       Rushing_Yards
-        //       Receiving_Yards
-        //       Passing_TDs
-        //       Rushing_TDs
-        //       Receiving_TD
-        //       FG_Made
-        //       FG_Missed
-        //       Extra_Points_Made
-        //       Interceptions
-        //       Fumbles_Lost
-        //       Interceptions_Thrown
-        //       Forced_Fumbles
-        //       Sacks
-        //       Blocked_Kicks
-        //       Blocked_Punts
-        //       Safeties
-        //       Kickoff_Return_TD
-        //       Punt_Return_TD
-        //       Defensive_TD
-        //       Punting_i20
-        //       Punting_Yards
-        //     }
-        //   }
-        // `;
-        // this.setState({
-        //   loading: true,
-        // });
-        // API.GraphQL(query).then(res => {
-        //   console.log(res);
-        //   const players = fromJS(res.data.ListPlayer);
-        //   this.setState({
-        //     loading: false,
-        //     players: players,
-        //   });
-        // });
+        const query = `
+          {
+            QueryScheduleByLeagueId(league_id: "${this.state.lid}" ) {
+                week_no
+                first_team {
+                  email
+                }
+                second_team {
+                  email
+                }
+              }
+          }
+        `;
+        this.setState({
+            loading: true
+        });
+        API.GraphQL(query).then(res => {
+            // console.log(res);
+            const QueryScheduleByLeagueId = res.data.QueryScheduleByLeagueId;
+            this.setState({
+                loading: false,
+                QueryScheduleByLeagueId: QueryScheduleByLeagueId
+            });
+        });
     }
 
     render() {
