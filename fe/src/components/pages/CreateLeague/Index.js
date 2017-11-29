@@ -276,9 +276,9 @@ class CreateLeague extends React.PureComponent {
       return;
     }
     const puntyds = parseInt(this.state.formula.get("puntyds"), 10);
-    if (isNaN(puntyds) || puntyds < 1 || puntyds > 200) {
+    if (isNaN(puntyds) || puntyds < 1 || puntyds > 100) {
       window.alert(
-        "One point can be given for between 1 and 200 punting yards"
+        "One point can be given for between 1 and 100 punting yards"
       );
       return;
     }
