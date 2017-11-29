@@ -331,7 +331,7 @@ class TradePlayer extends React.PureComponent {
           <BackBtn type="secondary">Back to List</BackBtn>
         </Link>
 
-        <h3>Player Starter</h3>
+        <h3>Starters</h3>
 
         <Starter
           arrangement={arrangement}
@@ -339,14 +339,14 @@ class TradePlayer extends React.PureComponent {
           handleChangePlayer={this.handleChangePlayer}
         />
 
-        <h3>Player In your Team</h3>
+        <h3>Your Team</h3>
         <InTeamPlayerList
           arrangement={arrangement}
           players={playerInTeam}
           handleReleasePlayer={this.handleReleasePlayer}
         />
 
-        <h3>Select Player from Free Market</h3>
+        <h3>Select Free Agent</h3>
         <PlayerList
           players={players}
           selectPlayer={this.selectPlayer}
