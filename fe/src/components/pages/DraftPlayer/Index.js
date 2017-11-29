@@ -489,8 +489,20 @@ class DraftPlayer extends React.PureComponent {
     return (
       <div className={cx('root')}>
         <Spinner show={loading} />
-        <h1>This is draft page!!</h1>
-        <div> Run-no {leagueData.get('draft_run')} </div>
+        <div className={cx('field')}>
+          <img
+            src="http://hddfhm.com/images/clipart-field-football-7.png"
+            height="250"
+            width="1500"
+          />{' '}
+        </div>
+        <div className={cx('logo')}>
+          <img
+            src="https://upload.wikimedia.org/wikipedia/en/thumb/8/80/NFL_Draft_logo.svg/806px-NFL_Draft_logo.svg.png"
+            height="300"
+          />{' '}
+        </div>
+        <div> Run-no {leagueData.get('draft_run') + 1} </div>
         <div>
           Round:
           {Math.floor(leagueData.get('draft_run') / leagueData.get('limit')) +
