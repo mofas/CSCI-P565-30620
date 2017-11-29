@@ -118,7 +118,8 @@ class TradePlayer extends React.PureComponent {
     });
 
     API.GraphQL(query).then(res => {
-      const arrangement = fromJS(res.data.QueryFantasyTeam.arrangement);
+      const QueryFantasyTeam = res.data.QueryFantasyTeam || {};
+      const arrangement = fromJS(QueryFantasyTeam.arrangement || {});
 
       const rawPoolPlayer = (res.data.QueryPoolPlayer || []).reduce(
         (acc, d) => acc.concat(d.players),
@@ -134,8 +135,8 @@ class TradePlayer extends React.PureComponent {
 
       this.setState({
         players: fromJS(res.data.ListPlayer),
-        fantasyTeamId: res.data.QueryFantasyTeam._id,
-        fantasyTeamName: res.data.QueryFantasyTeam.name,
+        fantasyTeamId: QueryFantasyTeam._id,
+        fantasyTeamName: QueryFantasyTeam.name,
         loading: false,
         arrangement,
         poolPlayer: fromJS(rawPoolPlayer || []),
