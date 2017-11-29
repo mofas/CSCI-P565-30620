@@ -64,58 +64,69 @@ class DraftPlayer extends React.PureComponent {
 
   loadData = () => {
     const query = `
-        {
-          ListPlayer{
+      {
+        ListPlayer{
+          _id
+          Name
+          Position
+          Team
+          Passing_Yards
+          Rushing_Yards
+          Receiving_Yards
+          Passing_TDs
+          Rushing_TDs
+          Receiving_TD
+          FG_Made
+          FG_Missed
+          Extra_Points_Made
+          Interceptions
+          Fumbles_Lost
+          Interceptions_Thrown
+          Forced_Fumbles
+          Sacks
+          Blocked_Kicks
+          Blocked_Punts
+          Safeties
+          Kickoff_Return_TD
+          Punt_Return_TD
+          Defensive_TD
+          Punting_i20
+          Punting_Yards
+        }
+        LeagueData: QueryLeague(_id: "${this.state.league_id}"){
+          name,
+          draft_run,
+          limit,
+          timeout,
+          lastPickTime,
+          stage,
+          accounts{
+            _id,
+            email,
+          }
+        }
+        PoolPlayers: QueryPoolPlayer(league_id: "${this.state.league_id}"){
+          players {
+            _id,
+          }
+        }
+        PoolPlayerWithUser: QueryPoolPlayerWithUser(league_id: "${
+          this.state.league_id
+        }") {
+          account {
+            _id
+            email
+          }
+          players {
             _id
             Name
             Position
-            Team
-            Passing_Yards
-            Rushing_Yards
-            Receiving_Yards
-            Passing_TDs
-            Rushing_TDs
-            Receiving_TD
-            FG_Made
-            FG_Missed
-            Extra_Points_Made
-            Interceptions
-            Fumbles_Lost
-          }
-          LeagueData: QueryLeague(_id: "${this.state.league_id}"){
-            name,
-            draft_run,
-            limit,
-            timeout,
-            lastPickTime,
-            stage,
-            accounts{
-              _id,
-              email,
-            }
-          }
-          PoolPlayers: QueryPoolPlayer(league_id: "${this.state.league_id}"){
-            players {
-              _id,
-            }
-          }
-          PoolPlayerWithUser: QueryPoolPlayerWithUser(league_id: "${
-            this.state.league_id
-          }") {
-            account {
-              _id
-              email
-            }
-            players {
-              _id
-              Name
-              Position
-            }
-
           }
 
         }
-      `;
+
+      }
+    `;
 
     this.setState({
       loading: true,
