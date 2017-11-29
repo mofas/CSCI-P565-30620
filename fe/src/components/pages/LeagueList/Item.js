@@ -99,7 +99,7 @@ class LeagueItem extends React.PureComponent {
               <Link to={`/app/league/season/${data.get('_id')}`}>
                 <Btn>
                   <SeasonIcon className="icon" />
-                  Season Game
+                  Schedule
                 </Btn>
               </Link>
             ) : null}
