@@ -22,3 +22,16 @@
   font-size: 14px;
   background-color: #820303;
 }
+
+.parent {
+  position: relative;
+}
+.field {
+  position: absolute;
+  top: 140px;
+  left: 95px;
+}
+.logo {
+  position: relative;
+  text-align: center;
+}
