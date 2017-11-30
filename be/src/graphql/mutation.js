@@ -60,6 +60,7 @@ export const CreateLeague = {
       timeout: 2,
       lastPickTime: epoc_date,
       formula,
+      gameWeek: 0
     };
 
     const { value } = await db.collection('leagues').insertOne(savedData);

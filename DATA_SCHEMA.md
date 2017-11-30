@@ -101,6 +101,7 @@
   draft_start_time: 12312334312, // draft start time
   timeout: 2, // how long user should wait, prior to automatic refresh ( # Minutes)
   lastPickTime: 12312312312, // last pick time
+  gameWeek:0 // current game week
 }
 ```
 
