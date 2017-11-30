@@ -433,38 +433,42 @@ export const RunMatch = {
     const league = await db
       .collection('leagues')
       .findOne({ _id: ObjectId(league_id) });
+    const formula = league.formula;
+    const week = league.gameWeek;
     const schedule = await db
       .collection('schedule')
-      .findOne({ league_id: league_id });
-    const team1_id = schedule.first_team;
-    const team2_id = schedule.second_team;
-    const formula = league.formula;
-    const week = schedule.week_no;
-    //Have to put it in the correct format for teamMatchAlgorithm
-    const team1 = {
-      _id: team1_id,
-      arrangement: await db
-        .collection('arrangement')
-        .findOne({ fantasy_team_id: team1_id }),
-    };
-    const team2 = {
-      _id: team2_id,
-      arrangement: await db
-        .collection('arrangement')
-        .findOne({ fantasy_team_id: team2_id }),
-    };
-    const result = match(league_id, week, team1, team2, formula);
-    const data = {
-      league_id: league_id,
-      week: week,
-      first_team: team1_id,
-      second_team: team2_id,
-      winner: result.winner,
-      first_score: result.first_score,
-      second_score: result.second_score,
-    };
-    db.collection('GAME_RECORD').insertOne(data);
-    console.log(result);
+      .find({ league_id: league_id, week_no: week })
+      .toArray();
+    var result;
+    for (var game in schedule) {
+      const team1_id = schedule[game].first_team;
+      const team2_id = schedule[game].second_team;
+      //Have to put it in the correct format for teamMatchAlgorithm
+      const team1 = {
+        _id: team1_id,
+        arrangement: await db
+          .collection('arrangement')
+          .findOne({ fancy_team_id: team1_id }),
+      };
+      const team2 = {
+        _id: team2_id,
+        arrangement: await db
+          .collection('arrangement')
+          .findOne({ fancy_team_id: team2_id }),
+      };
+      result = match(league_id, week, team1, team2, formula);
+      const data = {
+        league_id: league_id,
+        week: week,
+        first_team: team1_id,
+        second_team: team2_id,
+        winner: result.winner,
+        first_score: result.first_score,
+        second_score: result.second_score,
+      };
+      console.log(data);
+      db.collection('GAME_RECORD').insertOne(data);
+    }
     return result;
     // TODO : get league data from DB using league_id
     // TODO : get schedule from DB
