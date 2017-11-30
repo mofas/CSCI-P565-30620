@@ -76,3 +76,8 @@
 .oauth-btn {
   margin-top: 20px;
 }
+
+.logo {
+  position: absolute;
+  left: 1000;
+}

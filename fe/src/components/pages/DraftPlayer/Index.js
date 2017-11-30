@@ -351,11 +351,11 @@ class DraftPlayer extends React.PureComponent {
         `;
         API.GraphQL(mut, variables).then(res => {
           this.loadData();
-          console.log('Successffully changed the status');
+          console.log('Successfully changed the status');
         });
       }
     } else {
-      window.alert('Not your chance / Or your 20 players capacity is over');
+      window.alert('Another team is on the clock.');
     }
   };
 
