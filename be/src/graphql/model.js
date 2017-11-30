@@ -154,7 +154,7 @@ export const LeagueType = new GraphQLObjectType({
     draft_start_time: { type: GraphQLInt },
     timeout: { type: GraphQLInt },
     lastPickTime: { type: GraphQLInt },
-    gameweek: { type: GraphQLInt },
+    gameWeek: { type: GraphQLInt },
     accounts: {
       type: new GraphQLList(AccountType),
       resolve: async ({ accounts }, args, context) => {

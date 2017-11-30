@@ -92,7 +92,7 @@ export const QueryLeague = {
       _id: ObjectId(_id),
     };
     const result = await db.collection('leagues').findOne(query);
-
+    console.log(result);
     return result;
   },
 };
