@@ -1,11 +1,12 @@
 import React from 'react';
-import { fromJS, List, Set } from 'immutable';
+import { fromJS, List, Set, Map } from 'immutable';
 import { Link } from 'react-router-dom';
 
 import API from '../../../middleware/API';
 
 import Spinner from '../../common/Spinner/Spinner';
 import BackBtn from '../../common/Btn/BackBtn';
+import { Table, Thead, Tbody, Row, Col } from '../../common/Table/Index';
 
 import classnames from 'classnames/bind';
 import style from './Index.css';
@@ -16,7 +17,8 @@ class LeagueSeason extends React.PureComponent {
         super(props);
         this.state = {
             loading: false,
-            lid: this.props.match.params.l_id
+            lid: this.props.match.params.l_id,
+            ScheduleByLeagueId: fromJS({})
         };
     }
 
@@ -39,17 +41,18 @@ class LeagueSeason extends React.PureComponent {
         });
         API.GraphQL(query).then(res => {
             // console.log(res);
-            const QueryScheduleByLeagueId = res.data.QueryScheduleByLeagueId;
+            const ScheduleByLeagueId = fromJS(res.data.QueryScheduleByLeagueId);
+            // console.log(JSON.stringify(ScheduleByLeagueId));
             this.setState({
                 loading: false,
-                QueryScheduleByLeagueId: QueryScheduleByLeagueId
+                ScheduleByLeagueId: ScheduleByLeagueId
             });
         });
     }
 
     render() {
         const { state, props } = this;
-        const { loading } = state;
+        const { loading, ScheduleByLeagueId } = state;
 
         return (
             <div className={cx('root')}>
@@ -64,6 +67,30 @@ class LeagueSeason extends React.PureComponent {
                 TODO :
                 <div>
                     1. Match schedule // Manish This week game, Next week game,
+                    <Table>
+                        <Thead>
+                            <Row>
+                                <Col> Upcoming Fixture </Col>
+                            </Row>
+                        
+                          <Row>
+                            <Col>Week No</Col>
+                            <Col>first_team</Col>
+                            <Col>second_team </Col>
+                          </Row>
+                        </Thead>
+                        <Tbody>
+                        {this.state.ScheduleByLeagueId.map((d, i) => {
+                            return (
+                              <Row key={i}>
+                                <Col>{d.get('week_no')}</Col>
+                                <Col>{d.get('first_team').get('email')}</Col>
+                                <Col>{d.get('second_team').get('email')}</Col>
+                              </Row>
+                            );
+                          })}                          
+                        </Tbody>
+                    </Table>
                 </div>
                 <div>
                     1.5 Run Button // Joel Tyler Calculate the match this week,
