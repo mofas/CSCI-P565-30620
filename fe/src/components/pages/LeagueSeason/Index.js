@@ -19,6 +19,7 @@ class LeagueSeason extends React.PureComponent {
       loading: false,
       lid: this.props.match.params.l_id,
       ScheduleByLeagueId: fromJS({}),
+      standings: [],
     };
   }
 
@@ -40,19 +41,39 @@ class LeagueSeason extends React.PureComponent {
       loading: true,
     });
     API.GraphQL(query).then(res => {
-      // console.log(res);
+      //console.log(res);
       const ScheduleByLeagueId = fromJS(res.data.QueryScheduleByLeagueId);
-      // console.log(JSON.stringify(ScheduleByLeagueId));
+      //console.log(JSON.stringify(ScheduleByLeagueId));
       this.setState({
         loading: false,
         ScheduleByLeagueId: ScheduleByLeagueId,
       });
     });
+    this.getStandings();
   }
 
   run = () => {
-    const mutation = '{RunMatch(league_id: "${this.state.lid}")}';
-    console.log('hi');
+    const mutation = `{RunMatch(league_id: "${this.state.lid}")}`;
+    //?????
+  };
+
+  getStandings = () => {
+    const query = `{ListTeam(league_id: "${this.state.lid}"){ _id,
+        name,
+        win,
+        lose}}`;
+    this.setState({
+      loading: true,
+    });
+    API.GraphQL(query).then(res => {
+      //console.log(res);
+      const teams = fromJS(res.data.ListTeam);
+      //console.log(JSON.stringify(ScheduleByLeagueId));
+      this.setState({
+        loading: false,
+        standings: teams,
+      });
+    });
   };
 
   render() {
