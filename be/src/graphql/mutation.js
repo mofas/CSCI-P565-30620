@@ -467,14 +467,18 @@ export const RunMatch = {
         second_score: result.second_score,
       };
       console.log(data);
+      if (result.winner === 0) {
+        db
+          .collection('fantasy_team')
+          .findOneAndUpdate({ _id: team1_id }, { $inc: { win: 1 } });
+      } else {
+        db
+          .collection('fantasy_team')
+          .findOneAndUpdate({ _id: team2_id }, { $inc: { win: 1 } });
+      }
       db.collection('GAME_RECORD').insertOne(data);
     }
     return result;
-    // TODO : get league data from DB using league_id
-    // TODO : get schedule from DB
-    // TDOO : Get teams arrangement who will play in this week from DB
-    // TODO : Call match from teamMatchAlgorithm to get game record
-    // TODO:  get Result and save to DB GAME_RECORD
   },
 };
 

@@ -19,6 +19,7 @@ class LeagueSeason extends React.PureComponent {
       loading: false,
       lid: this.props.match.params.l_id,
       ScheduleByLeagueId: fromJS({}),
+      standings: [],
     };
   }
 
@@ -65,11 +66,12 @@ class LeagueSeason extends React.PureComponent {
       loading: true,
     });
     API.GraphQL(query).then(res => {
-      console.log(res);
+      //console.log(res);
       const teams = fromJS(res.data.ListTeam);
       //console.log(JSON.stringify(ScheduleByLeagueId));
       this.setState({
         loading: false,
+        standings: teams,
       });
     });
   };
