@@ -301,3 +301,26 @@ export const QueryScheduleByLeagueId = {
     return ret;
   },
 };
+
+export const ListTeam = {
+  type: new GraphQLList(FantasyTeamType),
+  args: {
+    league_id: { type: GraphQLString }, //league id
+    skip: { type: GraphQLInt },
+    limit: { type: GraphQLInt },
+  },
+  resolve: async ({ db }, { skip, limit, lang, league_id }, info) => {
+    let query = {
+      league_id: league_id,
+    };
+    skip = skip || 0;
+    limit = limit || 2000;
+    const result = await db
+      .collection('fantasy_team')
+      .find(query)
+      .skip(skip)
+      .limit(limit)
+      .toArray();
+    return result;
+  },
+};
