@@ -13,6 +13,7 @@ import {
   GetMessages,
   QueryPoolPlayerWithUser,
   QueryScheduleByLeagueId,
+  QueryGameRecordByLeagueId
 } from './query';
 
 import {
@@ -48,6 +49,7 @@ export const schema = new GraphQLSchema({
       QueryTeamArrangement,
       QueryPoolPlayerWithUser,
       QueryScheduleByLeagueId,
+      QueryGameRecordByLeagueId
     },
   }),
   mutation: new GraphQLObjectType({

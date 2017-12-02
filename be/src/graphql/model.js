@@ -421,3 +421,26 @@ export const ScheduleType = new GraphQLObjectType({
     },
   }),
 });
+
+export const GameRecordType = new GraphQLObjectType({
+  name: 'GameRecordType',
+  fields: () => ({
+    league_id: { type: GraphQLString },
+    week: { type: GraphQLString },
+    first_team: { 
+      type: AccountType,
+      resolve: async ({ first_team_id }, args, { db }) => {
+        const ret = await db.collection('accounts').findOne( {_id: ObjectId(first_team_id)} );
+        return ret;
+      }
+    },
+    second_team: { 
+      type: AccountType,
+      resolve: async ({ second_team_id }, args, { db }) => {
+        const ret = await db.collection('accounts').findOne( {_id: ObjectId(second_team_id)} );
+        return ret;
+      }
+    },
+    winner: { type: GraphQLInt },
+  }),
+});

@@ -24,6 +24,7 @@ import {
   MessageType,
   PoolPlayerWithUserType,
   ScheduleType,
+  GameRecordType
 } from './model';
 
 import {
@@ -298,6 +299,34 @@ export const QueryScheduleByLeagueId = {
       };
     });
     // console.log(ret);
+    return ret;
+  },
+};
+
+export const QueryGameRecordByLeagueId = {
+  type: new GraphQLList(GameRecordType),
+  args: {
+    league_id: { type: GraphQLString },
+  },
+  resolve: async ({ db }, { league_id }, info) => {
+    // console.log("league_id: adas: ", league_id);
+    const query = {
+      league_id: league_id,
+    };
+    const result = await db
+      .collection('game_record')
+      .find(query)
+      .toArray();
+
+    const ret = result.map(d => {
+      return {
+        league_id: d['league_id'],
+        week: d['week'],
+        first_team_id: d['first_team'],
+        second_team_id: d['second_team'],
+        winner: d['winner']
+      };
+    });
     return ret;
   },
 };
