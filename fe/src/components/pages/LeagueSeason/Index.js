@@ -6,8 +6,10 @@ import API from '../../../middleware/API';
 
 import Spinner from '../../common/Spinner/Spinner';
 import BackBtn from '../../common/Btn/BackBtn';
+import Btn from '../../common/Btn/BackBtn';
 import { Table, Thead, Tbody, Row, Col } from '../../common/Table/Index';
 
+import Standings from './Standings';
 import TeamsInfo from './TeamsInfo';
 
 import classnames from 'classnames/bind';
@@ -21,8 +23,8 @@ class LeagueSeason extends React.PureComponent {
       loading: false,
       teams: List(),
       lid: this.props.match.params.l_id,
-      ScheduleByLeagueId: fromJS({}),
-      standings: [],
+      ScheduleByLeagueId: Map(),
+      standings: List(),
       pointdata: {},
       gameWeek: 0,
     };
@@ -119,11 +121,11 @@ class LeagueSeason extends React.PureComponent {
     API.GraphQL(query).then(res => {
       const ScheduleByLeagueId = fromJS(res.data.QueryScheduleByLeagueId);
       const teams = fromJS(res.data.QueryLeagueTeams);
-      const standings = res.data.ListTeam;
+      const standings = fromJS(res.data.ListTeam);
       this.setState({
         loading: false,
         teams,
-        ScheduleByLeagueId: ScheduleByLeagueId,
+        ScheduleByLeagueId,
         gameWeek: res.data.QueryLeague['gameWeek'],
         standings,
       });
@@ -146,7 +148,6 @@ class LeagueSeason extends React.PureComponent {
         </Link>
         <Spinner show={loading} />
         <div>This is League Season Page</div>
-        TODO :
         <div>
           1. Match schedule // Manish This week game, Next week game,
           <Table>
@@ -176,40 +177,12 @@ class LeagueSeason extends React.PureComponent {
           </Table>
         </div>
         <div>
-          <button onClick={this.run}>Does nothing. Will run match</button>
-          <p />
+          <Btn onClick={this.run}>Run match</Btn>
           1.5 Run Button // Joel Tyler Calculate the match this week, and store
           the data into DB, reload the page.
         </div>
-        <div>
-          <Table>
-            <Thead>
-              <Row>
-                <Col> Standing : Week - {gameWeek - 1} </Col>
-              </Row>
-
-              <Row>
-                <Col>Rank </Col>
-                <Col>Team/Manager</Col>
-                <Col> Wins </Col>
-                <Col> Lose </Col>
-              </Row>
-            </Thead>
-            <Tbody>
-              {standings.map((d, i) => {
-                return (
-                  <Row key={i}>
-                    <Col>{i + 1}</Col>
-                    <Col>{d['name'] ? d['name'] : d['account']['email']}</Col>
-                    <Col>{d['win']}</Col>
-                    <Col>{d['lose']}</Col>
-                  </Row>
-                );
-              })}
-            </Tbody>
-          </Table>
-        </div>
         <div>2. Formula for League // Joel & Tyler</div>
+        <Standings gameWeek={gameWeek} data={standings} />
         <TeamsInfo data={teams} />
       </div>
     );

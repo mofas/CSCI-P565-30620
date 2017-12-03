@@ -19,7 +19,7 @@ const positionList = [
   'position_defense_1',
   'position_defense_2',
   'position_defense_3',
-  'position_defense_4'
+  'position_defense_4',
 ];
 
 const positionMapping = {
@@ -34,42 +34,32 @@ const positionMapping = {
   position_defense_1: 'DEF',
   position_defense_2: 'DEF',
   position_defense_3: 'DEF',
-  position_defense_4: 'DEF'
+  position_defense_4: 'DEF',
 };
 
 class TeamsStarter extends React.PureComponent {
   static defaultProps = {
-    data: Map()
+    data: Map(),
   };
 
   render() {
     const { props } = this;
     const { data } = props;
-
-    console.log(data.toJS());
     return (
-      <Table>
-        <Thead>
-          <Row>
-            <Col className={cx('name')}>Name</Col>
-            <Col className={cx('position')}>Position</Col>
-          </Row>
-        </Thead>
-        <Tbody>
-          {positionList.map(d => {
-            return (
-              <Row key={d}>
-                <Col className={cx('name')}>
-                  {data.getIn([d, 'Name']) || 'NA'}
-                </Col>
-                <Col className={cx('position')}>
-                  {data.getIn([d, 'Position']) || positionMapping[d]}
-                </Col>
-              </Row>
-            );
-          })}
-        </Tbody>
-      </Table>
+      <Tbody className={cx('team-info')}>
+        {positionList.map(d => {
+          return (
+            <Row key={d}>
+              <Col className={cx('name')}>
+                {data.getIn([d, 'Name']) || 'NA'}
+              </Col>
+              <Col className={cx('position')}>
+                {data.getIn([d, 'Position']) || positionMapping[d]}
+              </Col>
+            </Row>
+          );
+        })}
+      </Tbody>
     );
   }
 }

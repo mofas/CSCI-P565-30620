@@ -1,5 +1,6 @@
 import React from 'react';
 import { fromJS, List, Map, Set } from 'immutable';
+import { Table, Thead, Tbody, Row, Col } from '../../common/Table/Index';
 
 import Btn from '../../common/Btn/Btn';
 import TeamStarter from './TeamStarter';
@@ -10,7 +11,7 @@ const cx = classnames.bind(style);
 
 class TeamsInfo extends React.PureComponent {
   static defaultProps = {
-    data: List()
+    data: List(),
   };
 
   render() {
@@ -18,23 +19,30 @@ class TeamsInfo extends React.PureComponent {
     const { data } = props;
 
     return (
-      <div className={cx('teams')}>
-        <div className={cx('title')}>Team Starter</div>
-        {data.map(d => {
-          return (
-            <div
-              className={cx('team-info')}
-              key={d.getIn(['account', 'email'])}
-            >
-              <div className={cx('team-owner')}>
-                {d.getIn(['account', 'email']).split('@')[0] + "'s Team"}
-              </div>
-              <div className={cx('player-list')} key={d.get('_id')}>
+      <div className={cx('teams-info')}>
+        <Table>
+          <Thead>
+            <Row>
+              <Col>Team Starter</Col>
+            </Row>
+            <Row>
+              <Col className={cx('name')}>Name</Col>
+              <Col className={cx('position')}>Position</Col>
+            </Row>
+          </Thead>
+          {data.map(d => {
+            return (
+              <div>
+                <Row>
+                  <Col>
+                    {d.getIn(['account', 'email']).split('@')[0] + "'s Team"}
+                  </Col>
+                </Row>
                 <TeamStarter data={d.get('arrangement') || Map()} />
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </Table>
       </div>
     );
   }
