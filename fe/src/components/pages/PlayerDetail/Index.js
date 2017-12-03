@@ -77,14 +77,18 @@ class PlayerDetail extends React.PureComponent {
                 )}.png) no-repeat 50% 50%`,
               }}
             >
-              <div className={cx('bg-img-cover')} />
+              <div className={cx('bg-img-cover')}>
+			   </div>
             </div>
 
-            <div className={cx('thumb')} />
+            <div className={cx('thumb')}>
+				<img src={'./PlayerPics/'+player.get('Team')+'_'+player.get('Name')+'.png'} />
+			   
+			 </div>
             <div className={cx('info')}>
               <div className={cx('info-item', 'name')}>
                 <div className={cx('bold')}>Name</div>
-                {player.get('Name')}
+                {player.get('Name')	}
               </div>
               <div className={cx('info-item', 'position')}>
                 <div className={cx('bold')}>Position</div>
