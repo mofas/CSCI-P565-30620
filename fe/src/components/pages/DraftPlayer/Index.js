@@ -28,11 +28,9 @@ class DraftPlayer extends React.PureComponent {
       modalToggle: false,
       accounts_darft_complete: [],
       showMessage: '',
-      //userId : this.props.accountStore.getIn(['userInfo', 'email'])
     };
   }
   componentWillMount() {
-    // this.props.dispatch(getUserInfo());
     Modal.setAppElement('body');
   }
 
@@ -580,7 +578,11 @@ class DraftPlayer extends React.PureComponent {
           playerPoolData TODO: Chooseed player for all users Team1: Player1
           Player2 Team2: Player1 Player2
         </div>
-        <ChatRoom roomId={this.props.match.params.l_id} />
+
+        <div className={cx('chat-room-wrap')}>
+          <div className={cx('chat-room-title')}>Disscussion Board</div>
+          <ChatRoom roomId={this.props.match.params.l_id} />
+        </div>
       </div>
     );
   }

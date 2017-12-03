@@ -31,7 +31,13 @@
   top: 140px;
   left: 95px;
 }
-.logo {
-  position: relative;
-  text-align: center;
+
+.chat-room-wrap {
+  width: 400px;
+  height: 500px;
+  .chat-room-title {
+    padding: 10px;
+    text-align: center;
+    font-weight: bold;
+  }
 }
