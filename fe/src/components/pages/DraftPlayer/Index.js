@@ -8,6 +8,7 @@ import Spinner from '../../common/Spinner/Spinner';
 import Sequence from './Sequence';
 import ChatRoom from '../../common/ChatRoom/ChatRoom';
 import PlayerList from '../../common/SelectPlayerList/PlayerList';
+import { Table, Thead, Tbody, Row, Col } from '../../common/Table/Index';
 
 import classnames from 'classnames/bind';
 import style from './Index.css';
@@ -37,6 +38,8 @@ class DraftPlayer extends React.PureComponent {
       modalToggle: false,
       accounts_darft_complete: [],
       showMessage: '',
+      poolPlayerWithUser: [],
+      index: 0
     };
   }
 
@@ -118,7 +121,7 @@ class DraftPlayer extends React.PureComponent {
       const players = fromJS(res.data.ListPlayer);
       const leagueData = fromJS(res.data.LeagueData);
       const poolPlayers = fromJS(res.data.PoolPlayers);
-      // console.log("68766876", JSON.stringify(res.data.PoolPlayerWithUser));
+      // console.log("68766876", res.data.PoolPlayerWithUser);
       // console.log("manish", res.data.PoolPlayerWithUser.length);
 
       // console.log("fdskfasd=?????>>>>>", JSON.stringify(leagueData));
@@ -126,6 +129,9 @@ class DraftPlayer extends React.PureComponent {
         console.log('Redirect to game page');
         window.location.href = '#/app/league/list';
       }
+      this.setState({
+        poolPlayerWithUser: res.data.PoolPlayerWithUser,
+      });
 
       const accounts_darft_complete = [];
       let showMessage =
@@ -253,7 +259,7 @@ class DraftPlayer extends React.PureComponent {
         players: filterPlayers,
         leagueData: leagueData,
         poolPlayers: poolPlayers,
-        poolPlayerWithUser: res.data.PoolPlayerWithUser,
+        // poolPlayerWithUser: res.data.PoolPlayerWithUser,
         acc_to_players: acc_to_player,
       });
     });
@@ -326,6 +332,7 @@ class DraftPlayer extends React.PureComponent {
     const { loading, leagueData, players, poolPlayers } = state;
     const { accountStore } = props;
 
+    const targetData = this.state.poolPlayerWithUser[this.state.index];
     const currentPicker = getCurrentPicker(leagueData);
 
     return (
@@ -355,8 +362,44 @@ class DraftPlayer extends React.PureComponent {
         <div>
           playerPoolData TODO: Chooseed player for all users Team1: Player1
           Player2 Team2: Player1 Player2
-        </div>
 
+          <div>
+            <select onChange={(e)=>this.selectedUserIndex(e)}>
+              {this.state.poolPlayerWithUser.length > 0 && this.state.poolPlayerWithUser.map( (d,i) => {
+                return <option value={i}>{d['account']['email']}</option>
+              })}
+            </select>
+          </div>
+                    
+          <div>
+            {targetData ?
+              <Table>
+                      <Thead>
+                        <Row>
+                          <Col> Player {targetData['account']['email']} </Col>
+                        </Row>
+
+                        <Row>
+                          <Col>Player Name</Col>
+                          <Col>Position</Col>
+                        </Row>
+                      </Thead>
+                      <Tbody>
+                        {targetData['players'].map((p,index) => {
+                          return(
+                          <Row key={index}>
+                            <Col>{p['Name']}</Col>
+                            <Col>{p['Position']}</Col>
+                          </Row>
+                          )
+                        })}
+
+                      </Tbody>
+                    </Table>  
+                  : (null)
+            }
+          </div>
+        </div>
         <div className={cx('chat-room-wrap')}>
           <div className={cx('title')}>Disscussion Board</div>
           <ChatRoom roomId={this.props.match.params.l_id} />

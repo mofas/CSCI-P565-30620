@@ -57,8 +57,8 @@ class PlayerDetail extends React.PureComponent {
   render() {
     const { state, props } = this;
     const { pid, player } = state;
-
     return (
+		
       <div className={cx('root')}>
         <Link to={`/app/player/list`} style={{ display: 'inline-block' }}>
           <BackBtn type="secondary">Back to List</BackBtn>
@@ -82,9 +82,11 @@ class PlayerDetail extends React.PureComponent {
             </div>
 
             <div className={cx('thumb')}>
-				<img src={'./PlayerPics/'+player.get('Team')+'_'+player.get('Name')+'.png'} />
-			   
-			 </div>
+				<img id="PlayerProfile" src={'./PlayerPics/'+player.get('Team')+'_'+player.get('Name')+'.png'} onError={
+					()=>document.getElementById("PlayerProfile").src = "./PlayerPics/default.png"
+					}/>
+			</div>
+			 
             <div className={cx('info')}>
               <div className={cx('info-item', 'name')}>
                 <div className={cx('bold')}>Name</div>
