@@ -35,7 +35,8 @@ class TeamsInfo extends React.PureComponent {
               <div>
                 <Row>
                   <Col>
-                    {d.getIn(['account', 'email']).split('@')[0] + "'s Team"}
+                    {(d.getIn(['account', 'email']) || '').split('@')[0] +
+                      "'s Team"}
                   </Col>
                 </Row>
                 <TeamStarter data={d.get('arrangement') || Map()} />

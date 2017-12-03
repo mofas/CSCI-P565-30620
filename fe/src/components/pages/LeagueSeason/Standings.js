@@ -34,7 +34,8 @@ class Standings extends React.PureComponent {
               return (
                 <Row key={i}>
                   <Col className={cx('team')}>
-                    {d.getIn(['account', 'email']).split('@')[0] + "'s Team"}
+                    {(d.getIn(['account', 'email']) || '').split('@')[0] +
+                      "'s Team"}
                   </Col>
                   <Col className={cx('win')}>{d.getIn(['win']) || 0}</Col>
                   <Col className={cx('lose')}>{d.getIn(['lose']) || 0}</Col>
