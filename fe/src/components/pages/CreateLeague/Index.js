@@ -305,6 +305,8 @@ class CreateLeague extends React.PureComponent {
             onChange={this.changeLimit}
           />
         </div>
+        <div className={cx("formula")}>
+        <p> <b> Custom Formula </b> </p>
         {formulaKey.map(key => {
           return (
             <div className={cx("input-wrap")} key={key}>
@@ -316,6 +318,7 @@ class CreateLeague extends React.PureComponent {
             </div>
           );
         })}
+        </div>
         <div className={cx("function-bar")} onClick={this.handleCreateLeague}>
           <Btn>Create</Btn>
         </div>
