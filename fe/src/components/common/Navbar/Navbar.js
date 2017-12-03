@@ -20,7 +20,7 @@ class Navbar extends React.PureComponent {
     return (
       <div className={cx('root')}>
         <div className={cx('logo')}>
-          <img src="https://i.imgur.com/aXCELi5.png" height="50" width="300" />
+          <img src="https://i.imgur.com/aXCELi5.png" height="50" />
         </div>
         <div className={cx('user-info')}>
           {accountStore.get('loading') ? (
