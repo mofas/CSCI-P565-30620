@@ -10,7 +10,11 @@ const cx = classnames.bind(style);
 class MainChatRoom extends React.PureComponent {
   render() {
     const { props } = this;
-    return <ChatRoom roomId={this.props.match.params.room_id} />;
+    return (
+      <div className={cx('root')}>
+        <ChatRoom roomId={this.props.match.params.room_id} />
+      </div>
+    );
   }
 }
 

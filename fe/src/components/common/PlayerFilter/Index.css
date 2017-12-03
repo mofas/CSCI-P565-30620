@@ -1,5 +1,5 @@
 .position-filter {
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 .position-btn-wrap {
@@ -8,13 +8,12 @@
 }
 
 .position-btn {
-  margin-right: 20px;
+  margin-right: 10px;
 }
 
 .name {
   text-align: left;
-  width: 140px;
-  flex: inherit;
+  flex: 1;
 }
 
 .position {

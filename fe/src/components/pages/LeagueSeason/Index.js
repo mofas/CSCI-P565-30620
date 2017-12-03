@@ -119,7 +119,7 @@ class LeagueSeason extends React.PureComponent {
       loading: true,
     });
     API.GraphQL(query).then(res => {
-      const ScheduleByLeagueId = fromJS(res.data.QueryScheduleByLeagueId);
+      const ScheduleByLeagueId = fromJS(res.data.QueryScheduleByLeagueId || {});
       const teams = fromJS(res.data.QueryLeagueTeams);
       const standings = fromJS(res.data.ListTeam);
       this.setState({
@@ -168,8 +168,8 @@ class LeagueSeason extends React.PureComponent {
                   d.get('week_no') === this.state.gameWeek + 1 ? (
                   <Row key={i}>
                     <Col>{d.get('week_no')}</Col>
-                    <Col>{d.get('first_team').get('email')}</Col>
-                    <Col>{d.get('second_team').get('email')}</Col>
+                    <Col>{d.getIn(['first_team', 'email'])}</Col>
+                    <Col>{d.getIn(['second_team', 'email'])}</Col>
                   </Row>
                 ) : null;
               })}

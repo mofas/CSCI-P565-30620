@@ -130,7 +130,6 @@ class PlayerList extends React.PureComponent {
           />
         </div>
         <div className={cx('position-filter')}>
-          <div className={cx('position-selector')}>Filter Position</div>
           <div className={cx('position-btn-wrap')}>
             <Btn
               type={selectPosition === 'Offense' ? 'secondary' : 'primary'}
