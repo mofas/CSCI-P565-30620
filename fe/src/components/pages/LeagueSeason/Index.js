@@ -160,6 +160,7 @@ class LeagueSeason extends React.PureComponent {
       this.setState({
         record: newRecord,
       });
+      window.location.reload();
     });
   };
 
