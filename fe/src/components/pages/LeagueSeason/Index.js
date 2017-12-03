@@ -6,7 +6,7 @@ import API from '../../../middleware/API';
 
 import Spinner from '../../common/Spinner/Spinner';
 import BackBtn from '../../common/Btn/BackBtn';
-import Btn from '../../common/Btn/BackBtn';
+import Btn from '../../common/Btn/Btn';
 import { Table, Thead, Tbody, Row, Col } from '../../common/Table/Index';
 
 import Standings from './Standings';
@@ -27,6 +27,7 @@ class LeagueSeason extends React.PureComponent {
       standings: List(),
       pointdata: {},
       gameWeek: 0,
+      record: [],
     };
   }
 
@@ -133,8 +134,33 @@ class LeagueSeason extends React.PureComponent {
   }
 
   run = () => {
-    const mutation = `{RunMatch(league_id: "${this.state.lid}")}`;
-    //TODO...
+    const mutation = `mutation{RunMatch(league_id: "${this.state.lid}"){
+        league_id
+        week
+        winner
+        first_team {
+          _id
+          email
+          role
+          status
+          ban
+        }
+        second_team{
+            _id
+            email
+            role
+            status
+            ban
+        }
+    }}`;
+    API.GraphQL(mutation).then(res => {
+      //console.log(res);
+      const newRecord = res.data.RunMatch;
+      //console.log(newRecord);
+      this.setState({
+        record: newRecord,
+      });
+    });
   };
 
   render() {
@@ -177,7 +203,9 @@ class LeagueSeason extends React.PureComponent {
           </Table>
         </div>
         <div>
-          <Btn onClick={this.run}>Run match</Btn>
+          <Btn onClick={this.run} type="secondary">
+            Run match
+          </Btn>
           1.5 Run Button // Joel Tyler Calculate the match this week, and store
           the data into DB, reload the page.
         </div>
