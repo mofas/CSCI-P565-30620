@@ -9,6 +9,7 @@ import BackBtn from '../../common/Btn/BackBtn';
 import Btn from '../../common/Btn/Btn';
 import { Table, Thead, Tbody, Row, Col } from '../../common/Table/Index';
 
+import Schedule from './Schedule';
 import Standings from './Standings';
 import TeamsInfo from './TeamsInfo';
 
@@ -225,36 +226,20 @@ class LeagueSeason extends React.PureComponent {
           <BackBtn type="secondary">Back to List</BackBtn>
         </Link>
         <Spinner show={loading} />
-        <Table className={cx('schedule')}>
-          <Thead>
-            <Row>
-              <Col>Game Schedule</Col>
-            </Row>
 
-            <Row>
-              <Col>Week No</Col>
-              <Col>first_team</Col>
-              <Col>second_team </Col>
-            </Row>
-          </Thead>
-          <Tbody>
-            {this.state.ScheduleByLeagueId.map((d, i) => {
-              return d.get('week_no') === this.state.gameWeek ||
-                d.get('week_no') === this.state.gameWeek + 1 ? (
-                <Row key={i}>
-                  <Col>{d.get('week_no')}</Col>
-                  <Col>{d.getIn(['first_team', 'email'])}</Col>
-                  <Col>{d.getIn(['second_team', 'email'])}</Col>
-                </Row>
-              ) : null;
-            })}
-          </Tbody>
-        </Table>
-        <Btn onClick={this.run} type="secondary">
+        <Btn className={cx('run-btn')} onClick={this.run} type="secondary">
           Run match
         </Btn>
-        <Standings gameWeek={gameWeek} data={standings} />
-        <TeamsInfo data={teams} />
+
+        <div className={cx('block')}>
+          <div className={cx('side-menu')}>
+            <Standings gameWeek={gameWeek} data={standings} />
+            <TeamsInfo data={teams} />
+          </div>
+          <div className={cx('schedule-wrap')}>
+            <Schedule gameWeek={gameWeek} data={ScheduleByLeagueId} />
+          </div>
+        </div>
       </div>
     );
   }

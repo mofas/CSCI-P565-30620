@@ -2,13 +2,10 @@
   padding: 16px;
 }
 
-.schedule {
-  margin-top: 20px;
-}
-
-.thumb-placeholder {
-  width: 40px;
-  margin-right: 20px;
+.run-btn {
+  margin: 20px auto;
+  width: 400px;
+  padding: 20px;
 }
 
 .standings {
@@ -26,6 +23,18 @@
     width: 80px;
     flex: inherit;
   }
+}
+
+.block {
+  display: flex;
+}
+
+.schedule-wrap {
+  padding: 10px;
+  flex: 1;
+}
+
+.schedule {
 }
 
 .teams-info {
