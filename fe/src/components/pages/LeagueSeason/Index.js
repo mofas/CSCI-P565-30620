@@ -197,7 +197,7 @@ class LeagueSeason extends React.PureComponent {
           <Table>
             <Thead>
               <Row>
-                <Col> Ranking </Col>
+                <Col> Standing </Col>
               </Row>
 
               <Row>
