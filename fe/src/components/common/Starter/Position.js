@@ -14,6 +14,7 @@ class Position extends React.PureComponent {
     options: List(),
     style: {},
   };
+
   render() {
     const { props } = this;
     const {
@@ -24,11 +25,29 @@ class Position extends React.PureComponent {
       options,
       positionKey,
     } = props;
-
     return (
       <div className={cx('position-wrap')} style={style}>
         <div className={cx('position')}>{position}</div>
-        <div className={cx('thumb')} />
+        <div className={cx('thumb')}>
+          {player.get('Name') ? (
+            <img
+              id="PlayerProfile"
+              src={
+                './PlayerPics/' +
+                player.get('Team') +
+                '_' +
+                player.get('Name') +
+                '.png'
+              }
+              onError={() =>
+                (document.getElementById('PlayerProfile').src =
+                  './PlayerPics/default.png')
+              }
+            />
+          ) : (
+            <img src={'./PlayerPics/default.png'} />
+          )}
+        </div>
         <select
           className={cx('player-selector')}
           onChange={handleChangePlayer({
