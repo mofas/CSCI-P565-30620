@@ -203,8 +203,9 @@ class LeagueSeason extends React.PureComponent {
               <Row>
                 <Col>Rank </Col>
                 <Col>Team - Manager</Col>
-                <Col> Total Matches </Col>
-                <Col>Win# </Col>
+                <Col> Wins </Col>
+                <Col> Lose </Col>
+                <Col> Total matches </Col>
               </Row>
             </Thead>
             <Tbody>
@@ -214,6 +215,7 @@ class LeagueSeason extends React.PureComponent {
                     <Col>{i+1}</Col>
                     <Col>{d['email']}</Col>
                     <Col>{d['win']}</Col>
+                    <Col>{d['lose']}</Col>
                     <Col>{d['tm']}</Col>
                   </Row>
                 );
