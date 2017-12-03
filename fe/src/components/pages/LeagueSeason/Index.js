@@ -25,76 +25,6 @@ class LeagueSeason extends React.PureComponent {
     };
   }
 
-  setRanking = (GameRecordByLeagueId, accounts) => {
-    console.log("printing here", GameRecordByLeagueId);
-    let pointdata = {};
-    let standings = [];
-    if(GameRecordByLeagueId.length > 0){
-      for(let i=0; i<GameRecordByLeagueId.length; i++){
-        if(!(GameRecordByLeagueId[i]['first_team']['_id'] in pointdata)){
-          let tmp = {};
-          tmp['email'] = GameRecordByLeagueId[i]['first_team']['email'];
-          tmp['_id'] = GameRecordByLeagueId[i]['first_team']['_id'];
-          tmp['win'] = 0;
-          tmp['lose'] = 0;
-          tmp['tp'] = 0;
-          tmp['tm'] = 0;
-          pointdata[ GameRecordByLeagueId[i]['first_team']['_id'] ] = tmp;
-        }
-        if(!(GameRecordByLeagueId[i]['second_team']['_id'] in pointdata)){
-          let tmp = {};
-          tmp['email'] = GameRecordByLeagueId[i]['second_team']['email']
-          tmp['_id'] = GameRecordByLeagueId[i]['first_team']['_id'];
-          tmp['win'] = 0;
-          tmp['lose'] = 0;
-          tmp['tp'] = 0;
-          tmp['tm'] = 0;
-          pointdata[ GameRecordByLeagueId[i]['second_team']['_id'] ] = tmp;
-        }
-        pointdata[GameRecordByLeagueId[i]['first_team']['_id']]['tm']++;
-        pointdata[GameRecordByLeagueId[i]['second_team']['_id']]['tm']++;
-
-        if(GameRecordByLeagueId[i]['winner'] == 0){
-          pointdata[GameRecordByLeagueId[i]['first_team']['_id']] ['win']++;
-          pointdata[GameRecordByLeagueId[i]['first_team']['_id']] ['tp']++;
-          pointdata[GameRecordByLeagueId[i]['second_team']['_id']] ['lose']++;
-        }else{
-          pointdata[GameRecordByLeagueId[i]['second_team']['_id']] ['win']++;
-          pointdata[GameRecordByLeagueId[i]['second_team']['_id']] ['tp']++;
-          pointdata[GameRecordByLeagueId[i]['first_team']['_id']] ['lose']++;
-        }
-      }
-      for(let key in pointdata){
-        standings.push(pointdata[key]);
-      }
-  
-      // standings.sort(function(arg1, arg2) {
-      //   let a = arg1['tp'];
-      //   let b = arg2['tp'];
-      //   return a < b ? -1 : (a > b ? 1 : 0);
-      // });
-    }
-    else{
-      let t = {
-        'win': 0,
-        'lose': 0,
-        'tp': 0,
-        'tm': 0
-      };
-      for(let i=0; i<accounts.length; i++){
-        t['email'] = accounts[i]['email'];
-        t['_id'] = accounts[i]['_id']; 
-        standings.push(Object.assign({}, t));
-      }
-    }
-
-    this.setState({
-      standings: standings
-    });
-    console.log("ehqkjwehq ", standings);
-
-  }
-
   componentDidMount() {
     const query = `
           {
@@ -107,18 +37,6 @@ class LeagueSeason extends React.PureComponent {
                   email
                 }
             }
-            QueryGameRecordByLeagueId(league_id: "${this.state.lid}"){
-              league_id
-              first_team {
-                _id
-                email
-              }
-              second_team {
-                _id
-                email
-              }
-              winner
-            }
             QueryLeague(_id : "${this.state.lid}"){
               name
               gameWeek
@@ -127,49 +45,39 @@ class LeagueSeason extends React.PureComponent {
                 email
               }
             }
+            ListTeam(league_id: "${this.state.lid}"){ 
+              _id,
+              name,
+              account{
+                _id
+                email
+              }
+              win,
+              lose
+            }
           }
         `;
     this.setState({
       loading: true,
     });
     API.GraphQL(query).then(res => {
-      //console.log(res);
       const ScheduleByLeagueId = fromJS(res.data.QueryScheduleByLeagueId);
-      const GameRecordByLeagueId = res.data.QueryGameRecordByLeagueId;
-      this.setRanking(GameRecordByLeagueId, res.data.QueryLeague['accounts']);
-      //console.log(JSON.stringify(ScheduleByLeagueId));
+      const teams = res.data.ListTeam;
+      // console.log(teams);
 
       this.setState({
         loading: false,
         ScheduleByLeagueId: ScheduleByLeagueId,
-        gameWeek: res.data.QueryLeague['gameWeek']
+        gameWeek: res.data.QueryLeague['gameWeek'],
+        standings: teams,
       });
     });
-    this.getStandings();
+
   }
 
   run = () => {
     const mutation = `{RunMatch(league_id: "${this.state.lid}")}`;
     //?????
-  };
-
-  getStandings = () => {
-    const query = `{ListTeam(league_id: "${this.state.lid}"){ _id,
-        name,
-        win,
-        lose}}`;
-    this.setState({
-      loading: true,
-    });
-    API.GraphQL(query).then(res => {
-      //console.log(res);
-      const teams = fromJS(res.data.ListTeam);
-      //console.log(JSON.stringify(ScheduleByLeagueId));
-      this.setState({
-        loading: false,
-        standings: teams,
-      });
-    });
   };
 
   render() {
@@ -224,16 +132,14 @@ class LeagueSeason extends React.PureComponent {
           <Table>
             <Thead>
               <Row>
-                <Col> Standing </Col>
+                <Col> Standing : Week - {this.state.gameWeek - 1} </Col>
               </Row>
 
               <Row>
                 <Col>Rank </Col>
-                <Col>Team - Manager</Col>
+                <Col>Team/Manager</Col>
                 <Col> Wins </Col>
                 <Col> Lose </Col>
-                <Col> Total matches </Col>
-                <Col> Total Points </Col>
               </Row>
             </Thead>
             <Tbody>
@@ -241,11 +147,9 @@ class LeagueSeason extends React.PureComponent {
                 return (
                   <Row key={i}>
                     <Col>{i+1}</Col>
-                    <Col>{d['email']}</Col>
+                    <Col>{d['name']? d['name'] : d['account']['email']}</Col>
                     <Col>{d['win']}</Col>
                     <Col>{d['lose']}</Col>
-                    <Col>{d['tm']}</Col>
-                    <Col>{d['tp']}</Col>
                   </Row>
                 );
               })}
