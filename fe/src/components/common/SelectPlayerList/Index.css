@@ -1,5 +1,4 @@
 .player-list {
-  padding: 20px;
 }
 
 .player-item-wrap {
@@ -10,8 +9,7 @@
 .name {
   text-align: left;
   color: #41a9ff;
-  width: 140px;
-  flex: inherit;
+  flex: 1;
 }
 
 .position {
