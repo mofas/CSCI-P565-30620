@@ -8,11 +8,12 @@ import {
   QueryAccount,
   ListAccount,
   QueryPoolPlayer,
+  QueryLeagueTeams,
   QueryFantasyTeam,
   QueryTeamArrangement,
   GetMessages,
   QueryPoolPlayerWithUser,
-  QueryScheduleByLeagueId,
+  QueryScheduleByLeagueId
 } from './query';
 
 import {
@@ -29,7 +30,7 @@ import {
   RunMatch,
   SetSchedule,
   CreateFantasyTeam,
-  UpdateTeamArrangement,
+  UpdateTeamArrangement
 } from './mutation';
 
 export const schema = new GraphQLSchema({
@@ -44,11 +45,12 @@ export const schema = new GraphQLSchema({
       QueryAccount,
       GetMessages,
       QueryLeague,
+      QueryLeagueTeams,
       QueryFantasyTeam,
       QueryTeamArrangement,
       QueryPoolPlayerWithUser,
-      QueryScheduleByLeagueId,
-    },
+      QueryScheduleByLeagueId
+    }
   }),
   mutation: new GraphQLObjectType({
     name: 'RootMutationType',
@@ -66,7 +68,7 @@ export const schema = new GraphQLSchema({
       RunMatch,
       SetSchedule,
       CreateFantasyTeam,
-      UpdateTeamArrangement,
-    },
-  }),
+      UpdateTeamArrangement
+    }
+  })
 });

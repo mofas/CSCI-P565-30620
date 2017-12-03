@@ -11,7 +11,7 @@ const cx = classnames.bind(style);
 class InTeamPlaterList extends React.PureComponent {
   static defaultProps = {
     players: List(),
-    handleReleasePlayer: () => () => {},
+    handleReleasePlayer: () => () => {}
   };
 
   render() {

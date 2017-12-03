@@ -465,11 +465,6 @@ export const RunMatch = {
     db.collection('GAME_RECORD').insertOne(data);
     console.log(result);
     return result;
-    // TODO : get league data from DB using league_id
-    // TODO : get schedule from DB
-    // TDOO : Get teams arrangement who will play in this week from DB
-    // TODO : Call match from teamMatchAlgorithm to get game record
-    // TODO:  get Result and save to DB GAME_RECORD
   },
 };
 

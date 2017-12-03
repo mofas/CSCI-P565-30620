@@ -101,6 +101,7 @@
   draft_start_time: 12312334312, // draft start time
   timeout: 2, // how long user should wait, prior to automatic refresh ( # Minutes)
   lastPickTime: 12312312312, // last pick time
+  seasonweek: 0,
 }
 ```
 
@@ -143,7 +144,7 @@
   _id: "xxx",
   account_id: "xxxx",
   league_id: "xxx",
-  name: "My awesome teams"
+  name: "My awesome teams",
   wins: 2,
   lose: 3,
 }
