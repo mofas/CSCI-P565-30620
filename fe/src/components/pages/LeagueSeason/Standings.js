@@ -16,12 +16,16 @@ class Standings extends React.PureComponent {
     const { props } = this;
     const { data, gameWeek } = props;
 
+    const sortedData = data.sort((a, b) => {
+      return b.get('win') - a.get('win');
+    });
+
     return (
       <div className={cx('standings')}>
         <Table>
           <Thead>
             <Row>
-              <Col> Standing : Week {gameWeek - 1} </Col>
+              <Col> Standing : Week {gameWeek} </Col>
             </Row>
             <Row>
               <Col>Team</Col>
@@ -30,7 +34,7 @@ class Standings extends React.PureComponent {
             </Row>
           </Thead>
           <Tbody>
-            {data.map((d, i) => {
+            {sortedData.map((d, i) => {
               return (
                 <Row key={i}>
                   <Col className={cx('team')}>

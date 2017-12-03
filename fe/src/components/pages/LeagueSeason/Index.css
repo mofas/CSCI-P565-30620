@@ -2,9 +2,8 @@
   padding: 16px;
 }
 
-.thumb {
-  width: 80px;
-  flex: inherit;
+.schedule {
+  margin-top: 20px;
 }
 
 .thumb-placeholder {
@@ -12,8 +11,7 @@
   margin-right: 20px;
 }
 
-
-.standings{
+.standings {
   width: 320px;
   padding: 9px;
   font-size: 14px;

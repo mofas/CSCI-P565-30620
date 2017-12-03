@@ -598,16 +598,23 @@ export const SetSchedule = {
   type: ResultType,
   args: {
     data: { type: ScheduleInputType },
-    // league_id: { type: GraphQLString },
-    // account_ids: { type: new GraphQLList(GraphQLString) },
-    // weeks: { type: GraphQLInt }
   },
   resolve: async ({ db }, { data }, info) => {
-    const { league_id, account_ids, weeks } = data;
-    const r = await prepareScheduleObject(weeks, account_ids);
+    const { league_id, weeks } = data;
 
-    r.map(d => {
-      return (d.league_id = league_id);
+    const leagueData = await db.collection('leagues').findOne({
+      _id: ObjectId(league_id),
+    });
+
+    const account_ids = leagueData.accounts || [];
+
+    const r = prepareScheduleObject(weeks, account_ids).map(d => {
+      d.league_id = league_id;
+      return d;
+    });
+
+    await db.collection('schedule').remove({
+      league_id,
     });
 
     const result = await db.collection('schedule').insertMany(r);

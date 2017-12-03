@@ -32,6 +32,10 @@ class LeagueSeason extends React.PureComponent {
   }
 
   componentDidMount() {
+    this.loadData();
+  }
+
+  loadData = () => {
     const { l_id } = this.props.match.params;
     const query = `
       {
@@ -120,18 +124,65 @@ class LeagueSeason extends React.PureComponent {
       loading: true,
     });
     API.GraphQL(query).then(res => {
-      const ScheduleByLeagueId = fromJS(res.data.QueryScheduleByLeagueId || {});
       const teams = fromJS(res.data.QueryLeagueTeams);
       const standings = fromJS(res.data.ListTeam);
       this.setState({
         loading: false,
         teams,
-        ScheduleByLeagueId,
-        gameWeek: res.data.QueryLeague['gameWeek'],
+        gameWeek: res.data.QueryLeague['gameWeek'] || 1,
         standings,
       });
+
+      if (res.data.QueryScheduleByLeagueId.length > 0) {
+        const ScheduleByLeagueId = fromJS(res.data.QueryScheduleByLeagueId);
+        this.setState({
+          ScheduleByLeagueId,
+        });
+      } else {
+        this.createSchedule();
+      }
     });
-  }
+  };
+
+  createSchedule = () => {
+    const { l_id } = this.props.match.params;
+    const variables = {
+      inputsecheduleData: {
+        league_id: l_id,
+        weeks: 10,
+      },
+    };
+
+    const mut = `
+      mutation($inputsecheduleData: ScheduleInputType){
+        SetSchedule(data: $inputsecheduleData){
+          success
+        }
+      }
+    `;
+
+    API.GraphQL(mut, variables).then(res => {
+      if (res && res.SetSchedule && res.SetSchedule.success) {
+        const query = `
+          QueryScheduleByLeagueId(league_id: "${this.state.lid}" ) {
+            week_no
+            first_team {
+              email
+            }
+            second_team {
+              email
+            }
+          }
+          `;
+        API.GraphQL(query).then(res => {
+          const ScheduleByLeagueId = fromJS(res.data.QueryScheduleByLeagueId);
+          this.setState({
+            ScheduleByLeagueId,
+          });
+        });
+      }
+    });
+  };
 
   run = () => {
     const mutation = `mutation{RunMatch(league_id: "${this.state.lid}"){
@@ -174,43 +225,34 @@ class LeagueSeason extends React.PureComponent {
           <BackBtn type="secondary">Back to List</BackBtn>
         </Link>
         <Spinner show={loading} />
-        <div>This is League Season Page</div>
-        <div>
-          1. Match schedule // Manish This week game, Next week game,
-          <Table>
-            <Thead>
-              <Row>
-                <Col> Upcoming Fixture </Col>
-              </Row>
+        <Table className={cx('schedule')}>
+          <Thead>
+            <Row>
+              <Col>Game Schedule</Col>
+            </Row>
 
-              <Row>
-                <Col>Week No</Col>
-                <Col>first_team</Col>
-                <Col>second_team </Col>
-              </Row>
-            </Thead>
-            <Tbody>
-              {this.state.ScheduleByLeagueId.map((d, i) => {
-                return d.get('week_no') === this.state.gameWeek ||
-                  d.get('week_no') === this.state.gameWeek + 1 ? (
-                  <Row key={i}>
-                    <Col>{d.get('week_no')}</Col>
-                    <Col>{d.getIn(['first_team', 'email'])}</Col>
-                    <Col>{d.getIn(['second_team', 'email'])}</Col>
-                  </Row>
-                ) : null;
-              })}
-            </Tbody>
-          </Table>
-        </div>
-        <div>
-          <Btn onClick={this.run} type="secondary">
-            Run match
-          </Btn>
-          1.5 Run Button // Joel Tyler Calculate the match this week, and store
-          the data into DB, reload the page.
-        </div>
-        <div>2. Formula for League // Joel & Tyler</div>
+            <Row>
+              <Col>Week No</Col>
+              <Col>first_team</Col>
+              <Col>second_team </Col>
+            </Row>
+          </Thead>
+          <Tbody>
+            {this.state.ScheduleByLeagueId.map((d, i) => {
+              return d.get('week_no') === this.state.gameWeek ||
+                d.get('week_no') === this.state.gameWeek + 1 ? (
+                <Row key={i}>
+                  <Col>{d.get('week_no')}</Col>
+                  <Col>{d.getIn(['first_team', 'email'])}</Col>
+                  <Col>{d.getIn(['second_team', 'email'])}</Col>
+                </Row>
+              ) : null;
+            })}
+          </Tbody>
+        </Table>
+        <Btn onClick={this.run} type="secondary">
+          Run match
+        </Btn>
         <Standings gameWeek={gameWeek} data={standings} />
         <TeamsInfo data={teams} />
       </div>
