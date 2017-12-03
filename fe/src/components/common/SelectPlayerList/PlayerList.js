@@ -16,7 +16,7 @@ class PlayerList extends React.PureComponent {
     players: List(),
     selectedPlayers: List(),
     selectPlayer: () => {},
-    isDisabled: () => false,
+    isDisabled: false,
   };
 
   render() {
@@ -46,6 +46,7 @@ class PlayerList extends React.PureComponent {
                       leagueId={leagueId}
                       userId={userId}
                       selectPosition={selectPosition}
+                      isDisabled={isDisabled}
                     />
                   );
                 })}

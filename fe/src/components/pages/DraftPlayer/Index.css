@@ -37,11 +37,29 @@
 }
 
 .sequence-wrap {
-  padding: 10px;
-  background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 5px;
+  // padding: 10px;
+  // background-color: #fff;
+  // border: 1px solid #ddd;
+  // border-radius: 5px;
   margin-bottom: 20px;
+}
+
+.sequence {
+  .round {
+    width: 80px;
+    flex: inherit;
+  }
+  .user {
+    text-align: left;
+  }
+  .pass {
+    color: #999;
+    background: #eee;
+  }
+  .now {
+    color: #ffda23;
+    background: #333;
+  }
 }
 
 .select-player-wrap {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { fromJS, toJS, List, Set } from 'immutable';
+import { fromJS, Map, List, Set } from 'immutable';
 import { connect } from 'react-redux';
 
 import API from '../../../middleware/API';
@@ -15,6 +15,16 @@ import style from './Index.css';
 import Btn from '../../common/Btn/Btn';
 const cx = classnames.bind(style);
 
+const getCurrentPicker = leagueData => {
+  const limit = leagueData.get('limit');
+  const draft_run = leagueData.get('draft_run') || 0;
+  const userList = leagueData.get('accounts') || List();
+  const userListCount = userList.count();
+  const round = Math.floor(draft_run / limit);
+  let seqUserList = round % 2 === 1 ? userList : userList.reverse();
+  return seqUserList.get(draft_run % limit) || Map();
+};
+
 class DraftPlayer extends React.PureComponent {
   constructor(props) {
     super(props);
@@ -22,8 +32,7 @@ class DraftPlayer extends React.PureComponent {
       league_id: this.props.match.params.l_id,
       loading: false,
       players: List(),
-      leagueData: fromJS({}),
-      selectionOrder: [],
+      leagueData: Map(),
       totalPlayersInTeam: 20,
       poolPlayers: List(),
       modalToggle: false,
@@ -33,28 +42,6 @@ class DraftPlayer extends React.PureComponent {
       index: 0
     };
   }
-
-  arr_diff = (a1, a2) => {
-    // console.log("Using this.state.accounts_darft_complete", a2, "\n===\n", a1);
-    let a = [];
-    const diff = [];
-    for (let i = 0; i < a1.length; i++) {
-      a1[i]['del'] = false;
-      for (let j = 0; j < a2.length; j++) {
-        if (a1[i]['email'] == a2[j]) {
-          a1[i]['del'] = true;
-          break;
-        }
-      }
-    }
-    for (let i = 0; i < a1.length; i++) {
-      if (a1[i]['del'] === false) {
-        diff.push(Object.assign({}, a1[i]));
-      }
-    }
-    // console.log("Printing diff:===>>", JSON.stringify(diff));
-    return diff;
-  };
 
   componentDidMount() {
     this.loadData();
@@ -249,8 +236,6 @@ class DraftPlayer extends React.PureComponent {
           poolPlayersId = poolPlayersId.concat(tmpIds);
         }
 
-        // console.log("Pool player ids:-->", poolPlayersId.length);
-
         filterPlayers = players.filter(player => {
           if (poolPlayersId.indexOf(player.get('_id')) >= 0) {
             return false;
@@ -277,23 +262,17 @@ class DraftPlayer extends React.PureComponent {
         // poolPlayerWithUser: res.data.PoolPlayerWithUser,
         acc_to_players: acc_to_player,
       });
-      this.setPickingOrder(JSON.stringify(leagueData));
     });
   };
 
-  selectPlayer = (id, leagueId, userId, emailId) => {
-    // console.log('selected player called');
-    // console.log(id, leagueId, userId, emailId);
-    var run = Math.floor(
-      this.state.leagueData.get('draft_run') /
-        this.state.leagueData.get('limit')
-    );
-    run = run + 1;
+  selectPlayer = (id, leagueId, userId) => {
+    const { leagueData, totalPlayersInTeam } = this.state;
+    const run =
+      Math.floor(leagueData.get('draft_run') / leagueData.get('limit')) + 1;
 
-    if (
-      this.state.selectionOrder[0]['email'] === emailId &&
-      run <= this.state.totalPlayersInTeam
-    ) {
+    const currentPicker = getCurrentPicker(leagueData);
+
+    if (run <= totalPlayersInTeam) {
       const mutation = `
         mutation{
           SelectedPlayer(
@@ -311,19 +290,15 @@ class DraftPlayer extends React.PureComponent {
       `;
       API.GraphQL(mutation).then(res => {
         this.loadData();
-        console.log('Successffully loaded the data');
       });
 
       let max_run =
         this.state.leagueData.get('limit') * this.state.totalPlayersInTeam;
-      // console.log("Maxrun ==> run --->", max_run, run);
       if (max_run === run) {
         let accounts = this.state.leagueData.get('accounts').toJS();
         let account_ids = accounts.map(d => {
           return d['_id'];
         });
-        // console.log("====> ", JSON.stringify(accounts));
-        // let weeks = 10;
         const variables = {
           inputsecheduleData: {
             league_id: leagueId,
@@ -348,146 +323,25 @@ class DraftPlayer extends React.PureComponent {
         });
       }
     } else {
-      window.alert('Another team is on the clock.');
+      window.alert('Your team is full');
     }
-  };
-
-  selectedUserIndex(e){
-    console.log("manish index selected", e.target.value);
-    this.setState({
-      index: e.target.value
-    });
-  }
-  setPickingOrder = strdata => {
-    const data = JSON.parse(strdata);
-
-    let curr_epoc = Math.round(new Date().getTime() / 1000.0);
-    if (data['name']) {
-      //console.log("da sda da ",JSON.stringify( data ) );
-      let lastPickTime = data['lastPickTime'];
-      let timeout = data['timeout'];
-      let jump = 0;
-      if ((curr_epoc - lastPickTime) / 60 > timeout) {
-        jump = Math.floor((curr_epoc - lastPickTime) / 60);
-      }
-
-      // if( (curr_epoc - lastPickTime) > 4 ){
-      //   jump = Math.floor( (curr_epoc - lastPickTime)/4 );
-      // }
-      // let diff = curr_epoc - lastPickTime;
-      // console.log("jump pokfds", jump, curr_epoc, lastPickTime, diff );
-
-      let draft = data['draft_run'];
-      let limit = data['limit']; //data['limit'];
-      console.log('First argument', data['accounts']);
-      console.log('Second argument', this.state.accounts_darft_complete);
-      const accounts = this.arr_diff(
-        data['accounts'],
-        this.state.accounts_darft_complete
-      );
-      //console.log("this random shit ", account1s);
-
-      //let accounts = data["accounts"];
-      let div = Math.floor(draft / limit);
-      let remind = draft % limit;
-      let down_up = div % 2;
-      var selectionOrder = [];
-      let count = limit * 2;
-
-      jump = jump % (2 * limit);
-      // console.log("div jump:", jump, " limit", limit);
-      // console.log("remind", remind, " going:", down_up);
-      while (jump > 0) {
-        if (down_up == 0) {
-          let tmp = remind + jump;
-          let tmp2 = limit - 1;
-          // console.log(tmp, tmp2);
-          if (remind + jump > limit - 1) {
-            jump = jump - (limit - remind - 1);
-            remind = limit;
-            down_up = 1;
-          } else {
-            remind = remind + jump;
-            jump = 0;
-          }
-        } else {
-          if (remind - jump < 0) {
-            jump = jump - remind;
-            remind = -1;
-            down_up = 0;
-          } else {
-            remind = remind - jump;
-            jump = 0;
-          }
-        }
-      }
-      // console.log("remindcalc:", remind, " going:", down_up);
-
-      let round = this.state.totalPlayersInTeam - div;
-      if (down_up === 0) {
-        for (let i = remind; i < accounts.length; i++) {
-          selectionOrder.push(accounts[i]);
-        }
-        for (let i = accounts.length - 1; i >= 0; i--) {
-          selectionOrder.push(accounts[i]);
-        }
-
-        for (let i = 0; i < remind; i++) {
-          selectionOrder.push(accounts[i]);
-        }
-      } else {
-        let c = accounts.length - remind - 1;
-        for (let i = c; i >= 0; i--) {
-          selectionOrder.push(accounts[i]);
-        }
-        for (let i = 0; i < accounts.length; i++) {
-          selectionOrder.push(accounts[i]);
-        }
-        for (let i = accounts.length - 1; i > c; i--) {
-          selectionOrder.push(accounts[i]);
-        }
-      }
-
-      // console.log(selectionOrder);
-      this.setState({
-        selectionOrder: selectionOrder,
-      });
-    }
-  };
-
-  showPlayers = id => {
-    const p_u = this.state.poolPlayerWithUser;
-    // console.log("pu", p_u);
-    const ret = [];
-    for (let i = 0; i < p_u.length; i++) {
-      console.log(i, ':', p_u[i]['account']['email']);
-      if (p_u[i]['account']['email'] === id) {
-        ret.push(p_u[i]['players']);
-      }
-    }
-
-    return ret;
-  };
-
-  toggleModal = () => {
-    this.setState({
-      modalToggle: !this.state.modalToggle,
-    });
   };
 
   render() {
     const { state, props } = this;
-    const { loading, selectionOrder, leagueData, players, poolPlayers } = state;
+    const { loading, leagueData, players, poolPlayers } = state;
     const { accountStore } = props;
 
     const targetData = this.state.poolPlayerWithUser[this.state.index];
+    const currentPicker = getCurrentPicker(leagueData);
 
     return (
       <div className={cx('root')}>
         <Spinner show={loading} />
 
         <div className={cx('sequence-wrap')}>
-          <Sequence leagueData={leagueData} selectionOrder={selectionOrder} />
+          <div className={cx('title')}>Pick order</div>
+          <Sequence leagueData={leagueData} />
         </div>
 
         <div className={cx('select-player-wrap')}>
@@ -498,7 +352,10 @@ class DraftPlayer extends React.PureComponent {
             selectPlayer={this.selectPlayer}
             leagueId={this.state.league_id}
             userId={accountStore.getIn(['userInfo', '_id'])}
-            emailId={accountStore.getIn(['userInfo', 'email'])}
+            isDisabled={
+              currentPicker.get('_id') !==
+              accountStore.getIn(['userInfo', '_id'])
+            }
           />
         </div>
 
