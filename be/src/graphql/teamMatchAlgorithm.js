@@ -4,7 +4,7 @@ export const match = (league_id, week, team1, team2, formula) => {
   //Calc team 1 score
   for (var key in team1.arrangement) {
     let p = team1.arrangement[key];
-    if (key != '_id' && key != 'fancy_team_id') {
+    if (key != '_id' && key != 'fantasy_team_id') {
       first_score =
         first_score +
         formula.tdpass * p.Passing_TDs_curr +
@@ -34,7 +34,7 @@ export const match = (league_id, week, team1, team2, formula) => {
   //Calc Team 2 score
   for (var key in team2.arrangement) {
     let p = team2.arrangement[key];
-    if (key != '_id' && key != 'fancy_team_id') {
+    if (key != '_id' && key != 'fantasy_team_id') {
       second_score =
         second_score +
         formula.tdpass * p.Passing_TDs_curr +
@@ -65,7 +65,6 @@ export const match = (league_id, week, team1, team2, formula) => {
   if (first_score === second_score) {
     winner = Math.floor(Math.random() * 2);
   }
-
   return {
     league_id,
     week,
