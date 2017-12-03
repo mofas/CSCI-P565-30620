@@ -469,7 +469,7 @@ export const RunMatch = {
       };
       result.push(data);
       console.log(data);
-      if (result.winner === 0) {
+      if (outcome.winner === 0) {
         db
           .collection('fantasy_team')
           .findOneAndUpdate({ _id: team1_id }, { $inc: { win: 1 } });
