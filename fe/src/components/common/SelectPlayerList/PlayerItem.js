@@ -30,10 +30,8 @@ class PlayerItem extends React.PureComponent {
     } = props;
 
     const disabled =
-      selectedPlayers.count() >= 20 ||
       selectedPlayers.filter(d => d.get('_id') === data.get('_id')).count() >
-        0 ||
-      isDisabled;
+        0 || isDisabled;
 
     return (
       <Row>

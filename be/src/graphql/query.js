@@ -11,7 +11,7 @@ import {
   GraphQLObjectType,
   GraphQLSchema,
   GraphQLString,
-  GraphQLBoolean
+  GraphQLBoolean,
 } from 'graphql';
 
 import {
@@ -24,7 +24,7 @@ import {
   MessageType,
   PoolPlayerWithUserType,
   ScheduleType,
-  GameRecordType
+  GameRecordType,
 } from './model';
 
 import {
@@ -33,14 +33,14 @@ import {
   accountLoaderGenerator,
   leagueLoaderGenerator,
   fantasyTeamLoaderGenerator,
-  arrangementLoaderGenerator
+  arrangementLoaderGenerator,
 } from './dataLoader';
 
 export const ListPlayer = {
   type: new GraphQLList(PlayerType),
   args: {
     skip: { type: GraphQLInt },
-    limit: { type: GraphQLInt }
+    limit: { type: GraphQLInt },
   },
   resolve: async ({ db }, { skip, limit, lang }, info) => {
     let query = {};
@@ -53,21 +53,21 @@ export const ListPlayer = {
       .limit(limit)
       .toArray();
     return result;
-  }
+  },
 };
 
 export const QueryPlayer = {
   type: PlayerType,
   args: {
-    _id: { type: GraphQLString }
+    _id: { type: GraphQLString },
   },
   resolve: async ({ db }, { _id }, info) => {
     const query = {
-      _id: ObjectId(_id)
+      _id: ObjectId(_id),
     };
     const result = await db.collection('players').findOne(query);
     return result;
-  }
+  },
 };
 
 export const ListLeague = {
@@ -80,36 +80,35 @@ export const ListLeague = {
       .sort({ create_time: -1 })
       .toArray();
     return result;
-  }
+  },
 };
 
 export const QueryLeague = {
   type: LeagueType,
   args: {
-    _id: { type: GraphQLString }
+    _id: { type: GraphQLString },
   },
   resolve: async ({ db }, { _id }, info) => {
     const query = {
-      _id: ObjectId(_id)
+      _id: ObjectId(_id),
     };
     const result = await db.collection('leagues').findOne(query);
-    console.log(result);
     return result;
-  }
+  },
 };
 
 export const QueryAccount = {
   type: AccountType,
   args: {
-    _id: { type: GraphQLString }
+    _id: { type: GraphQLString },
   },
   resolve: async ({ db }, { _id }, info) => {
     const query = {
-      _id: ObjectId(_id)
+      _id: ObjectId(_id),
     };
     const result = await db.collection('accounts').findOne(query);
     return result;
-  }
+  },
 };
 
 export const ListAccount = {
@@ -122,13 +121,13 @@ export const ListAccount = {
       .find(query)
       .toArray();
     return result;
-  }
+  },
 };
 
 export const QueryLeagueTeams = {
   type: new GraphQLList(FantasyTeamType),
   args: {
-    league_id: { type: GraphQLString }
+    league_id: { type: GraphQLString },
   },
   resolve: async ({ db }, { league_id }, context) => {
     const loader = getLoader(
@@ -145,14 +144,14 @@ export const QueryLeagueTeams = {
     const teamIds = teamRet.map(d => d._id.toString());
     const result = await loader.loadMany(teamIds);
     return result;
-  }
+  },
 };
 export const QueryFantasyTeam = {
   type: FantasyTeamType,
   args: {
     _id: { type: GraphQLString },
     league_id: { type: GraphQLString },
-    account_id: { type: GraphQLString }
+    account_id: { type: GraphQLString },
   },
   resolve: async ({ db }, { _id, league_id, account_id }, context) => {
     const loader = getLoader(
@@ -173,7 +172,7 @@ export const QueryFantasyTeam = {
       return result[0];
     }
     return null;
-  }
+  },
 };
 
 export const QueryTeamArrangement = {
@@ -181,7 +180,7 @@ export const QueryTeamArrangement = {
   args: {
     fantasy_team_id: { type: GraphQLString },
     league_id: { type: GraphQLString },
-    account_id: { type: GraphQLString }
+    account_id: { type: GraphQLString },
   },
   resolve: async (
     { db },
@@ -209,17 +208,17 @@ export const QueryTeamArrangement = {
       return result[0];
     }
     return null;
-  }
+  },
 };
 
 export const QueryPoolPlayer = {
   type: new GraphQLList(PoolPlayerType),
   args: {
-    league_id: { type: GraphQLString } //league id
+    league_id: { type: GraphQLString }, //league id
   },
   resolve: async ({ db }, { league_id }, info) => {
     const query = {
-      league_id: league_id
+      league_id: league_id,
     };
     const result = await db
       .collection('pool')
@@ -237,22 +236,22 @@ export const QueryPoolPlayer = {
         user_id: user_id,
         players: result
           .filter(dd => dd.account_id === user_id)
-          .map(dd => dd.player_id)
+          .map(dd => dd.player_id),
       };
     });
     return ret;
-  }
+  },
 };
 
 export const QueryPoolPlayerWithUser = {
   type: new GraphQLList(PoolPlayerWithUserType),
   args: {
-    league_id: { type: GraphQLString } //league id
+    league_id: { type: GraphQLString }, //league id
   },
   resolve: async ({ db }, { league_id }, info) => {
     // console.log("league_id: adas: ", league_id);
     const query = {
-      league_id: league_id
+      league_id: league_id,
     };
     const result = await db
       .collection('pool')
@@ -270,12 +269,12 @@ export const QueryPoolPlayerWithUser = {
     const ret = Object.keys(groupByAccount).map(account_id => {
       return {
         account_id,
-        players: groupByAccount[account_id]
+        players: groupByAccount[account_id],
       };
     });
     // console.log(ret);
     return ret;
-  }
+  },
 };
 
 export const GetMessages = {
@@ -283,7 +282,7 @@ export const GetMessages = {
   args: {
     room_id: { type: new GraphQLNonNull(GraphQLString) },
     skip: { type: GraphQLInt },
-    limit: { type: GraphQLInt }
+    limit: { type: GraphQLInt },
   },
   resolve: async ({ db }, { room_id, skip = 0, limit = 100 }, info) => {
     const query = { room_id };
@@ -294,18 +293,18 @@ export const GetMessages = {
       .limit(limit)
       .toArray();
     return result;
-  }
+  },
 };
 
 export const QueryScheduleByLeagueId = {
   type: new GraphQLList(ScheduleType),
   args: {
-    league_id: { type: GraphQLString } //league id
+    league_id: { type: GraphQLString }, //league id
   },
   resolve: async ({ db }, { league_id }, info) => {
     // console.log("league_id: adas: ", league_id);
     const query = {
-      league_id: league_id
+      league_id: league_id,
     };
     const result = await db
       .collection('schedule')
@@ -317,12 +316,12 @@ export const QueryScheduleByLeagueId = {
         first_team: d['first_team'],
         second_team: d['second_team'],
         league_id: d['league_id'],
-        week_no: d['week_no']
+        week_no: d['week_no'],
       };
     });
     // console.log(ret);
     return ret;
-  }
+  },
 };
 
 export const QueryGameRecordByLeagueId = {
@@ -346,7 +345,7 @@ export const QueryGameRecordByLeagueId = {
         week: d['week'],
         first_team_id: d['first_team'],
         second_team_id: d['second_team'],
-        winner: d['winner']
+        winner: d['winner'],
       };
     });
     return ret;
