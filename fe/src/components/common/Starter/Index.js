@@ -53,7 +53,7 @@ class Starter extends React.PureComponent {
         <img className={cx('bg')} src={bg} />
         <Position
           style={{
-            left: 80,
+            left: 260,
             top: 220,
           }}
           position="QB"
@@ -66,8 +66,8 @@ class Starter extends React.PureComponent {
         />
         <Position
           style={{
-            left: 260,
-            top: 220,
+            left: 1150,
+            top: 20,
           }}
           position="K"
           positionKey="position_k_0"
@@ -92,8 +92,8 @@ class Starter extends React.PureComponent {
         />
         <Position
           style={{
-            left: 260,
-            top: 400,
+            left: 1150,
+            top: 430,
           }}
           position="P"
           positionKey="position_p_0"
@@ -106,7 +106,7 @@ class Starter extends React.PureComponent {
 
         <Position
           style={{
-            left: 440,
+            left: 80,
             top: 220,
           }}
           position="RB"
@@ -151,7 +151,7 @@ class Starter extends React.PureComponent {
         <Position
           style={{
             left: 680,
-            top: 220,
+            top: 400,
           }}
           position="DEF"
           positionKey="position_defense_0"
@@ -161,8 +161,8 @@ class Starter extends React.PureComponent {
         />
         <Position
           style={{
-            left: 860,
-            top: 100,
+            left: 680,
+            top: 40,
           }}
           position="DEF"
           positionKey="position_defense_1"
@@ -172,8 +172,8 @@ class Starter extends React.PureComponent {
         />
         <Position
           style={{
-            left: 860,
-            top: 340,
+            left: 680,
+            top: 220,
           }}
           position="DEF"
           positionKey="position_defense_2"
@@ -183,8 +183,8 @@ class Starter extends React.PureComponent {
         />
         <Position
           style={{
-            left: 1040,
-            top: 40,
+            left: 900,
+            top: 150,
           }}
           position="DEF"
           positionKey="position_defense_3"
@@ -194,8 +194,8 @@ class Starter extends React.PureComponent {
         />
         <Position
           style={{
-            left: 1040,
-            top: 400,
+            left: 900,
+            top: 350,
           }}
           position="DEF"
           positionKey="position_defense_4"

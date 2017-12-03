@@ -23,7 +23,8 @@ import {
   ArrangementType,
   MessageType,
   PoolPlayerWithUserType,
-  ScheduleType
+  ScheduleType,
+  GameRecordType
 } from './model';
 
 import {
@@ -92,7 +93,7 @@ export const QueryLeague = {
       _id: ObjectId(_id)
     };
     const result = await db.collection('leagues').findOne(query);
-
+    console.log(result);
     return result;
   }
 };
@@ -322,4 +323,55 @@ export const QueryScheduleByLeagueId = {
     // console.log(ret);
     return ret;
   }
+};
+
+export const QueryGameRecordByLeagueId = {
+  type: new GraphQLList(GameRecordType),
+  args: {
+    league_id: { type: GraphQLString },
+  },
+  resolve: async ({ db }, { league_id }, info) => {
+    // console.log("league_id: adas: ", league_id);
+    const query = {
+      league_id: league_id,
+    };
+    const result = await db
+      .collection('game_record')
+      .find(query)
+      .toArray();
+
+    const ret = result.map(d => {
+      return {
+        league_id: d['league_id'],
+        week: d['week'],
+        first_team_id: d['first_team'],
+        second_team_id: d['second_team'],
+        winner: d['winner']
+      };
+    });
+    return ret;
+  },
+};
+
+export const ListTeam = {
+  type: new GraphQLList(FantasyTeamType),
+  args: {
+    league_id: { type: GraphQLString }, //league id
+    skip: { type: GraphQLInt },
+    limit: { type: GraphQLInt },
+  },
+  resolve: async ({ db }, { skip, limit, lang, league_id }, info) => {
+    let query = {
+      league_id: league_id,
+    };
+    skip = skip || 0;
+    limit = limit || 2000;
+    const result = await db
+      .collection('fantasy_team')
+      .find(query)
+      .skip(skip)
+      .limit(limit)
+      .toArray();
+    return result;
+  },
 };

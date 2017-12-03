@@ -4,12 +4,12 @@ from pymongo import MongoClient
 import nflgame
 client = MongoClient('localhost', 27017)
 dbname = 'local'
-colname = 'schedule'
+colname = 'leagues'
 db = client[dbname]
 collection = db[colname]
 #Get week from database
-week = collection.find_one()['week_no']
-collection.update_one({'week_no': week}, {'$inc':{'week_no': 1}}) #increments week
+week = collection.find_one()['gameWeek']
+collection.update_many({'gameWeek': week}, {'$inc':{'gameWeek': 1}}) #increments week
 #Get stats for current week
 games = nflgame.games(2017, week=week)
 players = nflgame.combine(games)

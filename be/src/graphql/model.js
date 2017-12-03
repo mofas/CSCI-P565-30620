@@ -154,6 +154,7 @@ export const LeagueType = new GraphQLObjectType({
     draft_start_time: { type: GraphQLInt },
     timeout: { type: GraphQLInt },
     lastPickTime: { type: GraphQLInt },
+    gameWeek: { type: GraphQLInt },
     accounts: {
       type: new GraphQLList(AccountType),
       resolve: async ({ accounts }, args, context) => {
@@ -418,5 +419,28 @@ export const ScheduleType = new GraphQLObjectType({
     week_no: {
       type: GraphQLInt,
     },
+  }),
+});
+
+export const GameRecordType = new GraphQLObjectType({
+  name: 'GameRecordType',
+  fields: () => ({
+    league_id: { type: GraphQLString },
+    week: { type: GraphQLString },
+    first_team: { 
+      type: AccountType,
+      resolve: async ({ first_team_id }, args, { db }) => {
+        const ret = await db.collection('accounts').findOne( {_id: ObjectId(first_team_id)} );
+        return ret;
+      }
+    },
+    second_team: { 
+      type: AccountType,
+      resolve: async ({ second_team_id }, args, { db }) => {
+        const ret = await db.collection('accounts').findOne( {_id: ObjectId(second_team_id)} );
+        return ret;
+      }
+    },
+    winner: { type: GraphQLInt },
   }),
 });
