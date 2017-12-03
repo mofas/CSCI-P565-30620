@@ -20,7 +20,63 @@ class LeagueSeason extends React.PureComponent {
       lid: this.props.match.params.l_id,
       ScheduleByLeagueId: fromJS({}),
       standings: [],
+      pointdata: {}
     };
+  }
+
+  setRanking = (GameRecordByLeagueId) => {
+    console.log("printing here", GameRecordByLeagueId);
+    let pointdata = {};
+    for(let i=0; i<GameRecordByLeagueId.length; i++){
+      if(!(GameRecordByLeagueId[i]['first_team']['_id'] in pointdata)){
+        let tmp = {};
+        tmp['email'] = GameRecordByLeagueId[i]['first_team']['email'];
+        tmp['_id'] = GameRecordByLeagueId[i]['first_team']['_id'];
+        tmp['win'] = 0;
+        tmp['lose'] = 0;
+        tmp['tp'] = 0;
+        tmp['tm'] = 0;
+        pointdata[ GameRecordByLeagueId[i]['first_team']['_id'] ] = tmp;
+      }
+      if(!(GameRecordByLeagueId[i]['second_team']['_id'] in pointdata)){
+        let tmp = {};
+        tmp['email'] = GameRecordByLeagueId[i]['second_team']['email']
+        tmp['_id'] = GameRecordByLeagueId[i]['first_team']['_id'];
+        tmp['win'] = 0;
+        tmp['lose'] = 0;
+        tmp['tp'] = 0;
+        tmp['tm'] = 0;
+        pointdata[ GameRecordByLeagueId[i]['second_team']['_id'] ] = tmp;
+      }
+      pointdata[GameRecordByLeagueId[i]['first_team']['_id']]['tm']++;
+      pointdata[GameRecordByLeagueId[i]['second_team']['_id']]['tm']++;
+
+      if(GameRecordByLeagueId[i]['winner'] == 0){
+        pointdata[GameRecordByLeagueId[i]['first_team']['_id']] ['win']++;
+        pointdata[GameRecordByLeagueId[i]['first_team']['_id']] ['tp']++;
+        pointdata[GameRecordByLeagueId[i]['second_team']['_id']] ['lose']++;
+      }else{
+        pointdata[GameRecordByLeagueId[i]['second_team']['_id']] ['win']++;
+        pointdata[GameRecordByLeagueId[i]['second_team']['_id']] ['tp']++;
+        pointdata[GameRecordByLeagueId[i]['first_team']['_id']] ['lose']++;
+      }
+    }
+    let standings = [];
+    for(let key in pointdata){
+      standings.push(pointdata[key]);
+    }
+
+    // standings.sort(function(arg1, arg2) {
+    //   let a = arg1['tp'];
+    //   let b = arg2['tp'];
+    //   return a < b ? -1 : (a > b ? 1 : 0);
+    // });
+
+    this.setState({
+      standings: standings
+    });
+    console.log("ehqkjwehq ", standings);
+
   }
 
   componentDidMount() {
@@ -34,7 +90,19 @@ class LeagueSeason extends React.PureComponent {
                 second_team {
                   email
                 }
+            }
+            QueryGameRecordByLeagueId(league_id: "${this.state.lid}"){
+              league_id
+              first_team {
+                _id
+                email
               }
+              second_team {
+                _id
+                email
+              }
+              winner
+            }
           }
         `;
     this.setState({
@@ -43,7 +111,10 @@ class LeagueSeason extends React.PureComponent {
     API.GraphQL(query).then(res => {
       //console.log(res);
       const ScheduleByLeagueId = fromJS(res.data.QueryScheduleByLeagueId);
+      const GameRecordByLeagueId = res.data.QueryGameRecordByLeagueId;
+      this.setRanking(GameRecordByLeagueId);
       //console.log(JSON.stringify(ScheduleByLeagueId));
+
       this.setState({
         loading: false,
         ScheduleByLeagueId: ScheduleByLeagueId,
@@ -123,6 +194,32 @@ class LeagueSeason extends React.PureComponent {
         </div>
         <div>
           2. Standing // Manish Read GameRecord from database, display on the UI
+          <Table>
+            <Thead>
+              <Row>
+                <Col> Ranking </Col>
+              </Row>
+
+              <Row>
+                <Col>Rank </Col>
+                <Col>Team - Manager</Col>
+                <Col> Total Matches </Col>
+                <Col>Win# </Col>
+              </Row>
+            </Thead>
+            <Tbody>
+              {this.state.standings.map((d, i) => {
+                return (
+                  <Row key={i}>
+                    <Col>{i+1}</Col>
+                    <Col>{d['email']}</Col>
+                    <Col>{d['win']}</Col>
+                    <Col>{d['tm']}</Col>
+                  </Row>
+                );
+              })}
+            </Tbody>
+          </Table>          
         </div>
         <div>2. Formula for League // Joel & Tyler</div>
         <div>
