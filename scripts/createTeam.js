@@ -4,8 +4,8 @@ const dbUrl = 'mongodb://localhost:27017/local';
 
 // This script will insert the player data to pool with league_id and account_id
 
-const LEAGUE_ID = '5a08b7d7a5f5c440d2159165';
-const ACCOUNT_EMAIL = 'mofas223@gmail.com';
+const LEAGUE_ID = '5a089d4a3d16fb4788b90dfa';
+const ACCOUNT_EMAIL = 'jgpark@umail.iu.edu';
 const PLAYER_NAME_LIST = [
   'A. Rodgers', //QB
   'K. Hunt', //RB
