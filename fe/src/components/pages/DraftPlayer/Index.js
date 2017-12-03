@@ -366,8 +366,6 @@ class DraftPlayer extends React.PureComponent {
   }
 }
 
-//export default DraftPlayer;
-
 export default connect(stores => {
   return {
     accountStore: stores.account,
