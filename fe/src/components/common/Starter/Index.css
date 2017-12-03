@@ -36,6 +36,10 @@
     background-color: #555;
     border-radius: 10px;
   }
+  img {
+    width: 90px;
+    height: 90px;
+  }
   .player-selector {
     width: 100%;
   }

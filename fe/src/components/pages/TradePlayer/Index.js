@@ -133,6 +133,7 @@ class TradePlayer extends React.PureComponent {
         _id
         Name
         Position
+        Team
       }
     `;
 
