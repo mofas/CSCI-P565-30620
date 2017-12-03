@@ -7,6 +7,7 @@ import Spinner from '../../common/Spinner/Spinner';
 
 import ChatRoom from '../../common/ChatRoom/ChatRoom';
 import PlayerList from '../../common/SelectPlayerList/PlayerList';
+import { Table, Thead, Tbody, Row, Col } from '../../common/Table/Index';
 
 import classnames from 'classnames/bind';
 import style from './Index.css';
@@ -28,6 +29,8 @@ class DraftPlayer extends React.PureComponent {
       modalToggle: false,
       accounts_darft_complete: [],
       showMessage: '',
+      poolPlayerWithUser: [],
+      index: 0
     };
   }
   componentWillMount() {
@@ -134,14 +137,17 @@ class DraftPlayer extends React.PureComponent {
       const players = fromJS(res.data.ListPlayer);
       const leagueData = fromJS(res.data.LeagueData);
       const poolPlayers = fromJS(res.data.PoolPlayers);
-      // console.log("68766876", JSON.stringify(res.data.PoolPlayerWithUser));
-      // console.log("manish", res.data.PoolPlayerWithUser.length);
+      console.log("68766876", res.data.PoolPlayerWithUser);
+      console.log("manish", res.data.PoolPlayerWithUser.length);
 
       // console.log("fdskfasd=?????>>>>>", JSON.stringify(leagueData));
       if ('SeasonStart' === leagueData.get('stage')) {
         console.log('Redirect to game page');
         window.location.href = '#/app/league/list';
       }
+      this.setState({
+        poolPlayerWithUser: res.data.PoolPlayerWithUser,
+      });
 
       const accounts_darft_complete = [];
       let showMessage =
@@ -278,7 +284,7 @@ class DraftPlayer extends React.PureComponent {
         players: filterPlayers,
         leagueData: leagueData,
         poolPlayers: poolPlayers,
-        poolPlayerWithUser: res.data.PoolPlayerWithUser,
+        // poolPlayerWithUser: res.data.PoolPlayerWithUser,
         acc_to_players: acc_to_player,
       });
       this.setPickingOrder(JSON.stringify(leagueData));
@@ -357,6 +363,12 @@ class DraftPlayer extends React.PureComponent {
     }
   };
 
+  selectedUserIndex(e){
+    console.log("manish index selected", e.target.value);
+    this.setState({
+      index: e.target.value
+    });
+  }
   setPickingOrder = strdata => {
     const data = JSON.parse(strdata);
 
@@ -484,6 +496,8 @@ class DraftPlayer extends React.PureComponent {
     const playerListData = [];
     const playerPoolData = []; //query by league_id
 
+    const targetData = this.state.poolPlayerWithUser[this.state.index];
+
     return (
       <div className={cx('root')}>
         <Spinner show={loading} />
@@ -577,8 +591,44 @@ class DraftPlayer extends React.PureComponent {
         <div>
           playerPoolData TODO: Chooseed player for all users Team1: Player1
           Player2 Team2: Player1 Player2
-        </div>
 
+          <div>
+            <select onChange={(e)=>this.selectedUserIndex(e)}>
+              {this.state.poolPlayerWithUser.length > 0 && this.state.poolPlayerWithUser.map( (d,i) => {
+                return <option value={i}>{d['account']['email']}</option>
+              })}
+            </select>
+          </div>
+                    
+          <div>
+            {targetData ?
+              <Table>
+                      <Thead>
+                        <Row>
+                          <Col> Player {targetData['account']['email']} </Col>
+                        </Row>
+
+                        <Row>
+                          <Col>Player Name</Col>
+                          <Col>Position</Col>
+                        </Row>
+                      </Thead>
+                      <Tbody>
+                        {targetData['players'].map((p,index) => {
+                          return(
+                          <Row key={index}>
+                            <Col>{p['Name']}</Col>
+                            <Col>{p['Position']}</Col>
+                          </Row>
+                          )
+                        })}
+
+                      </Tbody>
+                    </Table>  
+                  : (null)
+            }
+          </div>
+        </div>
         <div className={cx('chat-room-wrap')}>
           <div className={cx('chat-room-title')}>Disscussion Board</div>
           <ChatRoom roomId={this.props.match.params.l_id} />
