@@ -69,6 +69,7 @@ class CreateLeague extends React.PureComponent {
     this.state = {
       name: "My League",
       limit: "2",
+      open: false,
       formula: Map({
         tdpass: 4,
         passyds: 25,
@@ -285,6 +286,12 @@ class CreateLeague extends React.PureComponent {
     this.createLeague();
   };
 
+  toggle(){
+    this.setState({
+      open: !this.state.open
+    });
+  }
+
   render() {
     const { state, props } = this;
     const { name, limit, formula } = state;
@@ -305,9 +312,12 @@ class CreateLeague extends React.PureComponent {
             onChange={this.changeLimit}
           />
         </div>
-        <div className={cx("formula")}>
-        <p> <b> Custom Formula </b> </p>
-        {formulaKey.map(key => {
+        <div className={cx("formula")} >
+        <div onClick={ () => this.toggle()} >
+        <Btn> <b> Custom Formula </b> </Btn>
+        </div>
+        <div className={cx("fspace")}>
+        {this.state.open && formulaKey.map(key => {
           return (
             <div className={cx("input-wrap")} key={key}>
               <LabelInput
@@ -318,6 +328,7 @@ class CreateLeague extends React.PureComponent {
             </div>
           );
         })}
+        </div>
         </div>
         <div className={cx("function-bar")} onClick={this.handleCreateLeague}>
           <Btn>Create</Btn>

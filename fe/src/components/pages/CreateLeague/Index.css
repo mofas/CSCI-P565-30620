@@ -13,7 +13,6 @@
   background-color: #fafafa;
 }
 
-
 .formula {
   margin-bottom: 20px;
   padding: 10px;
@@ -21,4 +20,9 @@
   border: 1px solid #eee;
   border-radius: 5px;
   background-color: #fafafa;
+  .fspace{
+    padding: 10px
+  }
 }
+
+
