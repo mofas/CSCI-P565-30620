@@ -22,6 +22,7 @@ import {
   LeagueType,
   LeagueInputType,
   ScheduleInputType,
+  GameRecordType,
 } from './model';
 import { match } from './teamMatchAlgorithm';
 import { QueryLeague } from './query';
@@ -422,7 +423,7 @@ export const UpdateLeagueTime = {
 };
 
 export const RunMatch = {
-  type: ResultType,
+  type: new GraphQLList(GameRecordType),
   args: {
     league_id: { type: GraphQLString },
   },
@@ -439,7 +440,7 @@ export const RunMatch = {
       .collection('schedule')
       .find({ league_id: league_id, week_no: week })
       .toArray();
-    var result;
+    var result = [];
     for (var game in schedule) {
       const team1_id = schedule[game].first_team;
       const team2_id = schedule[game].second_team;
@@ -456,25 +457,26 @@ export const RunMatch = {
           .collection('arrangement')
           .findOne({ fancy_team_id: team2_id }),
       };
-      result = match(league_id, week, team1, team2, formula);
+      const outcome = match(league_id, week, team1, team2, formula);
       const data = {
         league_id: league_id,
         week: week,
         first_team: team1_id,
         second_team: team2_id,
-        winner: result.winner,
-        first_score: result.first_score,
-        second_score: result.second_score,
+        winner: outcome.winner,
+        first_score: outcome.first_score,
+        second_score: outcome.second_score,
       };
-      console.log(data);
-      if (result.winner === 0) {
+      result.push(data);
+      //console.log(data);
+      if (outcome.winner === 0) {
         db
           .collection('fantasy_team')
-          .findOneAndUpdate({ _id: team1_id }, { $inc: { win: 1 } });
+          .findOneAndUpdate({ _id: ObjectId(team1_id) }, { $inc: { win: 1 } });
       } else {
         db
           .collection('fantasy_team')
-          .findOneAndUpdate({ _id: team2_id }, { $inc: { win: 1 } });
+          .findOneAndUpdate({ _id: ObjectId(team2_id) }, { $inc: { win: 1 } });
       }
       db.collection('GAME_RECORD').insertOne(data);
     }

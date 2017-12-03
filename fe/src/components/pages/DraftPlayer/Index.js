@@ -5,13 +5,13 @@ import { connect } from 'react-redux';
 import API from '../../../middleware/API';
 import Spinner from '../../common/Spinner/Spinner';
 
+import Sequence from './Sequence';
 import ChatRoom from '../../common/ChatRoom/ChatRoom';
 import PlayerList from '../../common/SelectPlayerList/PlayerList';
 import { Table, Thead, Tbody, Row, Col } from '../../common/Table/Index';
 
 import classnames from 'classnames/bind';
 import style from './Index.css';
-import Modal from 'react-modal';
 import Btn from '../../common/Btn/Btn';
 const cx = classnames.bind(style);
 
@@ -32,9 +32,6 @@ class DraftPlayer extends React.PureComponent {
       poolPlayerWithUser: [],
       index: 0
     };
-  }
-  componentWillMount() {
-    Modal.setAppElement('body');
   }
 
   arr_diff = (a1, a2) => {
@@ -137,8 +134,8 @@ class DraftPlayer extends React.PureComponent {
       const players = fromJS(res.data.ListPlayer);
       const leagueData = fromJS(res.data.LeagueData);
       const poolPlayers = fromJS(res.data.PoolPlayers);
-      console.log("68766876", res.data.PoolPlayerWithUser);
-      console.log("manish", res.data.PoolPlayerWithUser.length);
+      // console.log("68766876", res.data.PoolPlayerWithUser);
+      // console.log("manish", res.data.PoolPlayerWithUser.length);
 
       // console.log("fdskfasd=?????>>>>>", JSON.stringify(leagueData));
       if ('SeasonStart' === leagueData.get('stage')) {
@@ -272,13 +269,6 @@ class DraftPlayer extends React.PureComponent {
         ] = Object.assign({}, res.data.PoolPlayerWithUser[i]['players']);
       }
 
-      // for (let das in acc_to_player) {
-      //   console.log("dasdashahahaa 67887", acc_to_player[das]);
-      //   for (let d22 in acc_to_player[das]) {
-      //     console.log("Name:", acc_to_player[das][d22]["Name"]);
-      //   }
-      // }
-
       this.setState({
         loading: false,
         players: filterPlayers,
@@ -292,8 +282,8 @@ class DraftPlayer extends React.PureComponent {
   };
 
   selectPlayer = (id, leagueId, userId, emailId) => {
-    console.log('selected player called');
-    console.log(id, leagueId, userId, emailId);
+    // console.log('selected player called');
+    // console.log(id, leagueId, userId, emailId);
     var run = Math.floor(
       this.state.leagueData.get('draft_run') /
         this.state.leagueData.get('limit')
@@ -305,20 +295,19 @@ class DraftPlayer extends React.PureComponent {
       run <= this.state.totalPlayersInTeam
     ) {
       const mutation = `
-          mutation{
-            SelectedPlayer(
-              league_id: "${leagueId}",
-              player_id:"${id}",
-              account_id: "${userId}"
-            ){
-              success
-            }
-            UpdateDraftNoLeague(_id: "${leagueId}"){
-              _id,
-              draft_run
-            }
-
+        mutation{
+          SelectedPlayer(
+            league_id: "${leagueId}",
+            player_id:"${id}",
+            account_id: "${userId}"
+          ){
+            success
           }
+          UpdateDraftNoLeague(_id: "${leagueId}"){
+            _id,
+            draft_run
+          }
+        }
       `;
       API.GraphQL(mutation).then(res => {
         this.loadData();
@@ -488,106 +477,31 @@ class DraftPlayer extends React.PureComponent {
 
   render() {
     const { state, props } = this;
-    const { loading, players, poolPlayers } = state;
+    const { loading, selectionOrder, leagueData, players, poolPlayers } = state;
     const { accountStore } = props;
-
-    const MessageData = []; //query by league_id
-    const leagueData = this.state.leagueData; //query by league_id
-    const playerListData = [];
-    const playerPoolData = []; //query by league_id
 
     const targetData = this.state.poolPlayerWithUser[this.state.index];
 
     return (
       <div className={cx('root')}>
         <Spinner show={loading} />
-        <div className={cx('field')}>
-          <img
-            src="http://hddfhm.com/images/clipart-field-football-7.png"
-            height="250"
-            width="1500"
-          />{' '}
-        </div>
-        <div className={cx('logo')}>
-          <img
-            src="https://upload.wikimedia.org/wikipedia/en/thumb/8/80/NFL_Draft_logo.svg/806px-NFL_Draft_logo.svg.png"
-            height="300"
-          />{' '}
-        </div>
-        <div> Run-no {leagueData.get('draft_run') + 1} </div>
-        <div>
-          Round:
-          {Math.floor(leagueData.get('draft_run') / leagueData.get('limit')) +
-            1}
-        </div>
-        <div>Picking Order --></div>
 
-        <div>
-          {this.state.selectionOrder.length > 0 &&
-            this.state.selectionOrder.map((d, index) => {
-              return index < 7 ? (
-                index === 0 ? (
-                  <div
-                    key={index}
-                    className={cx('component', 'thick')}
-                    onClick={this.toggleModal}
-                  >
-                    {index + 1}:&nbsp;{d['email'].split('@')[0]}
-                    <Modal isOpen={this.state.modalToggle}>
-                      <Btn
-                        onClick={() => {
-                          this.setState({
-                            modalToggle: !this.state.modalToggle,
-                          });
-                          var abc = this.showPlayers(d['email']);
-                        }}
-                      >
-                        Close
-                      </Btn>
-                      <div>Show the selected player by that user</div>
-                      <b>
-                        {/**JSON.stringify(this.state.acc_to_players[d['_id']][0]) **/}
-                      </b>
-                      <p> Here is table </p>
-                      <table>
-                        <tr>
-                          <th> Players </th>
-                        </tr>
-                        {Object.keys(
-                          this.state.acc_to_players[d['_id']] || {}
-                        ).forEach(idx => {
-                          return (
-                            <tr>
-                              <td>
-                                {
-                                  this.state.acc_to_players[d['_id']][idx][
-                                    'Name'
-                                  ]
-                                }
-                              </td>
-                            </tr>
-                          );
-                        })}
-                      </table>
-                    </Modal>
-                  </div>
-                ) : (
-                  <div key={index} className={cx('component')}>
-                    {index + 1}:&nbsp;{d['email'].split('@')[0]}
-                  </div>
-                )
-              ) : null;
-            })}
+        <div className={cx('sequence-wrap')}>
+          <Sequence leagueData={leagueData} selectionOrder={selectionOrder} />
         </div>
-        <div>{this.state.showMessage}</div>
-        <PlayerList
-          players={players}
-          selectedPlayer={poolPlayers}
-          selectPlayer={this.selectPlayer}
-          leagueId={this.state.league_id}
-          userId={accountStore.getIn(['userInfo', '_id'])}
-          emailId={accountStore.getIn(['userInfo', 'email'])}
-        />
+
+        <div className={cx('select-player-wrap')}>
+          <div className={cx('title')}>Pick your player</div>
+          <PlayerList
+            players={players}
+            selectedPlayer={poolPlayers}
+            selectPlayer={this.selectPlayer}
+            leagueId={this.state.league_id}
+            userId={accountStore.getIn(['userInfo', '_id'])}
+            emailId={accountStore.getIn(['userInfo', 'email'])}
+          />
+        </div>
+
         <div>
           playerPoolData TODO: Chooseed player for all users Team1: Player1
           Player2 Team2: Player1 Player2
@@ -630,7 +544,7 @@ class DraftPlayer extends React.PureComponent {
           </div>
         </div>
         <div className={cx('chat-room-wrap')}>
-          <div className={cx('chat-room-title')}>Disscussion Board</div>
+          <div className={cx('title')}>Disscussion Board</div>
           <ChatRoom roomId={this.props.match.params.l_id} />
         </div>
       </div>

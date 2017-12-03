@@ -23,21 +23,41 @@
   background-color: #820303;
 }
 
-.parent {
+.sequence {
   position: relative;
+  .watermark {
+    position: absolute;
+    width: 480px;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    z-index: 0;
+    opacity: 0.05;
+  }
 }
-.field {
-  position: absolute;
-  top: 140px;
-  left: 95px;
+
+.sequence-wrap {
+  padding: 10px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+.select-player-wrap {
+  padding: 10px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.title {
+  padding: 10px;
+  text-align: center;
+  font-weight: bold;
 }
 
 .chat-room-wrap {
   width: 400px;
   height: 500px;
-  .chat-room-title {
-    padding: 10px;
-    text-align: center;
-    font-weight: bold;
-  }
 }
