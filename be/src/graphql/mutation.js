@@ -468,15 +468,15 @@ export const RunMatch = {
         second_score: outcome.second_score,
       };
       result.push(data);
-      console.log(data);
+      //console.log(data);
       if (outcome.winner === 0) {
         db
           .collection('fantasy_team')
-          .findOneAndUpdate({ _id: team1_id }, { $inc: { win: 1 } });
+          .findOneAndUpdate({ _id: ObjectId(team1_id) }, { $inc: { win: 1 } });
       } else {
         db
           .collection('fantasy_team')
-          .findOneAndUpdate({ _id: team2_id }, { $inc: { win: 1 } });
+          .findOneAndUpdate({ _id: ObjectId(team2_id) }, { $inc: { win: 1 } });
       }
       db.collection('GAME_RECORD').insertOne(data);
     }
