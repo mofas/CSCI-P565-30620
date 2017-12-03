@@ -56,7 +56,6 @@ export const CreateLeague = {
       draft_run: 0,
       creator: req.user._id,
       create_time: Math.floor(new Date() / 1000),
-      current_pickup_accounts: null,
       draft_start_time: epoc_date,
       timeout: 2,
       lastPickTime: epoc_date,
@@ -147,30 +146,36 @@ export const UpdateDraftNoLeague = {
       _id: ObjectId(_id),
     };
 
-    //console.log("456 draft_no:" , draft_no);
-    //console.log("print " , req);
-    //req.user = "test";
-
     const result = await db.collection('leagues').findOne(query);
-    //if (result.accounts.length === result.limit && req.user) {
-    let curr_epoc = Math.round(new Date().getTime() / 1000.0);
+
     if (result) {
-      const { value } = await db.collection('leagues').findOneAndUpdate(
-        {
-          _id: ObjectId(result._id),
-        },
-        {
-          $set: { draft_run: result.draft_run + 1, lastPickTime: curr_epoc },
-        },
-        {
-          returnOriginal: false,
-        }
-      );
-      return value;
-    } else {
-      //console.log("in else section");
+      let currentTime = Math.round(new Date().getTime() / 1000); //in sec
+      const lastPickTime = result.lastPickTime;
+      const timeout = result.timeout;
+
+      const elapsedTime = currentTime - lastPickTime;
+      const elapsedDraft = Math.floor(elapsedTime / (timeout * 60));
+
+      const newDraftRun = result.draft_run + elapsedDraft;
+      const newLastPickTime = lastPickTime + elapsedDraft * timeout * 60;
+
+      if (elapsedDraft > 0) {
+        const { value } = await db.collection('leagues').findOneAndUpdate(
+          {
+            _id: ObjectId(result._id),
+          },
+          {
+            $set: { draft_run: newDraftRun, lastPickTime: newLastPickTime },
+          },
+          {
+            returnOriginal: false,
+          }
+        );
+        return value;
+      }
       return result;
     }
+    return null;
   },
 };
 
@@ -263,15 +268,27 @@ export const SelectedPlayer = {
     // console.log("39847293", league_id, player_id, account_id);
     const result = await db.collection('pool').findOne(query);
     if (!result) {
-      console.log('Insert the record');
       const insertRec = {
         league_id: league_id,
         player_id: player_id,
         account_id: account_id,
       };
       const { result } = await db.collection('pool').insertOne(insertRec);
-      console.log(result);
-      console.log(result.ok);
+
+      const updateRes = await db.collection('leagues').findOneAndUpdate(
+        {
+          _id: ObjectId(league_id),
+        },
+        {
+          $set: {
+            lastPickTime: Math.round(new Date().getTime() / 1000),
+          },
+          $inc: {
+            draft_run: 1,
+          },
+        }
+      );
+
       if (result.ok) {
         return {
           error: '',
@@ -284,22 +301,11 @@ export const SelectedPlayer = {
         };
       }
     } else {
-      console.log(
-        'Player already exist---------------->',
-        league_id,
-        player_id,
-        account_id
-      );
       return {
         error: 'Player already exist',
         success: false,
       };
     }
-
-    // return await db
-    //   .collection('pool')
-    //   .find({ league_id: league_id }, { player_id: 1, _id: 0 })
-    //   .toArray();
   },
 };
 

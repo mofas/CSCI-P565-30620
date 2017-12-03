@@ -36,12 +36,13 @@
   }
 }
 
-.sequence-wrap {
-  // padding: 10px;
-  // background-color: #fff;
-  // border: 1px solid #ddd;
-  // border-radius: 5px;
+.block {
+  display: flex;
   margin-bottom: 20px;
+}
+
+.sequence-wrap {
+  flex: 1;
 }
 
 .sequence {
@@ -60,9 +61,16 @@
     color: #ffda23;
     background: #333;
   }
+
+  .count-down {
+    padding: 10px;
+    font-weight: bold;
+    text-align: right;
+  }
 }
 
 .select-player-wrap {
+  width: 100%;
   padding: 10px;
   background-color: #fff;
   border: 1px solid #ddd;
@@ -75,7 +83,26 @@
   font-weight: bold;
 }
 
+.team-detail-wrap {
+  margin-right: 20px;
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.team-detail {
+  width: 100%;
+  .selector {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+}
+
 .chat-room-wrap {
-  width: 400px;
   height: 500px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  flex: 1;
 }
