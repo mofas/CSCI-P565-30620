@@ -186,8 +186,9 @@ class DraftPlayer extends React.PureComponent {
       );
       const poolPlayers = fromJS(rawPoolPlayer);
       const poolPlayerWithUser = fromJS(res.data.PoolPlayerWithUser);
+
       if ('SeasonStart' === leagueData.get('stage')) {
-        window.location.href = '#/app/league/list';
+        window.location.href = '#/app/league/season/' + league_id;
       }
 
       this.setState({
@@ -196,6 +197,10 @@ class DraftPlayer extends React.PureComponent {
         leagueData,
         poolPlayers,
       });
+
+      setTimeout(() => {
+        this.checkSeasonStart();
+      }, 0);
     });
   };
 
@@ -205,8 +210,7 @@ class DraftPlayer extends React.PureComponent {
 
   selectPlayer = (id, leagueId, userId) => {
     const { leagueData, totalPlayersInTeam } = this.state;
-    const run =
-      Math.floor(leagueData.get('draft_run') / leagueData.get('limit')) + 1;
+    const run = leagueData.get('draft_run');
 
     const currentPicker = getCurrentPicker(leagueData);
 
@@ -227,39 +231,40 @@ class DraftPlayer extends React.PureComponent {
       API.GraphQL(mutation).then(res => {
         this.loadData();
       });
-
-      let max_run =
-        this.state.leagueData.get('limit') * this.state.totalPlayersInTeam;
-      if (max_run === run) {
-        let accounts = this.state.leagueData.get('accounts').toJS();
-        let account_ids = accounts.map(d => {
-          return d['_id'];
-        });
-        const variables = {
-          inputsecheduleData: {
-            league_id: leagueId,
-            account_ids: account_ids,
-            weeks: 10,
-          },
-        };
-
-        const mut = `
-          mutation($inputsecheduleData: ScheduleInputType){
-            UpdateLeague(_id: "${leagueId}", stage: "SeasonStart"){
-              _id
-            },
-            SetSchedule(data: $inputsecheduleData){
-              success
-            }
-          }
-        `;
-        API.GraphQL(mut, variables).then(res => {
-          this.loadData();
-          console.log('Successfully changed the status');
-        });
-      }
+      this.checkSeasonStart();
     } else {
       window.alert('Your team is full');
+    }
+  };
+
+  checkSeasonStart = () => {
+    const { league_id } = this.state;
+    const { leagueData, totalPlayersInTeam } = this.state;
+
+    const run = leagueData.get('draft_run');
+    let max_run = leagueData.get('limit') * totalPlayersInTeam;
+    if (max_run <= run - 1) {
+      const variables = {
+        inputsecheduleData: {
+          league_id: league_id,
+          weeks: 10,
+        },
+      };
+
+      const mut = `
+        mutation($inputsecheduleData: ScheduleInputType){
+          UpdateLeague(_id: "${league_id}", stage: "SeasonStart"){
+            _id
+          },
+          SetSchedule(data: $inputsecheduleData){
+            success
+          }
+        }
+      `;
+
+      API.GraphQL(mut, variables).then(res => {
+        // window.location.href = '#/app/league/season/' + league_id;
+      });
     }
   };
 
