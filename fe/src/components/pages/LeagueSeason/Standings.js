@@ -29,7 +29,7 @@ class Standings extends React.PureComponent {
             </Row>
             <Row>
               <Col>Team</Col>
-              <Col className={cx('win')}> Wins </Col>
+              <Col className={cx('win')}> Win </Col>
               <Col className={cx('lose')}> Lose </Col>
             </Row>
           </Thead>
@@ -41,7 +41,7 @@ class Standings extends React.PureComponent {
                     {(d.getIn(['account', 'email']) || '').split('@')[0] +
                       "'s Team"}
                   </Col>
-                  <Col className={cx('win')}>{d.getIn(['win']) || 0}</Col>
+                  <Col className={cx('win')}>{d.getIn(['wins']) || 0}</Col>
                   <Col className={cx('lose')}>{d.getIn(['lose']) || 0}</Col>
                 </Row>
               );

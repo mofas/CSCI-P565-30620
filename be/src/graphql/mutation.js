@@ -546,7 +546,6 @@ export const RunMatch = {
       .collection('schedule')
       .find({ league_id: league_id, week_no: week })
       .toArray();
-    let result = [];
 
     const loader = getLoader(
       context,
@@ -554,9 +553,9 @@ export const RunMatch = {
       playerLoaderGenerator
     );
 
-    for (let game in schedule) {
-      const team1_id = schedule[game].first_team;
-      const team2_id = schedule[game].second_team;
+    const result = schedule.map(async game => {
+      const team1_id = game.first_team;
+      const team2_id = game.second_team;
 
       //Have to put it in the correct format for teamMatchAlgorithm
       const arrangement1 = await db
@@ -612,32 +611,34 @@ export const RunMatch = {
         first_score: outcome.first_score,
         second_score: outcome.second_score,
       };
-      result.push(data);
       if (outcome.winner === 0) {
         db
           .collection('fantasy_team')
-          .findOneAndUpdate({ _id: ObjectId(team1_id) }, { $inc: { win: 1 } });
+          .findOneAndUpdate({ _id: ObjectId(team1_id) }, { $inc: { wins: 1 } });
         db
           .collection('fantasy_team')
           .findOneAndUpdate({ _id: ObjectId(team2_id) }, { $inc: { lose: 1 } });
       } else {
         db
           .collection('fantasy_team')
-          .findOneAndUpdate({ _id: ObjectId(team2_id) }, { $inc: { win: 1 } });
+          .findOneAndUpdate({ _id: ObjectId(team2_id) }, { $inc: { wins: 1 } });
         db
           .collection('fantasy_team')
           .findOneAndUpdate({ _id: ObjectId(team1_id) }, { $inc: { lose: 1 } });
       }
 
-      await db
-        .collection('leagues')
-        .findOneAndUpdate(
-          { _id: ObjectId(league_id) },
-          { $inc: { gameWeek: 1 } }
-        );
+      await db.collection('GAME_RECORD').insertOne(data);
 
-      db.collection('GAME_RECORD').insertOne(data);
-    }
+      return data;
+    });
+
+    await db
+      .collection('leagues')
+      .findOneAndUpdate(
+        { _id: ObjectId(league_id) },
+        { $inc: { gameWeek: 1 } }
+      );
+
     return result;
   },
 };
@@ -657,13 +658,23 @@ export const SetSchedule = {
 
     const account_ids = leagueData.accounts || [];
 
-    const loader = getLoader(
-      context,
-      'fantasyTeamByAccountsLoaderGenerator',
-      fantasyTeamByAccountsLoaderGenerator
+    // const loader = getLoader(
+    //   context,
+    //   'fantasyTeamByAccountsLoaderGenerator',
+    //   fantasyTeamByAccountsLoaderGenerator
+    // );
+    // const fantasyTeams = await loader.loadMany(account_ids);
+    const fantasyTeams = await Promise.all(
+      account_ids.map(async account_id => {
+        let query = {
+          account_id,
+          league_id,
+        };
+        const ret = await db.collection('fantasy_team').findOne(query);
+        return ret;
+      })
     );
 
-    const fantasyTeams = await loader.loadMany(account_ids);
     const fantasy_team_ids = fantasyTeams.map(d => d._id.toString());
 
     const r = prepareScheduleObject(weeks, fantasy_team_ids).map(d => {

@@ -358,7 +358,7 @@ export const FantasyTeamType = new GraphQLObjectType({
       },
     },
     name: { type: GraphQLString },
-    win: { type: GraphQLInt },
+    wins: { type: GraphQLInt },
     lose: { type: GraphQLInt },
   },
 });

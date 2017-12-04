@@ -43,7 +43,7 @@ class LeagueSeason extends React.PureComponent {
         QueryLeagueTeams(league_id: "${l_id}") {
           _id
           name
-          win
+          wins
           lose
           account{
             email
@@ -111,7 +111,7 @@ class LeagueSeason extends React.PureComponent {
             _id
             email
           }
-          win,
+          wins
           lose
         }
       }

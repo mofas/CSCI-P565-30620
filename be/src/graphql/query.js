@@ -371,6 +371,7 @@ export const ListTeam = {
       .skip(skip)
       .limit(limit)
       .toArray();
+
     return result;
   },
 };
