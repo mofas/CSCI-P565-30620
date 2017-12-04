@@ -356,13 +356,6 @@ class TradePlayer extends React.PureComponent {
           emailId={accountStore.getIn(['userInfo', 'email'])}
           selectedPlayers={poolPlayer}
         />
-
-        <div>3. trade UI</div>
-        <div>Dropdrown form for making trade request</div>
-        <div>3.1 The need to select the team in league</div>
-        <div>3.2 Then select the player you want in that team.</div>
-        <div>3.3 You need to offer the player in bench.</div>
-        <div>3.4 Make the request</div>
       </div>
     );
   }
