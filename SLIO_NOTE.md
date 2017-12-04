@@ -59,14 +59,14 @@ npm run build:production
 
 Then we just need to copy our page to that folder,
 ```
-rm -rf /u/<username>/cgi-pub
-mv ./build ./cgi-pub && mv -f ./cgi-pub /u/<username>/
+rm -rf /u/cli3/cgi-pub
+mv ./build ./cgi-pub && mv -f ./cgi-pub /u/cli3/
 ```
 
 Then you can visit page
 
 ```
-http://homes.soic.indiana.edu/<username>
+http://homes.soic.indiana.edu/cli3
 ```
 
 
@@ -159,3 +159,20 @@ CONTAINER ID        IMAGE               COMMAND                  CREATED        
 ```
 
 You can use mongo shell `mongo localhost:27017` to inspect your DB now.
+
+
+## Build Backend
+
+1. Export all environment variable
+
+2.
+
+```
+cd be && npm install
+npm run compile
+npm run start:production
+```
+
+
+
+
