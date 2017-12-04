@@ -28,10 +28,12 @@ class TeamsInfo extends React.PureComponent {
 
     return (
       <div className={cx('sequence')}>
+        {/*
         <img
           className={cx('watermark')}
           src="https://upload.wikimedia.org/wikipedia/en/thumb/8/80/NFL_Draft_logo.svg/806px-NFL_Draft_logo.svg.png"
         />
+        */}
         <CountDown
           timeout={leagueData.get('timeout') * 60}
           lastPickTime={leagueData.get('lastPickTime')}

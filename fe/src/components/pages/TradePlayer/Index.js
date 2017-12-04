@@ -165,7 +165,7 @@ class TradePlayer extends React.PureComponent {
         loading: false,
         arrangement,
         poolPlayer: fromJS(rawPoolPlayer || []),
-        playerInTeam: fromJS(playerInTeam.players),
+        playerInTeam: fromJS(playerInTeam.players || []),
       });
     });
   };

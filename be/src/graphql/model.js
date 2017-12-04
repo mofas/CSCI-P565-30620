@@ -386,21 +386,38 @@ export const ScheduleType = new GraphQLObjectType({
   fields: () => ({
     first_team: {
       type: AccountType,
-      resolve: async ({ first_team }, args, { db }) => {
-        const ret = await db
-          .collection('accounts')
-          .findOne({ _id: ObjectId(first_team) });
-        return ret;
+      resolve: async ({ first_team }, args, context) => {
+        const fantasyTeamLoader = getLoader(
+          context,
+          'fantasyTeamLoaderGenerator',
+          fantasyTeamLoaderGenerator
+        );
+        const teams = await fantasyTeamLoader.loadMany([first_team]);
+        const loader = getLoader(
+          context,
+          'accountLoaderGenerator',
+          accountLoaderGenerator
+        );
+        const result = await loader.loadMany([teams[0].account_id]);
+        return result[0];
       },
     },
     second_team: {
       type: AccountType,
-      resolve: async ({ second_team }, args, { db }) => {
-        const ret = await db
-          .collection('accounts')
-          .findOne({ _id: ObjectId(second_team) });
-        // console.log(ret);
-        return ret;
+      resolve: async ({ second_team }, args, context) => {
+        const fantasyTeamLoader = getLoader(
+          context,
+          'fantasyTeamLoaderGenerator',
+          fantasyTeamLoaderGenerator
+        );
+        const teams = await fantasyTeamLoader.loadMany([second_team]);
+        const loader = getLoader(
+          context,
+          'accountLoaderGenerator',
+          accountLoaderGenerator
+        );
+        const result = await loader.loadMany([teams[0].account_id]);
+        return result[0];
       },
     },
     league: {

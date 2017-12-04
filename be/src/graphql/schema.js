@@ -31,7 +31,6 @@ import {
   UpdateLeagueTime,
   RunMatch,
   SetSchedule,
-  CreateFantasyTeam,
   UpdateTeamArrangement,
 } from './mutation';
 
@@ -71,7 +70,6 @@ export const schema = new GraphQLSchema({
       UpdateLeagueTime,
       RunMatch,
       SetSchedule,
-      CreateFantasyTeam,
       UpdateTeamArrangement,
     },
   }),

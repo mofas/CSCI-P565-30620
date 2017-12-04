@@ -18,7 +18,7 @@ const defaultConfig = {
     callbackURL: 'http://localhost:5000/oauth2callback',
   },
   duo: {
-    disable: false,
+    disable: true,
     hostname: 'api-00cc3ec1.duosecurity.com',
     integrationKey: 'DI7GFUB7U9UYCE38XRTG',
     secretKey: process.env.DUO_SECRET || '',

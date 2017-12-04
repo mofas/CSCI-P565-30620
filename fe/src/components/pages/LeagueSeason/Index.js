@@ -186,33 +186,14 @@ class LeagueSeason extends React.PureComponent {
   };
 
   run = () => {
-    const mutation = `mutation{RunMatch(league_id: "${this.state.lid}"){
-        league_id
-        week
-        winner
-        first_team {
-          _id
-          email
-          role
-          status
-          ban
-        }
-        second_team{
-            _id
-            email
-            role
-            status
-            ban
-        }
+    const mutation = `mutation{RunMatch(league_id: "${
+      this.props.match.params.l_id
+    }"){
+      league_id
+      week
     }}`;
     API.GraphQL(mutation).then(res => {
-      //console.log(res);
-      const newRecord = res.data.RunMatch;
-      //console.log(newRecord);
-      this.setState({
-        record: newRecord,
-      });
-      window.location.reload();
+      this.loadData();
     });
   };
 

@@ -27,6 +27,12 @@ import {
 import { match } from './teamMatchAlgorithm';
 import { QueryLeague } from './query';
 
+import {
+  getLoader,
+  playerLoaderGenerator,
+  fantasyTeamByAccountsLoaderGenerator,
+} from './dataLoader';
+
 export const CreateLeague = {
   type: LeagueType,
   args: {
@@ -189,11 +195,13 @@ export const JoinLeague = {
       _id: ObjectId(_id),
     };
 
+    const account_id = req.user._id;
+    const league_id = _id;
     const result = await db.collection('leagues').findOne(query);
     if (
       result.accounts.length < result.limit &&
       req.user &&
-      !result.accounts.includes(req.user._id)
+      !result.accounts.includes(account_id)
     ) {
       const { value } = await db.collection('leagues').findOneAndUpdate(
         {
@@ -210,6 +218,37 @@ export const JoinLeague = {
           returnOriginal: false,
         }
       );
+
+      await db.collection('fantasy_team').remove({
+        account_id,
+        league_id,
+      });
+
+      const res = await db.collection('fantasy_team').insert({
+        account_id,
+        league_id,
+        name: '',
+        wins: 0,
+        lose: 0,
+      });
+
+      const fantasy_team_id = res.insertedIds[0].toString();
+      const data = {
+        fantasy_team_id,
+        position_qb_0: null,
+        position_rb_0: null,
+        position_wr_0: null,
+        position_wr_1: null,
+        position_te_0: null,
+        position_k_0: null,
+        position_p_0: null,
+        position_defense_0: null,
+        position_defense_1: null,
+        position_defense_2: null,
+        position_defense_3: null,
+        position_defense_4: null,
+      };
+      await db.collection('arrangement').insertOne(data);
       return value;
     } else {
       return result;
@@ -428,131 +467,115 @@ export const UpdateLeagueTime = {
   },
 };
 
+const positionKey = [
+  'position_qb_0',
+  'position_rb_0',
+  'position_wr_0',
+  'position_wr_1',
+  'position_te_0',
+  'position_k_0',
+  'position_p_0',
+  'position_defense_0',
+  'position_defense_1',
+  'position_defense_2',
+  'position_defense_3',
+  'position_defense_4',
+];
+
+const defaultPlayerStat = stats => {
+  return {
+    Passing_Yards_curr: stats.Passing_Yards_curr || 0,
+    Rushing_Yards_curr: stats.Rushing_Yards_curr || 0,
+    Receiving_Yards_curr: stats.Receiving_Yards_curr || 0,
+    Passing_TDs_curr: stats.Passing_TDs_curr || 0,
+    Rushing_TDs_curr: stats.Rushing_TDs_curr || 0,
+    Receiving_TD_curr: stats.Receiving_TD_curr || 0,
+    FG_Made_curr: stats.FG_Made_curr || 0,
+    FG_Missed_curr: stats.FG_Missed_curr || 0,
+    Extra_Points_Made_curr: stats.Extra_Points_Made_curr || 0,
+    Interceptions_curr: stats.Interceptions_curr || 0,
+    Fumbles_Lost_curr: stats.Fumbles_Lost_curr || 0,
+    Forced_Fumbles_curr: stats.Forced_Fumbles_curr || 0,
+    Interceptions_Thrown_curr: stats.Interceptions_Thrown_curr || 0,
+    Sacks_curr: stats.Sacks_curr || 0,
+    Blocked_Kicks_curr: stats.Blocked_Kicks_curr || 0,
+    Blocked_Punts_curr: stats.Blocked_Punts_curr || 0,
+    Safeties_curr: stats.Safeties_curr || 0,
+    Kickoff_Return_TD_curr: stats.Kickoff_Return_TD_curr || 0,
+    Punt_Return_TD_curr: stats.Punt_Return_TD_curr || 0,
+    Defensive_TD_curr: stats.Defensive_TD_curr || 0,
+    Punting_i20_curr: stats.Punting_i20_curr || 0,
+    Punting_Yards_curr: stats.Punting_Yards_curr || 0,
+  };
+};
+
 export const RunMatch = {
   type: new GraphQLList(GameRecordType),
   args: {
     league_id: { type: GraphQLString },
   },
-  resolve: async ({ db }, { league_id }, info) => {
+  resolve: async (context, { league_id }, info) => {
+    const { db } = context;
     const query = {
       league_id: league_id,
     };
     const league = await db
       .collection('leagues')
       .findOne({ _id: ObjectId(league_id) });
+
     const formula = league.formula;
-    const week = league.gameWeek;
+    const week = league.gameWeek || 1;
     const schedule = await db
       .collection('schedule')
       .find({ league_id: league_id, week_no: week })
       .toArray();
-    var result = [];
-    for (var game in schedule) {
+    let result = [];
+
+    const loader = getLoader(
+      context,
+      'playerLoaderGenerator',
+      playerLoaderGenerator
+    );
+
+    for (let game in schedule) {
       const team1_id = schedule[game].first_team;
       const team2_id = schedule[game].second_team;
+
       //Have to put it in the correct format for teamMatchAlgorithm
       const arrangement1 = await db
         .collection('arrangement')
         .findOne({ fantasy_team_id: team1_id });
-      var starterStats1 = {
-        position_qb_0: {},
-        position_rb_0: {},
-        position_wr_0: {},
-        position_wr_1: {},
-        position_te_0: {},
-        position_k_0: {},
-        position_p_0: {},
-        position_defense_0: {},
-        position_defense_1: {},
-        position_defense_2: {},
-        position_defense_3: {},
-        position_defense_4: {},
-      };
-      for (var key in arrangement1) {
-        var player = arrangement1[key];
-        if (key != 'fantasy_team_id' && key != '_id') {
-          var stats = await db
-            .collection('players')
-            .findOne({ _id: ObjectId(player) });
-          starterStats1[key] = {
-            Passing_Yards_curr: stats.Passing_Yards_curr,
-            Rushing_Yards_curr: stats.Rushing_Yards_curr,
-            Receiving_Yards_curr: stats.Receiving_Yards_curr,
-            Passing_TDs_curr: stats.Passing_TDs_curr,
-            Rushing_TDs_curr: stats.Rushing_TDs_curr,
-            Receiving_TD_curr: stats.Receiving_TD_curr,
-            FG_Made_curr: stats.FG_Made_curr,
-            FG_Missed_curr: stats.FG_Missed_curr,
-            Extra_Points_Made_curr: stats.Extra_Points_Made_curr,
-            Interceptions_curr: stats.Interceptions_curr,
-            Fumbles_Lost_curr: stats.Fumbles_Lost_curr,
-            Forced_Fumbles_curr: stats.Forced_Fumbles_curr,
-            Interceptions_Thrown_curr: stats.Interceptions_Thrown_curr,
-            Sacks_curr: stats.Sacks_curr,
-            Blocked_Kicks_curr: stats.Blocked_Kicks_curr,
-            Blocked_Punts_curr: stats.Blocked_Punts_curr,
-            Safeties_curr: stats.Safeties_curr,
-            Kickoff_Return_TD_curr: stats.Kickoff_Return_TD_curr,
-            Punt_Return_TD_curr: stats.Punt_Return_TD_curr,
-            Defensive_TD_curr: stats.Defensive_TD_curr,
-            Punting_i20_curr: stats.Punting_i20_curr,
-            Punting_Yards_curr: stats.Punting_Yards_curr,
-          };
-          starterStats1[key].Interceptions_Thrown_curr =
-            starterStats1[key].Interceptions_Thrown_curr || 0;
-        }
-      }
+
       const arrangement2 = await db
         .collection('arrangement')
         .findOne({ fantasy_team_id: team2_id });
-      var starterStats2 = {
-        position_qb_0: {},
-        position_rb_0: {},
-        position_wr_0: {},
-        position_wr_1: {},
-        position_te_0: {},
-        position_k_0: {},
-        position_p_0: {},
-        position_defense_0: {},
-        position_defense_1: {},
-        position_defense_2: {},
-        position_defense_3: {},
-        position_defense_4: {},
-      };
-      for (var key in arrangement2) {
-        var player = arrangement2[key];
-        if (key != 'fantasy_team_id' && key != '_id') {
-          var stats = await db
-            .collection('players')
-            .findOne({ _id: ObjectId(player) });
-          starterStats2[key] = {
-            Passing_Yards_curr: stats.Passing_Yards_curr,
-            Rushing_Yards_curr: stats.Rushing_Yards_curr,
-            Receiving_Yards_curr: stats.Receiving_Yards_curr,
-            Passing_TDs_curr: stats.Passing_TDs_curr,
-            Rushing_TDs_curr: stats.Rushing_TDs_curr,
-            Receiving_TD_curr: stats.Receiving_TD_curr,
-            FG_Made_curr: stats.FG_Made_curr,
-            FG_Missed_curr: stats.FG_Missed_curr,
-            Extra_Points_Made_curr: stats.Extra_Points_Made_curr,
-            Interceptions_curr: stats.Interceptions_curr,
-            Fumbles_Lost_curr: stats.Fumbles_Lost_curr,
-            Forced_Fumbles_curr: stats.Forced_Fumbles_curr,
-            Interceptions_Thrown_curr: stats.Interceptions_Thrown_curr,
-            Sacks_curr: stats.Sacks_curr,
-            Blocked_Kicks_curr: stats.Blocked_Kicks_curr,
-            Blocked_Punts_curr: stats.Blocked_Punts_curr,
-            Safeties_curr: stats.Safeties_curr,
-            Kickoff_Return_TD_curr: stats.Kickoff_Return_TD_curr,
-            Punt_Return_TD_curr: stats.Punt_Return_TD_curr,
-            Defensive_TD_curr: stats.Defensive_TD_curr,
-            Punting_i20_curr: stats.Punting_i20_curr,
-            Punting_Yards_curr: stats.Punting_Yards_curr,
-          };
-          starterStats2[key].Interceptions_Thrown_curr =
-            starterStats2[key].Interceptions_Thrown_curr || 0;
+
+      const players = positionKey.reduce((acc, key) => {
+        if (arrangement1[key]) {
+          acc.push(arrangement1[key]);
         }
-      }
+        if (arrangement2[key]) {
+          acc.push(arrangement2[key]);
+        }
+        return acc;
+      }, []);
+
+      const playerStats = await loader.loadMany(players || []);
+
+      const starterStats1 = positionKey.map(key => {
+        const playerId = arrangement1[key] || {};
+        const stats =
+          playerStats.filter(d => d._id.toString() === playerId)[0] || {};
+        return defaultPlayerStat(stats);
+      });
+
+      const starterStats2 = positionKey.map(key => {
+        const playerId = arrangement2[key] || {};
+        const stats =
+          playerStats.filter(d => d._id.toString() === playerId)[0] || {};
+        return defaultPlayerStat(stats);
+      });
+
       const team1 = {
         _id: team1_id,
         arrangement: starterStats1,
@@ -562,6 +585,7 @@ export const RunMatch = {
         arrangement: starterStats2,
       };
       const outcome = match(league_id, week, team1, team2, formula);
+
       const data = {
         league_id: league_id,
         week: week,
@@ -572,7 +596,6 @@ export const RunMatch = {
         second_score: outcome.second_score,
       };
       result.push(data);
-      // console.log(data);
       if (outcome.winner === 0) {
         db
           .collection('fantasy_team')
@@ -588,6 +611,14 @@ export const RunMatch = {
           .collection('fantasy_team')
           .findOneAndUpdate({ _id: ObjectId(team1_id) }, { $inc: { lose: 1 } });
       }
+
+      await db
+        .collection('leagues')
+        .findOneAndUpdate(
+          { _id: ObjectId(league_id) },
+          { $inc: { gameWeek: 1 } }
+        );
+
       db.collection('GAME_RECORD').insertOne(data);
     }
     return result;
@@ -599,7 +630,8 @@ export const SetSchedule = {
   args: {
     data: { type: ScheduleInputType },
   },
-  resolve: async ({ db }, { data }, info) => {
+  resolve: async (context, { data }, info) => {
+    const { db } = context;
     const { league_id, weeks } = data;
 
     const leagueData = await db.collection('leagues').findOne({
@@ -608,7 +640,16 @@ export const SetSchedule = {
 
     const account_ids = leagueData.accounts || [];
 
-    const r = prepareScheduleObject(weeks, account_ids).map(d => {
+    const loader = getLoader(
+      context,
+      'fantasyTeamByAccountsLoaderGenerator',
+      fantasyTeamByAccountsLoaderGenerator
+    );
+
+    const fantasyTeams = await loader.loadMany(account_ids);
+    const fantasy_team_ids = fantasyTeams.map(d => d._id.toString());
+
+    const r = prepareScheduleObject(weeks, fantasy_team_ids).map(d => {
       d.league_id = league_id;
       return d;
     });
@@ -632,6 +673,7 @@ export const SetSchedule = {
   },
 };
 
+// Not used
 export const CreateFantasyTeam = {
   type: ResultType,
   args: {
@@ -653,7 +695,7 @@ export const CreateFantasyTeam = {
     });
 
     if (res.result.ok) {
-      const fantasy_team_id = res.insertedIds[0];
+      const fantasy_team_id = res.insertedIds[0].toString();
       const data = {
         fantasy_team_id,
         position_qb_0: null,
