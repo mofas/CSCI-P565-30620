@@ -92,7 +92,9 @@ export const UpdateLeague = {
           _id: ObjectId(result._id),
         },
         {
-          $set: { stage: stage },
+          $set: {
+            stage: stage,
+          },
         },
         {
           returnOriginal: false,
@@ -210,6 +212,7 @@ export const JoinLeague = {
         {
           $set: {
             accounts: [req.user._id, ...result.accounts],
+            lastPickTime: Math.floor(new Date().getTime() / 1000.0),
             stage:
               result.accounts.length === result.limit - 1 ? 'Draft' : 'Initial',
           },
