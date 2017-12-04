@@ -1,6 +1,7 @@
 import React from 'react';
 import { fromJS, Map, List, Set } from 'immutable';
 import { connect } from 'react-redux';
+import { WS_ENDPOINT } from '../../../config';
 
 import API from '../../../middleware/API';
 import Spinner from '../../common/Spinner/Spinner';
@@ -40,13 +41,47 @@ class DraftPlayer extends React.PureComponent {
       showMessage: '',
       poolPlayerWithUser: List(),
       selectTeamIndex: 0,
+
+      ws: null,
     };
   }
 
   componentDidMount() {
     this.updateData();
     this.loadStaticData();
+    if (!this.state.ws) {
+      this.createWS();
+    }
   }
+
+  createWS = () => {
+    const ws = new WebSocket(WS_ENDPOINT);
+
+    this.setState({
+      ws,
+    });
+
+    ws.onopen = () => {
+      this.setState({
+        loading: false,
+      });
+      ws.send(JSON.stringify({ type: 'initial' }));
+    };
+
+    ws.onmessage = event => {
+      try {
+        const data = JSON.parse(event.data);
+        const { type, league_id, account_id } = data;
+        if (
+          type === 'selectedPlayer' &&
+          league_id === this.props.match.params.l_id &&
+          account_id !== this.props.accountStore.getIn(['userInfo', '_id'])
+        ) {
+          this.updateData();
+        }
+      } catch (e) {}
+    };
+  };
 
   updateData = () => {
     const { league_id } = this.state;
