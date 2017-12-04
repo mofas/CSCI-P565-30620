@@ -298,7 +298,7 @@ export const SelectedPlayer = {
     player_id: { type: GraphQLString },
     account_id: { type: GraphQLString },
   },
-  resolve: async ({ db }, { league_id, player_id, account_id }, info) => {
+  resolve: async ({ db, ws }, { league_id, player_id, account_id }, info) => {
     const query = {
       league_id: league_id,
       player_id: player_id,
@@ -329,6 +329,20 @@ export const SelectedPlayer = {
       );
 
       if (result.ok) {
+        Object.keys(ws).forEach(connectId => {
+          try {
+            ws[connectId].send(
+              JSON.stringify({
+                type: 'selectedPlayer',
+                league_id: league_id,
+                account_id: account_id,
+              })
+            );
+          } catch (e) {
+            ws[connectId] = null;
+          }
+        });
+
         return {
           error: '',
           success: true,

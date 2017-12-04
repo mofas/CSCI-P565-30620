@@ -1,6 +1,7 @@
 import React from 'react';
 import { fromJS, Map, List, Set } from 'immutable';
 import { connect } from 'react-redux';
+import { WS_ENDPOINT } from '../../../config';
 
 import API from '../../../middleware/API';
 import Spinner from '../../common/Spinner/Spinner';
@@ -40,13 +41,47 @@ class DraftPlayer extends React.PureComponent {
       showMessage: '',
       poolPlayerWithUser: List(),
       selectTeamIndex: 0,
+
+      ws: null,
     };
   }
 
   componentDidMount() {
     this.updateData();
     this.loadStaticData();
+    if (!this.state.ws) {
+      this.createWS();
+    }
   }
+
+  createWS = () => {
+    const ws = new WebSocket(WS_ENDPOINT);
+
+    this.setState({
+      ws,
+    });
+
+    ws.onopen = () => {
+      this.setState({
+        loading: false,
+      });
+      ws.send(JSON.stringify({ type: 'initial' }));
+    };
+
+    ws.onmessage = event => {
+      try {
+        const data = JSON.parse(event.data);
+        const { type, league_id, account_id } = data;
+        if (
+          type === 'selectedPlayer' &&
+          league_id === this.props.match.params.l_id &&
+          account_id !== this.props.accountStore.getIn(['userInfo', '_id'])
+        ) {
+          this.updateData();
+        }
+      } catch (e) {}
+    };
+  };
 
   updateData = () => {
     const { league_id } = this.state;
@@ -151,8 +186,9 @@ class DraftPlayer extends React.PureComponent {
       );
       const poolPlayers = fromJS(rawPoolPlayer);
       const poolPlayerWithUser = fromJS(res.data.PoolPlayerWithUser);
+
       if ('SeasonStart' === leagueData.get('stage')) {
-        window.location.href = '#/app/league/list';
+        window.location.href = '#/app/league/season/' + league_id;
       }
 
       this.setState({
@@ -161,6 +197,10 @@ class DraftPlayer extends React.PureComponent {
         leagueData,
         poolPlayers,
       });
+
+      setTimeout(() => {
+        this.checkSeasonStart();
+      }, 0);
     });
   };
 
@@ -170,8 +210,7 @@ class DraftPlayer extends React.PureComponent {
 
   selectPlayer = (id, leagueId, userId) => {
     const { leagueData, totalPlayersInTeam } = this.state;
-    const run =
-      Math.floor(leagueData.get('draft_run') / leagueData.get('limit')) + 1;
+    const run = leagueData.get('draft_run');
 
     const currentPicker = getCurrentPicker(leagueData);
 
@@ -192,39 +231,40 @@ class DraftPlayer extends React.PureComponent {
       API.GraphQL(mutation).then(res => {
         this.loadData();
       });
-
-      let max_run =
-        this.state.leagueData.get('limit') * this.state.totalPlayersInTeam;
-      if (max_run === run) {
-        let accounts = this.state.leagueData.get('accounts').toJS();
-        let account_ids = accounts.map(d => {
-          return d['_id'];
-        });
-        const variables = {
-          inputsecheduleData: {
-            league_id: leagueId,
-            account_ids: account_ids,
-            weeks: 10,
-          },
-        };
-
-        const mut = `
-          mutation($inputsecheduleData: ScheduleInputType){
-            UpdateLeague(_id: "${leagueId}", stage: "SeasonStart"){
-              _id
-            },
-            SetSchedule(data: $inputsecheduleData){
-              success
-            }
-          }
-        `;
-        API.GraphQL(mut, variables).then(res => {
-          this.loadData();
-          console.log('Successfully changed the status');
-        });
-      }
+      this.checkSeasonStart();
     } else {
       window.alert('Your team is full');
+    }
+  };
+
+  checkSeasonStart = () => {
+    const { league_id } = this.state;
+    const { leagueData, totalPlayersInTeam } = this.state;
+
+    const run = leagueData.get('draft_run');
+    let max_run = leagueData.get('limit') * totalPlayersInTeam;
+    if (max_run <= run - 1) {
+      const variables = {
+        inputsecheduleData: {
+          league_id: league_id,
+          weeks: 10,
+        },
+      };
+
+      const mut = `
+        mutation($inputsecheduleData: ScheduleInputType){
+          UpdateLeague(_id: "${league_id}", stage: "SeasonStart"){
+            _id
+          },
+          SetSchedule(data: $inputsecheduleData){
+            success
+          }
+        }
+      `;
+
+      API.GraphQL(mut, variables).then(res => {
+        // window.location.href = '#/app/league/season/' + league_id;
+      });
     }
   };
 

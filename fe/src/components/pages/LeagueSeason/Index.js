@@ -208,9 +208,15 @@ class LeagueSeason extends React.PureComponent {
         </Link>
         <Spinner show={loading} />
 
-        <Btn className={cx('run-btn')} onClick={this.run} type="secondary">
-          Run match
-        </Btn>
+        {gameWeek < 11 ? (
+          <Btn className={cx('run-btn')} onClick={this.run} type="secondary">
+            Run match
+          </Btn>
+        ) : (
+          <Btn className={cx('run-btn')} type="secondary" disabled>
+            Season is over
+          </Btn>
+        )}
 
         <div className={cx('block')}>
           <div className={cx('side-menu')}>

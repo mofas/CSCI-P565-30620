@@ -30,9 +30,9 @@ class TeamsInfo extends React.PureComponent {
               <Col className={cx('position')}>Position</Col>
             </Row>
           </Thead>
-          {data.map(d => {
+          {data.map((d, i) => {
             return (
-              <div>
+              <div key={i}>
                 <Row>
                   <Col>
                     {(d.getIn(['account', 'email']) || '').split('@')[0] +

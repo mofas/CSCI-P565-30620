@@ -44,7 +44,9 @@ class TeamsInfo extends React.PureComponent {
             <Row>
               <Col className={cx('round')}>Round</Col>
               {userList.map((_, i) => (
-                <Col className={cx('user')}>No. {i + 1} Picker</Col>
+                <Col className={cx('user')} key={i}>
+                  No. {i + 1} Picker
+                </Col>
               ))}
             </Row>
           </Thead>
@@ -60,7 +62,11 @@ class TeamsInfo extends React.PureComponent {
                       ? 'pass'
                       : pickerNo === draft_run ? 'now' : 'coming';
 
-                  return <Col className={cx(['user', statusCx])}>{d}</Col>;
+                  return (
+                    <Col className={cx(['user', statusCx])} key={j}>
+                      {d}
+                    </Col>
+                  );
                 })}
               </Row>
             );
