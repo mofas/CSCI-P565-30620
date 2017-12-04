@@ -92,7 +92,7 @@ now
 ```
 
 ```
-now alias game-server-cknryfkvyr.now.sh csci.now.sh
+now alias game-server-ltrrxlifwx.now.sh csci.now.sh
 ```
 
 

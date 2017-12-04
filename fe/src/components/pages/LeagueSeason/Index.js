@@ -219,14 +219,12 @@ class LeagueSeason extends React.PureComponent {
         )}
 
         <div className={cx('block')}>
-          <div className={cx('side-menu')}>
-            <Standings gameWeek={gameWeek} data={standings} />
-            <TeamsInfo data={teams} />
-          </div>
+          <Standings gameWeek={gameWeek} data={standings} />
           <div className={cx('schedule-wrap')}>
             <Schedule gameWeek={gameWeek} data={ScheduleByLeagueId} />
           </div>
         </div>
+        <TeamsInfo data={teams} />
       </div>
     );
   }

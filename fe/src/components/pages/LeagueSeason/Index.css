@@ -38,9 +38,16 @@
 }
 
 .teams-info {
-  width: 320px;
+  width: 100%;
+  display: flex;
   padding: 9px;
   font-size: 14px;
+  flex-wrap: wrap;
+}
+
+.teams-table {
+  margin-right: 20px;
+  width: 320px;
 }
 
 .team-info {

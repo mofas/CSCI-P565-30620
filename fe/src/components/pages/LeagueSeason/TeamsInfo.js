@@ -20,19 +20,19 @@ class TeamsInfo extends React.PureComponent {
 
     return (
       <div className={cx('teams-info')}>
-        <Table>
-          <Thead>
-            <Row>
-              <Col>Team Starter</Col>
-            </Row>
-            <Row>
-              <Col className={cx('name')}>Name</Col>
-              <Col className={cx('position')}>Position</Col>
-            </Row>
-          </Thead>
-          {data.map((d, i) => {
-            return (
-              <div key={i}>
+        {data.map((d, i) => {
+          return (
+            <Table className={cx('teams-table')}>
+              <Thead>
+                <Row>
+                  <Col>Team Starter</Col>
+                </Row>
+                <Row>
+                  <Col className={cx('name')}>Name</Col>
+                  <Col className={cx('position')}>Position</Col>
+                </Row>
+              </Thead>
+              <Tbody key={i}>
                 <Row>
                   <Col>
                     {(d.getIn(['account', 'email']) || '').split('@')[0] +
@@ -40,10 +40,10 @@ class TeamsInfo extends React.PureComponent {
                   </Col>
                 </Row>
                 <TeamStarter data={d.get('arrangement') || Map()} />
-              </div>
-            );
-          })}
-        </Table>
+              </Tbody>
+            </Table>
+          );
+        })}
       </div>
     );
   }

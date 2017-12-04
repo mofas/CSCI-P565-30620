@@ -57,7 +57,7 @@ Hit the following commands to build file.
 npm run build:production
 ```
 
-Then we just need to copy our page to that folder,
+  Then we just need to copy our page to that folder,
 ```
 rm -rf /u/cli3/cgi-pub
 mv ./build ./cgi-pub && mv -f ./cgi-pub /u/cli3/
