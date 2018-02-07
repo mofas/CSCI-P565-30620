@@ -28,6 +28,7 @@ jobs:
           working_directory: ~/fe
 
       - run: yarn install
+          working_directory: ~/fe
 
       - save_cache:
           paths:
@@ -37,6 +38,6 @@ jobs:
 
       # run tests!
       - run: yarn test
-        working_directory: ~/fe
+          working_directory: ~/fe
 
 
