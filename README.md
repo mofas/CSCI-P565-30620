@@ -1,5 +1,10 @@
-# Software Engineering
+# Software Engineering Project
 
+[![CircleCI](https://circleci.com/gh/mofas/CSCI-P565-30620.svg?style=svg)](https://circleci.com/gh/mofas/CSCI-P565-30620)
+
+This is a course project.
+
+The goal of this project is learning software engineering through building a Fantasy Football Game like web application.
 
 ## Prerequisite
 
@@ -35,9 +40,6 @@ I will suggest use VS code (https://code.visualstudio.com/), sublime text (https
 
 Those IDE can improve your productivity significantly.
 
-- Babel
-- Emmet
-- Rect snippet
-
-
-
+* Babel
+* Emmet
+* Rect snippet
